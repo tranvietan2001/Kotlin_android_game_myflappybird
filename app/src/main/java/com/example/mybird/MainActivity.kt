@@ -11,7 +11,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main)
+
+
     }
 }
