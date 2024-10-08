@@ -95,11 +95,17 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     }
 
     fun update() {
+        bird.update()
 //        println("====================> GameManager Update --- AnTV test")
     }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         bird.draw(canvas)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        bird.onTouchEvent()
+        return super.onTouchEvent(event)
     }
 }

@@ -34,7 +34,7 @@ class Bird(
     private var birdX: Int = resources.getDimension(R.dimen.bird_x).toInt()
     private var birdY: Int = screenHeight / 2
     private var currentFallingSpeed: Float = 0f
-    private val gravity: Float = resources.getDimension(R.dimen.gravity)
+    private val gravity: Float = resources.getDimension(R.dimen.gravity) // rơi nhanh chậm
     private val flappyBoost: Float = resources.getDimension(R.dimen.flappy_boost)
     private var collision: Boolean = false
 
@@ -47,6 +47,20 @@ class Bird(
     }
 
     override fun update() {
-        TODO("Not yet implemented")
+//        if (collision) {
+//            if (birdY + birdDown.height < screenHeight) {
+//                birdY += currentFallingSpeed.toInt()
+//                currentFallingSpeed += gravity
+//            }
+//        } else {
+            birdY += currentFallingSpeed.toInt()
+            currentFallingSpeed += gravity
+//            val birdPosition = Rect(birdX, birdY, birdX + birdDown.width, birdY + birdDown.height)
+//            callback.updatePosition(birdPosition)
+//        }
+    }
+
+    fun onTouchEvent(){
+        currentFallingSpeed = flappyBoost
     }
 }
