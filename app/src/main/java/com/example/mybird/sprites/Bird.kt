@@ -10,18 +10,9 @@ import com.example.mybird.R
 
 class Bird(
     resources: Resources,
-    private val screenHeight: Int,
+    private val screenHeight: Int
 //    private val callback: GameManagerCallback
 ) : Sprite{
-
-//    private val bird: Bitmap
-//        get() {
-//            TODO()
-//        }
-//
-//    @SuppressLint("ResourceType")
-//    private var birdX: Int = resources.getDimension(bird_level).toInt()
-
 
     private val birdDown: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_down)
         .let { Bitmap.createScaledBitmap(it, resources.getDimension(R.dimen.bird_width).toInt(),
@@ -31,11 +22,20 @@ class Bird(
         .let { Bitmap.createScaledBitmap(it, resources.getDimension(R.dimen.bird_width).toInt(),
             resources.getDimension(R.dimen.bird_height).toInt(), false) }
 
+
+
+//    private var birdWith: Int = resources.getDimension(R.dimen.bird_width).toInt()
+//    private var birdHeight: Int = resources.getDimension(R.dimen.bird_height).toInt()
+//    private val birdBmpDown: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_down)
+//    private val birdBmpUp: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_up)
+//    private val bird_down: Bitmap = Bitmap.createScaledBitmap(birdBmpDown,birdWith, birdHeight, false)
+//    private val bird_up: Bitmap = Bitmap.createScaledBitmap(birdBmpUp,birdWith, birdHeight, false)
+
     private var birdX: Int = resources.getDimension(R.dimen.bird_x).toInt()
     private var birdY: Int = screenHeight / 2
     private var currentFallingSpeed: Float = 0f
-    private val gravity: Float = resources.getDimension(R.dimen.gravity) // rơi nhanh chậm
-    private val flappyBoost: Float = resources.getDimension(R.dimen.flappy_boost)
+    private var gravity: Float = resources.getDimension(R.dimen.gravity) // rơi nhanh(>) chậm m(<) (0.5)
+    private var flappyBoost: Float = resources.getDimension(R.dimen.flappy_boost) // bay lên nhanh (>) chậm (>) (-9)
     private var collision: Boolean = false
 
 
@@ -44,6 +44,11 @@ class Bird(
     override fun draw(canvas: Canvas) {
         val bitmapToDraw = if (currentFallingSpeed < 0) birdUp else birdDown
         canvas.drawBitmap(bitmapToDraw, birdX.toFloat(), birdY.toFloat(), null)
+
+//        if(currentFallingSpeed < 0){
+//            canvas.drawBitmap(bird_down,birdX.toFloat(), birdY.toFloat(), null)
+//        }
+//        else  canvas.drawBitmap(bird_up,birdX.toFloat(), birdY.toFloat(), null)
     }
 
     override fun update() {
@@ -62,5 +67,7 @@ class Bird(
 
     fun onTouchEvent(){
         currentFallingSpeed = flappyBoost
+        print("==========> y")
+        println(birdY.toInt())
     }
 }

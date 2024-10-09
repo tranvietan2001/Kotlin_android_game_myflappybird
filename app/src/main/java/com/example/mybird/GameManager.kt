@@ -21,7 +21,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //    private var gameState: GameState = GameState.INITIAL
 //
     private lateinit var bird: Bird
-//    private lateinit var background: Background
+    private lateinit var background: Background
     private lateinit var dm: DisplayMetrics
 //    private lateinit var obstacleManager: ObstacleManager
 //    private lateinit var gameOver: GameOver
@@ -50,8 +50,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //        birdPosition = Rect()
 //        obstaclePositions = HashMap()
         bird = Bird(resources, dm.heightPixels)
-//        bird = Bird(resources, dm.heightPixels, this)
-//        background = Background(resources, dm.heightPixels)
+        background = Background(resources, dm.heightPixels)
+
 //        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels, this)
 //        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
 //        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
@@ -101,6 +101,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+        canvas.drawRGB(150,255,255)
+        background.draw(canvas)
         bird.draw(canvas)
     }
 
