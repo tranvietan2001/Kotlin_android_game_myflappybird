@@ -22,6 +22,9 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //
     private lateinit var bird: Bird
     private lateinit var background: Background
+
+    private  lateinit var obstacle: Obstacle // test vật cản
+
     private lateinit var dm: DisplayMetrics
 //    private lateinit var obstacleManager: ObstacleManager
 //    private lateinit var gameOver: GameOver
@@ -51,6 +54,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //        obstaclePositions = HashMap()
         bird = Bird(resources, dm.heightPixels)
         background = Background(resources, dm.heightPixels)
+
+        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
 
 //        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels, this)
 //        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
@@ -104,6 +109,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         canvas.drawRGB(150,255,255)
         background.draw(canvas)
         bird.draw(canvas)
+
+        obstacle.draw(canvas) // test
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
