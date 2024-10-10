@@ -4,22 +4,25 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.media.MediaPlayer
+import android.media.MediaPlayer.OnCompletionListener
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Toast
+import com.example.mybird.*
 import com.example.mybird.sprites.*
 
-class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context), SurfaceHolder.Callback {
+
+class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context), SurfaceHolder.Callback, GameManagerCallback{
     private val thread: MainThread = MainThread(holder, this)
 
 //    private val APP_NAME = "FlappyBirdClone"
 //    private var gameState: GameState = GameState.INITIAL
-//
+
+    private var gameState: GameState = GameState.PLAYING
+
+
     private lateinit var bird: Bird
     private lateinit var background: Background
 
@@ -31,8 +34,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //    private lateinit var gameMessage: GameMessage
 //    private lateinit var scoreSprite: Score
 //    private var score: Int = 0
-//    private var birdPosition: Rect = Rect()
-//    private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
+    private var birdPosition: Rect = Rect()
+    private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
 //
 //    private lateinit var mpPoint: MediaPlayer
 //    private lateinit var mpSwoosh: MediaPlayer
@@ -52,11 +55,11 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //        score = 0
 //        birdPosition = Rect()
 //        obstaclePositions = HashMap()
-        bird = Bird(resources, dm.heightPixels)
+        bird = Bird(resources, dm.heightPixels, this)
         background = Background(resources, dm.heightPixels)
 
 //        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
-        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels) // quản lý việc vật cản xuất bện và duy chuyển
+        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels, this) // quản lý việc vật cản xuất bện và duy chuyển
 
 //        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
 //        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
@@ -100,23 +103,117 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     }
 
     fun update() {
-        bird.update()
-        obstacleManager.update()
+
+        when (gameState) {
+            GameState.PLAYING -> {
+                bird.update()
+                obstacleManager.update()
+            }
+            GameState.GAME_OVER -> {
+                bird.update()
+            }
+            else -> {}
+        }
+
+
+//        bird.update()
+//        obstacleManager.update()
 //        println("====================> GameManager Update --- AnTV test")
     }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        canvas.drawRGB(150,255,255)
+        canvas.drawRGB(150, 255, 255)
         background.draw(canvas)
-        bird.draw(canvas)
 
-//        obstacle.draw(canvas) // test
-        obstacleManager.draw(canvas)
+//        bird.draw(canvas)
+////        obstacle.draw(canvas) // test
+//        obstacleManager.draw(canvas)
+
+        when (gameState) {
+            GameState.PLAYING -> {
+                bird.draw(canvas)
+                obstacleManager.draw(canvas)
+//                scoreSprite.draw(canvas)
+                calculateCollision()
+            }
+            GameState.INITIAL -> TODO()
+//            GameState.INITIAL -> {
+//                bird.draw(canvas)
+////                gameMessage.draw(canvas)
+//            }
+            GameState.GAME_OVER -> {
+                bird.draw(canvas)
+                obstacleManager.draw(canvas)
+//                gameOver.draw(canvas)
+//                scoreSprite.draw(canvas)
+            }
+
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        bird.onTouchEvent()
+//        bird.onTouchEvent()
+
+        when (gameState) {
+            GameState.PLAYING -> {
+                bird.onTouchEvent()
+//                mpWing.start()
+            }
+            GameState.INITIAL -> TODO()
+//            GameState.INITIAL -> {
+//                bird.onTouchEvent()
+//                mpWing.start()
+//                gameState = GameState.PLAYING
+//                mpSwoosh.start()
+//            }
+            GameState.GAME_OVER -> {
+                initGame()
+                gameState = GameState.INITIAL
+            }
+
+        }
         return super.onTouchEvent(event)
+    }
+
+    override fun updatePosition(birdPosition: Rect) {
+        this.birdPosition = birdPosition
+    }
+
+    override fun updatePosition(obstacle: Obstacle, positions: ArrayList<Rect>) {
+//        if (obstaclePositions.containsKey(obstacle)) {
+//            obstaclePositions.remove(obstacle)
+//        }
+        obstaclePositions.remove(obstacle)
+        obstaclePositions[obstacle] = positions
+    }
+
+    override fun removeObstacle(obstacle: Obstacle) {
+        obstaclePositions.remove(obstacle)
+    }
+
+    fun calculateCollision() {
+        var collision = false
+        if (birdPosition.bottom > dm.heightPixels) {
+            collision = true
+        } else {
+            for (obstacle in obstaclePositions.keys) {
+                val bottomRectangle = obstaclePositions[obstacle]!![0]
+                val topRectangle = obstaclePositions[obstacle]!![1]
+                if (birdPosition.right > bottomRectangle.left && birdPosition.left < bottomRectangle.right && birdPosition.bottom > bottomRectangle.top) {
+                    collision = true
+                } else if (birdPosition.right > topRectangle.left && birdPosition.left < topRectangle.right && birdPosition.top < topRectangle.bottom) {
+                    collision = true
+                }
+            }
+        }
+
+        if (collision) {
+            gameState = GameState.GAME_OVER
+            bird.collision()
+//            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+//            mpHit.start()
+//            mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
+        }
     }
 }

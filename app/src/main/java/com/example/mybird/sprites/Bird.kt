@@ -6,12 +6,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Rect
-import com.example.mybird.R
+import com.example.mybird.*
 
 class Bird(
     resources: Resources,
-    private val screenHeight: Int
-//    private val callback: GameManagerCallback
+    private val screenHeight: Int,
+    private val callback: GameManagerCallback
 ) : Sprite{
 
     private val birdDown: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_down)
@@ -36,7 +36,7 @@ class Bird(
     private var currentFallingSpeed: Float = 0f
     private var gravity: Float = resources.getDimension(R.dimen.gravity) // rơi nhanh(>) chậm m(<) (0.5)
     private var flappyBoost: Float = resources.getDimension(R.dimen.flappy_boost) // bay lên nhanh (>) chậm (>) (-9)
-    private var collision: Boolean = false
+    internal var collision: Boolean = false
 
 
 
@@ -52,22 +52,36 @@ class Bird(
     }
 
     override fun update() {
-//        if (collision) {
-//            if (birdY + birdDown.height < screenHeight) {
-//                birdY += currentFallingSpeed.toInt()
-//                currentFallingSpeed += gravity
-//            }
-//        } else {
+        if (collision) {
+            if (birdY + birdDown.height < screenHeight) {
+                birdY += currentFallingSpeed.toInt()
+                currentFallingSpeed += gravity
+            }
+        } else {
             birdY += currentFallingSpeed.toInt()
             currentFallingSpeed += gravity
-//            val birdPosition = Rect(birdX, birdY, birdX + birdDown.width, birdY + birdDown.height)
-//            callback.updatePosition(birdPosition)
-//        }
+            val birdPosition = Rect(birdX, birdY, birdX + birdDown.width, birdY + birdDown.height - 200 /**/)
+            callback.updatePosition(birdPosition)
+        }
+
+
+//        birdY += currentFallingSpeed.toInt()
+//        currentFallingSpeed += gravity
     }
 
     fun onTouchEvent(){
-        currentFallingSpeed = flappyBoost
-        print("==========> y")
-        println(birdY.toInt())
+        if(!collision) {
+            currentFallingSpeed = flappyBoost
+        }
+
+
+
+
+//        print("==========> y")
+//        println(birdY.toInt())
+    }
+
+    fun collision(){
+        collision = true
     }
 }

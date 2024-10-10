@@ -4,13 +4,13 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Rect
 //import com.example.mybird.GameManagerCallback
-import com.example.mybird.R
+import com.example.mybird.*
 
 class ObstacleManager(
     private val resources: Resources,
     private val screenHeight: Int,
     private val screenWidth: Int,
-//    private val callback: GameManagerCallback
+    private val callback: GameManagerCallback
 ) : ObstacleCallback {
 
     private var interval: Int = resources.getDimension(R.dimen.obstacle_interval).toInt()
@@ -43,10 +43,10 @@ class ObstacleManager(
 
     override fun obstacleOffScreen(obstacle: Obstacle) {
         obstacles.remove(obstacle)
-//        callback.removeObstacle(obstacle)
+        callback.removeObstacle(obstacle)
     }
-//
-//    override fun updatePosition(obstacle: Obstacle, positions: ArrayList<Rect>) {
-//        callback.updatePosition(obstacle, positions)
-//    }
+
+    override fun updatePosition(obstacle: Obstacle, positions: ArrayList<Rect>) {
+        callback.updatePosition(obstacle, positions)
+    }
 }

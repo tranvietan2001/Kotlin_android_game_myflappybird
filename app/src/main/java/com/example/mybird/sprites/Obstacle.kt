@@ -53,14 +53,14 @@ class Obstacle(
             callback.obstacleOffScreen(this)
         }
 
-//        else {
-//            val positions = ArrayList<Rect>()
-//            val bottomPosition = Rect(xPosition, screenHeight - height - headHeight, xPosition + width + 2 * headExtraWidth, screenHeight)
-//            val topPosition = Rect(xPosition, 0, xPosition + width + 2 * headExtraWidth, screenHeight - height - headHeight - separation)
-//
-//            positions.add(bottomPosition)
-//            positions.add(topPosition)
-////            callback.updatePosition(this, positions)
-//        }
+        else {
+            val positions = ArrayList<Rect>()
+            val bottomPosition = Rect(xPosition, screenHeight - height - headHeight, xPosition + width + 2 * headExtraWidth, screenHeight)
+            val topPosition = Rect(xPosition, 0, xPosition + width + 2 * headExtraWidth, screenHeight - height - headHeight - separation)
+
+            positions.add(bottomPosition)
+            positions.add(topPosition)
+//            callback.updatePosition(this, positions)
+        }
     }
 }
