@@ -23,10 +23,10 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     private lateinit var bird: Bird
     private lateinit var background: Background
 
-    private  lateinit var obstacle: Obstacle // test vật cản
+//    private  lateinit var obstacle: Obstacle // test vật cản
 
     private lateinit var dm: DisplayMetrics
-//    private lateinit var obstacleManager: ObstacleManager
+    private lateinit var obstacleManager: ObstacleManager
 //    private lateinit var gameOver: GameOver
 //    private lateinit var gameMessage: GameMessage
 //    private lateinit var scoreSprite: Score
@@ -55,9 +55,9 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         bird = Bird(resources, dm.heightPixels)
         background = Background(resources, dm.heightPixels)
 
-        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
+//        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
+        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels) // quản lý việc vật cản xuất bện và duy chuyển
 
-//        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels, this)
 //        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
 //        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
 //        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
@@ -101,6 +101,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     fun update() {
         bird.update()
+        obstacleManager.update()
 //        println("====================> GameManager Update --- AnTV test")
     }
 
@@ -110,7 +111,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         background.draw(canvas)
         bird.draw(canvas)
 
-        obstacle.draw(canvas) // test
+//        obstacle.draw(canvas) // test
+        obstacleManager.draw(canvas)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

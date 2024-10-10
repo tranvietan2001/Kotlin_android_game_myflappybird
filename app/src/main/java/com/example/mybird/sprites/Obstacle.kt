@@ -20,7 +20,7 @@ class Obstacle(
     private var height: Int
     private var width: Int = resources.getDimension(R.dimen.obstacle_width).toInt()
     private var separation: Int = resources.getDimension(R.dimen.obstacle_separation).toInt()
-    private var xPosition: Int = /*screenWidth*/ 300
+    private var xPosition: Int = screenWidth /*300*/
     private var speed: Int = resources.getDimension(R.dimen.obstacle_speed).toInt()
     private var headHeight: Int = resources.getDimension(R.dimen.head_height).toInt()
     private var headExtraWidth: Int = resources.getDimension(R.dimen.head_extra_width).toInt()
@@ -46,7 +46,7 @@ class Obstacle(
     }
 
     override fun update() {
-//        xPosition -= speed
+        xPosition -= speed
 //        if (xPosition <= 0 - width - 2 * headExtraWidth) {
 ////            callback.obstacleOffScreen(this)
 //        } else {
