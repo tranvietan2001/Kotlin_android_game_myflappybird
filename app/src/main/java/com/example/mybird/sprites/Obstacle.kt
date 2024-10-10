@@ -13,7 +13,7 @@ class Obstacle(
     resources: Resources,
     private val screenHeight: Int,
     private val screenWidth: Int,
-//    private val callback: ObstacleCallback
+    private val callback: ObstacleCallback
 ) : Sprite {
 
     private val image: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pipes)
@@ -47,9 +47,13 @@ class Obstacle(
 
     override fun update() {
         xPosition -= speed
-//        if (xPosition <= 0 - width - 2 * headExtraWidth) {
-////            callback.obstacleOffScreen(this)
-//        } else {
+
+        //kiểm tra vị trí của vật cản, nếu qua thì xóa và tạo mới lại
+        if (xPosition <= 0 - width - 2 * headExtraWidth) {
+            callback.obstacleOffScreen(this)
+        }
+
+//        else {
 //            val positions = ArrayList<Rect>()
 //            val bottomPosition = Rect(xPosition, screenHeight - height - headHeight, xPosition + width + 2 * headExtraWidth, screenHeight)
 //            val topPosition = Rect(xPosition, 0, xPosition + width + 2 * headExtraWidth, screenHeight - height - headHeight - separation)
