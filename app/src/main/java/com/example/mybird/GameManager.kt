@@ -162,13 +162,13 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //                mpWing.start()
             }
             GameState.INITIAL -> {
-                initGame()
+//                initGame()
                 bird.onTouchEvent()
                 gameState = GameState.PLAYING
 
             }
             GameState.GAME_OVER -> {
-//                initGame()
+                initGame()
                 gameState = GameState.INITIAL
             }
         }
