@@ -18,9 +18,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     private val thread: MainThread = MainThread(holder, this)
 
 //    private val APP_NAME = "FlappyBirdClone"
-//    private var gameState: GameState = GameState.INITIAL
-
-    private var gameState: GameState = GameState.PLAYING
+    private var gameState: GameState = GameState.INITIAL
+//    private var gameState: GameState = GameState.PLAYING
 
 
     private lateinit var bird: Bird
@@ -30,8 +29,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     private lateinit var dm: DisplayMetrics
     private lateinit var obstacleManager: ObstacleManager
-//    private lateinit var gameOver: GameOver
-//    private lateinit var gameMessage: GameMessage
+    private lateinit var gameOver: GameOver
+    private lateinit var gameMessage: GameMessage
 //    private lateinit var scoreSprite: Score
 //    private var score: Int = 0
     private var birdPosition: Rect = Rect()
@@ -53,16 +52,16 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     private fun initGame() {
 //        score = 0
-//        birdPosition = Rect()
-//        obstaclePositions = HashMap()
+        birdPosition = Rect()
+        obstaclePositions = HashMap()
         bird = Bird(resources, dm.heightPixels, this)
         background = Background(resources, dm.heightPixels)
 
 //        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
         obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels, this) // quản lý việc vật cản xuất bện và duy chuyển
 
-//        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
-//        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
+        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
+        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
 //        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
     }
 
@@ -123,6 +122,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+
+
         canvas.drawRGB(150, 255, 255)
         background.draw(canvas)
 
@@ -137,15 +138,15 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //                scoreSprite.draw(canvas)
                 calculateCollision()
             }
-            GameState.INITIAL -> TODO()
-//            GameState.INITIAL -> {
-//                bird.draw(canvas)
-////                gameMessage.draw(canvas)
-//            }
+
+            GameState.INITIAL -> {
+                bird.draw(canvas)
+                gameMessage.draw(canvas)
+            }
             GameState.GAME_OVER -> {
                 obstacleManager.draw(canvas)
                 bird.draw(canvas)
-//                gameOver.draw(canvas)
+                gameOver.draw(canvas)
 //                scoreSprite.draw(canvas)
             }
 
@@ -160,19 +161,18 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
                 bird.onTouchEvent()
 //                mpWing.start()
             }
-            GameState.INITIAL -> TODO()
-//            GameState.INITIAL -> {
-//                bird.onTouchEvent()
-//                mpWing.start()
-//                gameState = GameState.PLAYING
-//                mpSwoosh.start()
-//            }
-            GameState.GAME_OVER -> {
+            GameState.INITIAL -> {
                 initGame()
+                bird.onTouchEvent()
+                gameState = GameState.PLAYING
+
+            }
+            GameState.GAME_OVER -> {
+//                initGame()
                 gameState = GameState.INITIAL
             }
-
         }
+        bird.onTouchEvent()
         return super.onTouchEvent(event)
     }
 
