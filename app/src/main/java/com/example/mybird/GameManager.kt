@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.media.MediaPlayer
 import android.media.MediaPlayer.OnCompletionListener
 import android.util.AttributeSet
 import android.util.DisplayMetrics
@@ -36,15 +37,16 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     private var score: Int = 0
     private var birdPosition: Rect = Rect()
     private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
-//
-//    private lateinit var mpPoint: MediaPlayer
-//    private lateinit var mpSwoosh: MediaPlayer
-//    private lateinit var mpDie: MediaPlayer
-//    private lateinit var mpHit: MediaPlayer
-//    private lateinit var mpWing: MediaPlayer
+
+    private lateinit var mpPoint: MediaPlayer
+    private lateinit var mpSwoosh: MediaPlayer
+    private lateinit var mpDie: MediaPlayer
+    private lateinit var mpHit: MediaPlayer
+    private lateinit var mpWing: MediaPlayer
 
 
     init {
+        initSounds()
         holder.addCallback(this)
         dm = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(dm)
@@ -67,11 +69,11 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     }
 
     private fun initSounds() {
-//        mpPoint = MediaPlayer.create(context, R.raw.point)
-//        mpSwoosh = MediaPlayer.create(context, R.raw.swoosh)
-//        mpDie = MediaPlayer.create(context, R.raw.die)
-//        mpHit = MediaPlayer.create(context, R.raw.hit)
-//        mpWing = MediaPlayer.create(context, R.raw.wing)
+        mpPoint = MediaPlayer.create(context, R.raw.point)
+        mpSwoosh = MediaPlayer.create(context, R.raw.swoosh)
+        mpDie = MediaPlayer.create(context, R.raw.die)
+        mpHit = MediaPlayer.create(context, R.raw.hit)
+        mpWing = MediaPlayer.create(context, R.raw.wing)
     }
 
 
@@ -161,20 +163,21 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         when (gameState) {
             GameState.PLAYING -> {
                 bird.onTouchEvent()
-//                mpWing.start()
+                mpWing.start()
             }
             GameState.INITIAL -> {
 //                initGame()
                 bird.onTouchEvent()
+                mpWing.start()
                 gameState = GameState.PLAYING
-
+                mpSwoosh.start()
             }
             GameState.GAME_OVER -> {
                 initGame()
                 gameState = GameState.INITIAL
             }
         }
-        bird.onTouchEvent()
+//        bird.onTouchEvent()
         return super.onTouchEvent(event)
     }
 
@@ -195,6 +198,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 //        score +=10000
         score++
         scoreSprite.updateScore(score)
+        mpPoint.start()
     }
 
     fun calculateCollision() {
@@ -223,8 +227,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
             bird.collision()
             println("=========================================> GAME OVER")
             scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
-//            mpHit.start()
-//            mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
+            mpHit.start()
+            mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
         }
     }
 }

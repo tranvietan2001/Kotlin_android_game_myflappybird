@@ -60,7 +60,7 @@ class Bird(
         } else {
             birdY += currentFallingSpeed.toInt()
             currentFallingSpeed += gravity
-            val birdPosition = Rect(birdX, birdY, birdX + birdDown.width, birdY + birdDown.height - 200 /**/)
+            val birdPosition = Rect(birdX, birdY, birdX + birdDown.width, birdY + birdDown.height /*-200*/)
             callback.updatePosition(birdPosition)
         }
 
@@ -73,10 +73,6 @@ class Bird(
         if(!collision) {
             currentFallingSpeed = flappyBoost
         }
-
-
-
-
 //        print("==========> y")
 //        println(birdY.toInt())
     }
