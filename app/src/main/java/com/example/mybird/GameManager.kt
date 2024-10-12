@@ -132,8 +132,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
         when (gameState) {
             GameState.PLAYING -> {
-                bird.draw(canvas)
                 obstacleManager.draw(canvas)
+                bird.draw(canvas)
 //                scoreSprite.draw(canvas)
                 calculateCollision()
             }
@@ -143,8 +143,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 ////                gameMessage.draw(canvas)
 //            }
             GameState.GAME_OVER -> {
-                bird.draw(canvas)
                 obstacleManager.draw(canvas)
+                bird.draw(canvas)
 //                gameOver.draw(canvas)
 //                scoreSprite.draw(canvas)
             }
@@ -197,9 +197,14 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         if (birdPosition.bottom > dm.heightPixels) {
             collision = true
         } else {
+            println("=========================================>xxxxx$obstaclePositions")
             for (obstacle in obstaclePositions.keys) {
+                println("=========================================>yyyy")
                 val bottomRectangle = obstaclePositions[obstacle]!![0]
                 val topRectangle = obstaclePositions[obstacle]!![1]
+                println("=========================================>")
+                println("=========================================>OB: ${bottomRectangle.left}==${topRectangle.left}")
+                println("=========================================>Bird: $birdPosition.right ")
                 if (birdPosition.right > bottomRectangle.left && birdPosition.left < bottomRectangle.right && birdPosition.bottom > bottomRectangle.top) {
                     collision = true
                 } else if (birdPosition.right > topRectangle.left && birdPosition.left < topRectangle.right && birdPosition.top < topRectangle.bottom) {
@@ -211,6 +216,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         if (collision) {
             gameState = GameState.GAME_OVER
             bird.collision()
+            println("=========================================> GAME OVER")
 //            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
 //            mpHit.start()
 //            mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })

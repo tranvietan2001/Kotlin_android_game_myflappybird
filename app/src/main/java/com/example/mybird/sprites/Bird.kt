@@ -46,7 +46,7 @@ class Bird(
         canvas.drawBitmap(bitmapToDraw, birdX.toFloat(), birdY.toFloat(), null)
 
 //        if(currentFallingSpeed < 0){
-//            canvas.drawBitmap(bird_down,birdX.toFloat(), birdY.toFloat(), null)
+//            canvas.drawBitmap(bird_down,birdX.toFloat(), birdY.toFloat(),  null)
 //        }
 //        else  canvas.drawBitmap(bird_up,birdX.toFloat(), birdY.toFloat(), null)
     }

@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.mybird.R
+import com.example.mybird.sprites.*
 import java.util.*
 
 class Obstacle(
@@ -60,7 +61,7 @@ class Obstacle(
 
             positions.add(bottomPosition)
             positions.add(topPosition)
-//            callback.updatePosition(this, positions)
+            callback.updatePosition(this, positions)
         }
     }
 }
