@@ -1,5 +1,6 @@
 package com.example.mybird
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
@@ -17,7 +18,7 @@ import com.example.mybird.sprites.*
 class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context), SurfaceHolder.Callback, GameManagerCallback{
     private val thread: MainThread = MainThread(holder, this)
 
-//    private val APP_NAME = "FlappyBirdClone"
+    private val APP_NAME = "MyBird"
     private var gameState: GameState = GameState.INITIAL
 //    private var gameState: GameState = GameState.PLAYING
 
@@ -31,8 +32,8 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     private lateinit var obstacleManager: ObstacleManager
     private lateinit var gameOver: GameOver
     private lateinit var gameMessage: GameMessage
-//    private lateinit var scoreSprite: Score
-//    private var score: Int = 0
+    private lateinit var scoreSprite: Score
+    private var score: Int = 0
     private var birdPosition: Rect = Rect()
     private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
 //
@@ -51,7 +52,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     }
 
     private fun initGame() {
-//        score = 0
+        score = 0
         birdPosition = Rect()
         obstaclePositions = HashMap()
         bird = Bird(resources, dm.heightPixels, this)
@@ -62,7 +63,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
         gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
-//        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
+        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
     }
 
     private fun initSounds() {
@@ -135,7 +136,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
             GameState.PLAYING -> {
                 obstacleManager.draw(canvas)
                 bird.draw(canvas)
-//                scoreSprite.draw(canvas)
+                scoreSprite.draw(canvas)
                 calculateCollision()
             }
 
@@ -147,12 +148,13 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
                 obstacleManager.draw(canvas)
                 bird.draw(canvas)
                 gameOver.draw(canvas)
-//                scoreSprite.draw(canvas)
+                scoreSprite.draw(canvas)
             }
 
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 //        bird.onTouchEvent()
 
@@ -190,6 +192,9 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     override fun removeObstacle(obstacle: Obstacle) {
         obstaclePositions.remove(obstacle)
+//        score +=10000
+        score++
+        scoreSprite.updateScore(score)
     }
 
     fun calculateCollision() {
@@ -217,7 +222,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
             gameState = GameState.GAME_OVER
             bird.collision()
             println("=========================================> GAME OVER")
-//            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
 //            mpHit.start()
 //            mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
         }
