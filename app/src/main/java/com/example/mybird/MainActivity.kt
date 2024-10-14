@@ -13,10 +13,10 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private var sOnlineBtn: Button? =null
-    private var sOfflineBtn: Button? =null
-    private var sShopBtn: Button? =null
-    private var sConfigBtn: Button? =null
+    private lateinit var sOnlineBtn: Button
+    private lateinit var sOfflineBtn: Button
+    private lateinit var sShopBtn: Button
+    private lateinit var sConfigBtn: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,13 +29,13 @@ class MainActivity : AppCompatActivity() {
         sShopBtn = findViewById(R.id.sShopBtn)
         sConfigBtn = findViewById(R.id.sConfigBtn)
 
-        sOnlineBtn?.setOnClickListener {
+        sOnlineBtn.setOnClickListener {
             Toast.makeText(this,"online", Toast.LENGTH_SHORT).show()
-            val changeUi = Intent(this,PlayGameActivity::class.java)
+            val changeUi = Intent(this,LoginActivity::class.java)
             startActivity(changeUi)
         }
 
-        sOfflineBtn?.setOnClickListener {
+        sOfflineBtn.setOnClickListener {
             Toast.makeText(this,"offline", Toast.LENGTH_SHORT).show()
 
             val changeUi = Intent(this,PlayGameActivity::class.java)
@@ -43,15 +43,15 @@ class MainActivity : AppCompatActivity() {
 //            finish()
         }
 
-        sShopBtn?.setOnClickListener {
+        sShopBtn.setOnClickListener {
             Toast.makeText(this,"shop", Toast.LENGTH_SHORT).show()
-            val changeUi = Intent(this,PlayGameActivity::class.java)
+            val changeUi = Intent(this,ShopActivity::class.java)
             startActivity(changeUi)
         }
 
-        sConfigBtn?.setOnClickListener {
+        sConfigBtn.setOnClickListener {
             Toast.makeText(this,"config", Toast.LENGTH_SHORT).show()
-            val changeUi = Intent(this,PlayGameActivity::class.java)
+            val changeUi = Intent(this,ConfigActivity::class.java)
             startActivity(changeUi)
         }
     }

@@ -2,15 +2,41 @@ package com.example.mybird
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var accountNameTxt:EditText
+    private lateinit var passwordTxt:EditText
+    private lateinit var loginBtn:Button
+
+    private var accountName = ""
+    private var password = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.login_activity_main)
+
+        accountNameTxt = findViewById(R.id.accountTxt)
+        passwordTxt = findViewById(R.id.passwordTxt)
+        loginBtn = findViewById(R.id.loginBtn)
+
+        loginBtn?.setOnClickListener {
+            accountName = accountNameTxt.text.toString()
+            password = passwordTxt.text.toString()
+            if((accountName == "" && password == "") || accountName == "" || password == ""){
+                Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
+            }
+            else {
+                Toast.makeText(this, "$accountName---$password", Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 
