@@ -21,6 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".PlayGameActivity"/>
+        <activity android:name=".ConfigActivity"/>
+        <activity android:name=".ForgotPasswordActivity"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".ShopActivity"/>
     </application>
 
 </manifest>

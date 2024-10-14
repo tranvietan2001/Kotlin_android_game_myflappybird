@@ -1,19 +1,59 @@
 package com.example.mybird
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    private var sOnlineBtn: Button? =null
+    private var sOfflineBtn: Button? =null
+    private var sShopBtn: Button? =null
+    private var sConfigBtn: Button? =null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.select_game_mode_activity_main)
 
+        sOnlineBtn = findViewById(R.id.sOnlineBtn)
+        sOfflineBtn = findViewById(R.id.sOfflineBtn)
+        sShopBtn = findViewById(R.id.sShopBtn)
+        sConfigBtn = findViewById(R.id.sConfigBtn)
+
+        sOnlineBtn?.setOnClickListener {
+            Toast.makeText(this,"online", Toast.LENGTH_SHORT).show()
+            val changeUi = Intent(this,PlayGameActivity::class.java)
+            startActivity(changeUi)
+        }
+
+        sOfflineBtn?.setOnClickListener {
+            Toast.makeText(this,"offline", Toast.LENGTH_SHORT).show()
+
+            val changeUi = Intent(this,PlayGameActivity::class.java)
+            startActivity(changeUi)
+//            finish()
+        }
+
+        sShopBtn?.setOnClickListener {
+            Toast.makeText(this,"shop", Toast.LENGTH_SHORT).show()
+            val changeUi = Intent(this,PlayGameActivity::class.java)
+            startActivity(changeUi)
+        }
+
+        sConfigBtn?.setOnClickListener {
+            Toast.makeText(this,"config", Toast.LENGTH_SHORT).show()
+            val changeUi = Intent(this,PlayGameActivity::class.java)
+            startActivity(changeUi)
+        }
     }
 
 
@@ -30,5 +70,4 @@ class MainActivity : AppCompatActivity() {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
         }
     }
-
 }
