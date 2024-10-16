@@ -1,6 +1,5 @@
 package com.example.mybird.sprites
 
-import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
