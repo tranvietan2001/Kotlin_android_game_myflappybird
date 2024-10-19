@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyBird</string>
+    <string name="account_already_exists_please_check_again">Account already exists, please check again</string>
+    <string name="create">Create</string>
+    <string name="nickname">Nickname</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="create_account">create account</string>
 </resources>

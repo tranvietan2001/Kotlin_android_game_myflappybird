@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".PlayGameActivity"/>
         <activity android:name=".ConfigActivity"/>
+        <activity android:name=".CreateAccountActivity"/>
         <activity android:name=".ForgotPasswordActivity"/>
         <activity android:name=".LoginActivity"/>
         <activity android:name=".ShopActivity"/>
