@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#96FFFF"
-    android:backgroundTint="#96FFFF">
+    android:background="@color/bg_color"
+    android:backgroundTint="@color/bg_color">
 
     <TextView
         android:id="@+id/textView"
@@ -24,6 +24,9 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="50dp"
         android:text="Email"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="48sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -32,7 +35,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="password"
+        android:text="Password"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="48sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -43,6 +49,9 @@
         android:layout_marginStart="20dp"
         android:ems="10"
         android:inputType="text"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="32sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2" />
@@ -53,6 +62,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="32sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="@+id/accountTxt" />
 
@@ -61,7 +73,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="login"
+        android:text="Login"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="32sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTxt" />
@@ -72,6 +87,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="If you do not have an account, please click here"
+        android:fontFamily="@font/font_mybird_rocket"
+        android:textSize="24sp"
+        android:textColor="@color/txt_color_notif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
@@ -82,6 +100,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Login failed, please check your information again!"
+        android:fontFamily="@font/font_mybird_rocket"
+        android:textSize="24sp"
         android:textColor="#F20202"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,6 +113,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Forgot password"
+        android:fontFamily="@font/font_mybird_rocket"
+        android:textSize="24sp"
+        android:textColor="@color/txt_color_notif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

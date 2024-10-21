@@ -54,8 +54,11 @@ class CreateAccountActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty() && isCheckEmail && password.toString().length >=6) {
                 // Gọi hàm tạo tài khoản trong coroutine
                 lifecycleScope.launch {
-                    /*val result = */firebaseManager.createAccount(email.toString(), password.toString())
-//                    Toast.makeText(this@CreateAccountActivity, result, Toast.LENGTH_SHORT).show()
+                    val result = firebaseManager.createAccount(email.toString(), password.toString())
+                    Toast.makeText(this@CreateAccountActivity, result, Toast.LENGTH_SHORT).show()
+
+                    val nameResult = firebaseManager.createAccountName("Player1")
+                    Toast.makeText(this@CreateAccountActivity, nameResult, Toast.LENGTH_SHORT).show()
                 }
             } else {
 //                Toast.makeText(this, "Vui lòng nhập email và mật khẩu", Toast.LENGTH_SHORT).show()

@@ -35,8 +35,9 @@ class FirebaseManager {
 
     suspend fun createAccountName(name: String): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-        val userAccount = UserAccount(email = user.email ?: "", accountName = name)
+//        return user.email.toString()
 
+        val userAccount = UserAccount(email = user.email ?: "", accountName = name)
         database.child("users").child(user.uid).setValue(userAccount).await()
         return "Tạo tên người chơi thành công"
     }
