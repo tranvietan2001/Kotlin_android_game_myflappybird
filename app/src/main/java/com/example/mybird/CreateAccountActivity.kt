@@ -64,6 +64,19 @@ class CreateAccountActivity : AppCompatActivity() {
 //                Toast.makeText(this, "Vui lòng nhập email và mật khẩu", Toast.LENGTH_SHORT).show()
             }
         }
+
+        val valMark = findViewById<EditText>(R.id.testMarkTxt)
+        val updateMarlBtn = findViewById<Button>(R.id.updateMarkBtn)
+        val testListData = findViewById<TextView>(R.id.testListDataTxt)
+        updateMarlBtn.setOnClickListener {
+            val mark = valMark.text.toString()
+            val resultUpdate = firebaseManager.updateMark(nameAccount = nameAccTxt.toString(), mark.toInt())
+            Toast.makeText(this@CreateAccountActivity, resultUpdate, Toast.LENGTH_SHORT).show()
+
+            testListData.text = resultUpdate
+
+
+        }
     }
 
 

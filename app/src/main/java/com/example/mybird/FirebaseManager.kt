@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -90,16 +91,22 @@ class FirebaseManager {
         auth.signOut()
     }
 
-    suspend fun updateMark(nameAccount: String, mark: Int): String {
+    fun updateMark(nameAccount: String, mark: Int): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-        val userRef = database.child("users").child(user.uid)
 
-        return try {
-            userRef.child("mark").setValue(mark).await()
-            "Cập nhật điểm thành công"
-        } catch (e: Exception) {
-            "Lỗi: ${e.message}"
-        }
+        val db = Firebase.firestore
+        val updateData = db.collection("users").document(user.email.toString())
+
+// Set the "isCapital" field of the city 'DC'
+        updateData
+            .update("Mark", mark)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
+
+        val dataList = db.collection("users")
+        val rs = dataList.orderBy("Mark").limit(3)
+        return rs.toString()
     }
 
     suspend fun getMark(nameAccount: String): Any {
