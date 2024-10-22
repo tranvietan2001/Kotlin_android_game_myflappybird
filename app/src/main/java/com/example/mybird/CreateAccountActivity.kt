@@ -57,7 +57,7 @@ class CreateAccountActivity : AppCompatActivity() {
                     val result = firebaseManager.createAccount(email.toString(), password.toString())
                     Toast.makeText(this@CreateAccountActivity, result, Toast.LENGTH_SHORT).show()
 
-                    val nameResult = firebaseManager.createAccountName("Player1")
+                    val nameResult = firebaseManager.createAccountName(name.toString())
                     Toast.makeText(this@CreateAccountActivity, nameResult, Toast.LENGTH_SHORT).show()
                 }
             } else {

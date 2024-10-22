@@ -1,10 +1,13 @@
 package com.example.mybird
 
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -38,7 +41,33 @@ class FirebaseManager {
 //        return user.email.toString()
 
         val userAccount = UserAccount(email = user.email ?: "", accountName = name)
-        database.child("users").child(user.uid).setValue(userAccount).await()
+
+//        database.child("users").child(user.uid).setValue(userAccount).await()
+//        https://firebase.google.com/docs/firestore/manage-data/add-data?hl=vi#kotlin+ktx
+
+
+        val db = Firebase.firestore
+        val data = hashMapOf(
+//            "email" to userAccount.email,
+            "nameAccount" to userAccount.accountName,
+            "Mark" to userAccount.mark
+        )
+
+        //dcm id random
+//        db.collection("users")
+//            .add(data)
+//            .addOnSuccessListener { documentReference ->
+//                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//            }
+//            .addOnFailureListener { e ->
+//                Log.w(TAG, "Error adding document", e)
+//            }
+
+        db.collection("users").document(userAccount.email)
+            .set(data)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
         return "Tạo tên người chơi thành công"
     }
 
@@ -55,6 +84,10 @@ class FirebaseManager {
                 "Tài khoản chưa được đăng ký"
             }
         }
+    }
+
+    fun logoutAccount(){
+        auth.signOut()
     }
 
     suspend fun updateMark(nameAccount: String, mark: Int): String {
