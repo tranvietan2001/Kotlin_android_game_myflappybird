@@ -3,11 +3,12 @@ package com.example.mybird
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -54,16 +55,6 @@ class FirebaseManager {
             "Mark" to userAccount.mark
         )
 
-        //dcm id random
-//        db.collection("users")
-//            .add(data)
-//            .addOnSuccessListener { documentReference ->
-//                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-//            }
-//            .addOnFailureListener { e ->
-//                Log.w(TAG, "Error adding document", e)
-//            }
-
         db.collection("users").document(userAccount.email)
             .set(data)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
@@ -103,10 +94,23 @@ class FirebaseManager {
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
 
+        // truy van sap xep
 
-        val dataList = db.collection("users")
-        val rs = dataList.orderBy("Mark").limit(3)
-        return rs.toString()
+        val testList: MutableList<String> = mutableListOf()
+
+        db.collection("users").orderBy("Mark", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                for(document in result){
+//                    testList.add(document.id+"-"+document.data)
+                    println("=====>${document.id} === ${document.data}")
+                }
+            }
+            .addOnFailureListener{ exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+
+        return "Update done!"
     }
 
     suspend fun getMark(nameAccount: String): Any {
