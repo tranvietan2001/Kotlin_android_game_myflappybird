@@ -1,17 +1,53 @@
 package com.example.mybird
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
+    private lateinit var emailForgotTxt:EditText
+    private lateinit var resetBtn:Button
+    private lateinit var backBtn: Button
+    private lateinit var nofitiTxt: TextView
+
+    private lateinit var firebaseManager: FirebaseManager
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+        enableEdgeToEdge()
         setContentView(R.layout.forgot_password_activity_main)
 
+        // Khởi tạo FirebaseManager
+        firebaseManager = FirebaseManager()
+        firebaseManager.initFirebase()
+
+        emailForgotTxt = findViewById(R.id.emailForgotTxt)
+        resetBtn = findViewById(R.id.resetBtn)
+        backBtn = findViewById(R.id.backBtn)
+        nofitiTxt = findViewById(R.id.notifiTxt)
+
+        val emailForgot = emailForgotTxt.text
+
+        resetBtn.setOnClickListener {
+            nofitiTxt.setText("Wait a moment for verification")
+            firebaseManager.forgotPass(emailForgot.toString())
+//            {result ->
+//                nofitiTxt.setText(result)
+//            }
+
+
+        }
+
+        backBtn.setOnClickListener {
+            finish()
+        }
     }
 
 

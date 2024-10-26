@@ -54,7 +54,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
             } else {
                 failLoginTxt.visibility = View.GONE  // ẩn
-//                val result = firebaseManager.loginAccount(accountName, password)
 
                 firebaseManager.loginAccount(accountEmail, password){ result ->
                     if((result.toString() != "fail") || (result.toString() != "") || (result.toString() != "null")){

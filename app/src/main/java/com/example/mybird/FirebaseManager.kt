@@ -3,11 +3,7 @@ package com.example.mybird
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,16 +14,14 @@ data class UserAccount(val email: String, val accountName: String, var mark: Int
 class FirebaseManager {
 
     private lateinit var auth: FirebaseAuth
-//    private lateinit var database: DatabaseReference
-
     val database = Firebase.firestore
+
     val nameDb = "users"
     val markField = "mark"
     val nameField = "nameAccount"
 
     fun initFirebase() {
         auth = FirebaseAuth.getInstance()
-//        database = Firebase.database.reference
     }
 
     suspend fun createAccount(email: String, password: String): String {
@@ -48,13 +42,12 @@ class FirebaseManager {
 
         val userAccount = UserAccount(email = user.email ?: "", accountName = name)
 
-        val db = Firebase.firestore
         val data = hashMapOf(
             nameField to userAccount.accountName,
             markField to userAccount.mark
         )
 
-        db.collection(nameDb).document(userAccount.email)
+        database.collection(nameDb).document(userAccount.email)
             .set(data)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
@@ -64,7 +57,6 @@ class FirebaseManager {
 
     fun loginAccount(email: String, password: String, callback: (String) -> Unit) {
         logoutAccount()
-//        return try {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -88,7 +80,6 @@ class FirebaseManager {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
         val updateData = database.collection(nameDb).document(user.email.toString())
 
-// Set the "isCapital" field of the city 'DC'
         updateData
             .update(markField, mark)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
@@ -117,6 +108,29 @@ class FirebaseManager {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
 //        val mark = database.child("users").child(user.uid).child("mark").get().await().getValue(Int::class.java)
         return "Không tìm thấy thông tin"
+    }
+
+    fun forgotPass(email:String): String{
+        database.collection(nameDb)
+            .get()
+            .addOnSuccessListener { result ->
+                var isCheck:Boolean = false
+                for (document in result) {
+                    if (document.id.equals(email)){
+                        isCheck = true
+                        break
+                    }
+                    println("ISCHECK: ${document.id} => $email == ${document.data}")
+                }
+
+                println("ISCHECK: $isCheck")
+            }
+            .addOnFailureListener { exception ->
+                println("ISCHECK: Error getting documents.$exception")
+            }
+
+        return "aa"
+
     }
 
 }
