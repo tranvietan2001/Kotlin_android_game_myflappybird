@@ -21,6 +21,9 @@ class FirebaseManager {
 //    private lateinit var database: DatabaseReference
 
     val database = Firebase.firestore
+    val nameDb = "users"
+    val markField = "mark"
+    val nameField = "nameAccount"
 
     fun initFirebase() {
         auth = FirebaseAuth.getInstance()
@@ -47,11 +50,11 @@ class FirebaseManager {
 
         val db = Firebase.firestore
         val data = hashMapOf(
-            "nameAccount" to userAccount.accountName,
-            "Mark" to userAccount.mark
+            nameField to userAccount.accountName,
+            markField to userAccount.mark
         )
 
-        db.collection("users").document(userAccount.email)
+        db.collection(nameDb).document(userAccount.email)
             .set(data)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
@@ -65,32 +68,16 @@ class FirebaseManager {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    callback("ok") // Trả về "ok" nếu đăng nhập thành công
+                    database.collection(nameDb).document(email).get().addOnSuccessListener { result ->
+                        val name = result.get(nameField)
+                        callback(name.toString())
+                    }
+
+//                    callback("ok") // Trả về "ok" nếu đăng nhập thành công
                 } else {
                     callback("fail") // Trả về "ng" nếu đăng nhập không thành công
                 }
             }
-//            "data"
-//        }
-//        catch (e:Exception){
-//            "ng"
-//        }
-
-//
-//
-//        auth.signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener() { task ->
-//                if (task.isSuccessful) {
-//                    result = "ok"
-//                    // Sign in success, update UI with the signed-in user's information
-//                    Log.d(TAG, "-----signInWithEmail:success$result")
-//                } else {
-//                    result = "ng"
-//                    // If sign in fails, display a message to the user.
-//                    Log.w(TAG, "-----signInWithEmail:failure$result", task.exception)
-//                }
-//            }.await()
-
     }
 
     private fun logoutAccount() {
@@ -99,11 +86,11 @@ class FirebaseManager {
 
     fun updateMark(nameAccount: String, mark: Int): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-        val updateData = database.collection("users").document(user.email.toString())
+        val updateData = database.collection(nameDb).document(user.email.toString())
 
 // Set the "isCapital" field of the city 'DC'
         updateData
-            .update("Mark", mark)
+            .update(markField, mark)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
 
@@ -111,7 +98,7 @@ class FirebaseManager {
 
         val testList: MutableList<String> = mutableListOf()
 
-        database.collection("users").orderBy("Mark", Query.Direction.ASCENDING)
+        database.collection(nameDb).orderBy(markField, Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {

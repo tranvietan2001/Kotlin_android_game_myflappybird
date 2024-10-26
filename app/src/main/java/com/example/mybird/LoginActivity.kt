@@ -45,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
         failLoginTxt.visibility = View.GONE
 
+
         loginBtn.setOnClickListener {
             accountEmail = emailTxt.text.toString()
             password = passwordTxt.text.toString()
@@ -56,7 +57,18 @@ class LoginActivity : AppCompatActivity() {
 //                val result = firebaseManager.loginAccount(accountName, password)
 
                 firebaseManager.loginAccount(accountEmail, password){ result ->
-                    Toast.makeText(this, "Dang nhap: $result", Toast.LENGTH_SHORT).show()
+                    if((result.toString() != "fail") || (result.toString() != "") || (result.toString() != "null")){
+                        Toast.makeText(this, "Dang nhap OK: $result", Toast.LENGTH_SHORT).show()
+                        emailTxt.setText("")
+                        passwordTxt.setText("")
+                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+                        changeUi.putExtra("NAME_ACCOUNT", result)
+                        startActivity(changeUi)
+                    }
+                    else {
+                        Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
 //                Toast.makeText(this, "$accountName---$password", Toast.LENGTH_LONG).show()
 //                val changeUi = Intent(this,PlayGameActivity::class.java)

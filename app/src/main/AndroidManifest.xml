@@ -27,6 +27,7 @@
         <activity android:name=".ForgotPasswordActivity"/>
         <activity android:name=".LoginActivity"/>
         <activity android:name=".ShopActivity"/>
+        <activity android:name=".InforAfterLoginActivity"/>
     </application>
 
 </manifest>
