@@ -18,11 +18,13 @@ data class UserAccount(val email: String, val accountName: String, var mark: Int
 class FirebaseManager {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+//    private lateinit var database: DatabaseReference
+
+    val database = Firebase.firestore
 
     fun initFirebase() {
         auth = FirebaseAuth.getInstance()
-        database = Firebase.database.reference
+//        database = Firebase.database.reference
     }
 
     suspend fun createAccount(email: String, password: String): String {
@@ -38,19 +40,13 @@ class FirebaseManager {
         }
     }
 
-    suspend fun createAccountName(name: String): String {
+    fun createAccountName(name: String): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-//        return user.email.toString()
 
         val userAccount = UserAccount(email = user.email ?: "", accountName = name)
 
-//        database.child("users").child(user.uid).setValue(userAccount).await()
-//        https://firebase.google.com/docs/firestore/manage-data/add-data?hl=vi#kotlin+ktx
-
-
         val db = Firebase.firestore
         val data = hashMapOf(
-//            "email" to userAccount.email,
             "nameAccount" to userAccount.accountName,
             "Mark" to userAccount.mark
         )
@@ -63,30 +59,47 @@ class FirebaseManager {
         return "Tạo tên người chơi thành công"
     }
 
-    suspend fun loginAccount(email: String, password: String): String {
-        return try {
-            auth.signInWithEmailAndPassword(email, password).await()
-            val user = auth.currentUser ?: return "Tài khoản chưa được đăng ký"
-            val name = database.child("users").child(user.uid).child("accountName").get().await().getValue(String::class.java)
-            name ?: "Tên tài khoản không có"
-        } catch (e: Exception) {
-            if (e.message?.contains("wrong password") == true) {
-                "Mật khẩu sai, vui lòng kiểm tra và đăng nhập lại"
-            } else {
-                "Tài khoản chưa được đăng ký"
+    fun loginAccount(email: String, password: String, callback: (String) -> Unit) {
+        logoutAccount()
+//        return try {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback("ok") // Trả về "ok" nếu đăng nhập thành công
+                } else {
+                    callback("fail") // Trả về "ng" nếu đăng nhập không thành công
+                }
             }
-        }
+//            "data"
+//        }
+//        catch (e:Exception){
+//            "ng"
+//        }
+
+//
+//
+//        auth.signInWithEmailAndPassword(email, password)
+//            .addOnCompleteListener() { task ->
+//                if (task.isSuccessful) {
+//                    result = "ok"
+//                    // Sign in success, update UI with the signed-in user's information
+//                    Log.d(TAG, "-----signInWithEmail:success$result")
+//                } else {
+//                    result = "ng"
+//                    // If sign in fails, display a message to the user.
+//                    Log.w(TAG, "-----signInWithEmail:failure$result", task.exception)
+//                }
+//            }.await()
+
     }
 
-    fun logoutAccount(){
+    private fun logoutAccount() {
         auth.signOut()
     }
 
     fun updateMark(nameAccount: String, mark: Int): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-
-        val db = Firebase.firestore
-        val updateData = db.collection("users").document(user.email.toString())
+        val updateData = database.collection("users").document(user.email.toString())
 
 // Set the "isCapital" field of the city 'DC'
         updateData
@@ -98,15 +111,15 @@ class FirebaseManager {
 
         val testList: MutableList<String> = mutableListOf()
 
-        db.collection("users").orderBy("Mark", Query.Direction.ASCENDING)
+        database.collection("users").orderBy("Mark", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
-                for(document in result){
+                for (document in result) {
 //                    testList.add(document.id+"-"+document.data)
                     println("=====>${document.id} === ${document.data}")
                 }
             }
-            .addOnFailureListener{ exception ->
+            .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
             }
 
@@ -115,26 +128,8 @@ class FirebaseManager {
 
     suspend fun getMark(nameAccount: String): Any {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-        val mark = database.child("users").child(user.uid).child("mark").get().await().getValue(Int::class.java)
-        return mark ?: "Không tìm thấy thông tin"
+//        val mark = database.child("users").child(user.uid).child("mark").get().await().getValue(Int::class.java)
+        return "Không tìm thấy thông tin"
     }
 
-    suspend fun arrangeMark(): List<Triple<String, Int, Int>> {
-        val snapshot = database.child("users").get().await()
-        val userList = mutableListOf<UserAccount>()
-
-        snapshot.children.forEach { child ->
-            val userAccount = child.getValue(UserAccount::class.java)
-            if (userAccount != null) {
-                userList.add(userAccount)
-            }
-        }
-
-        val sortedList = userList.sortedByDescending { it.mark }.take(20)
-        val result = sortedList.mapIndexed { index, user ->
-            Triple(user.accountName, user.mark, index + 1)
-        }
-
-        return result
-    }
 }
