@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class RankAdapter(private val userList: ArrayList<User>): RecyclerView.Adapter<RankAdapter.ViewHolder>() {
+class RankAdapter(private val userList: List<User>): RecyclerView.Adapter<RankAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val index: TextView = itemView.findViewById(R.id.item_indexTxt)

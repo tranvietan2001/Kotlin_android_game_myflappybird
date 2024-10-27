@@ -32,7 +32,7 @@ class InforAfterLoginActivity : AppCompatActivity() {
         playBtn.setOnClickListener {  }
 
         rankBtn.setOnClickListener {
-            val changeUi = Intent(this, RecyclerViewActivity::class.java)
+            val changeUi = Intent(this, RankRecyclerViewActivity::class.java)
             startActivity(changeUi)
         }
 

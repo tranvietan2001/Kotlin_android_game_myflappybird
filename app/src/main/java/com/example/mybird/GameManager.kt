@@ -167,14 +167,16 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
             }
             GameState.INITIAL -> {
 //                initGame()
-                bird.onTouchEvent()
+//                bird.onTouchEvent()
                 mpWing.start()
                 gameState = GameState.PLAYING
                 mpSwoosh.start()
             }
             GameState.GAME_OVER -> {
-                initGame()
-                gameState = GameState.INITIAL
+//                initGame()
+//                gameState = GameState.INITIAL
+
+                // game over thì có nút replay khi click vào đó thì mới init v game states
             }
         }
 //        bird.onTouchEvent()
