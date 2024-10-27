@@ -56,7 +56,7 @@ class FirebaseManager {
     }
 
     fun loginAccount(email: String, password: String, callback: (String) -> Unit) {
-        logoutAccount()
+//        logoutAccount()
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -110,27 +110,33 @@ class FirebaseManager {
         return "Không tìm thấy thông tin"
     }
 
-    fun forgotPass(email:String): String{
+    fun forgotPass(email:String, callback: (String) -> Unit){
         database.collection(nameDb)
             .get()
             .addOnSuccessListener { result ->
                 var isCheck:Boolean = false
                 for (document in result) {
-                    if (document.id.equals(email)){
+                    if (document.id == email){
                         isCheck = true
                         break
                     }
-                    println("ISCHECK: ${document.id} => $email == ${document.data}")
+//                    println("ISCHECK: ${document.id} => $email == ${document.data}")
                 }
 
-                println("ISCHECK: $isCheck")
+                if(isCheck){
+                    auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                        if(task.isSuccessful){
+                            callback("Please check your email and follow the steps to reset your password")
+                        } else callback("Password reset request failed, please re-authenticate")
+                    }
+                }
+                else callback("Email does not exist, please check again")
+//                println("ISCHECK: $isCheck")
             }
             .addOnFailureListener { exception ->
+                callback("There is a problem with the connection, please check again.")
                 println("ISCHECK: Error getting documents.$exception")
             }
-
-        return "aa"
-
     }
 
 }

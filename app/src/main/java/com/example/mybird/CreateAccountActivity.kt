@@ -50,7 +50,7 @@ class CreateAccountActivity : AppCompatActivity() {
 
             Toast.makeText(this, "$isCheckEmail", Toast.LENGTH_SHORT).show()
 
-
+// nếu ok thì chuyển đế tram login
             if (email.isNotEmpty() && password.isNotEmpty() && isCheckEmail && password.toString().length >=6) {
                 // Gọi hàm tạo tài khoản trong coroutine
                 lifecycleScope.launch {

@@ -36,8 +36,11 @@ class ForgotPasswordActivity : AppCompatActivity() {
         val emailForgot = emailForgotTxt.text
 
         resetBtn.setOnClickListener {
-            nofitiTxt.setText("Wait a moment for verification")
-            firebaseManager.forgotPass(emailForgot.toString())
+            nofitiTxt.text = "Wait a moment for verification"
+            //có thể cho xác thực send mail reset ok thì tự back về login luôn cũng đc
+            firebaseManager.forgotPass(emailForgot.toString()){ result ->
+                nofitiTxt.text = result
+            }
 //            {result ->
 //                nofitiTxt.setText(result)
 //            }

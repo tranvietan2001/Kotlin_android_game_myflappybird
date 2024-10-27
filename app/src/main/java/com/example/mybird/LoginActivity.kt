@@ -45,26 +45,38 @@ class LoginActivity : AppCompatActivity() {
 
         failLoginTxt.visibility = View.GONE
 
-
         loginBtn.setOnClickListener {
             accountEmail = emailTxt.text.toString()
             password = passwordTxt.text.toString()
             if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
                 failLoginTxt.visibility = View.VISIBLE
-                Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
             } else {
                 failLoginTxt.visibility = View.GONE  // ẩn
 
                 firebaseManager.loginAccount(accountEmail, password){ result ->
-                    if((result.toString() != "fail") || (result.toString() != "") || (result.toString() != "null")){
-                        Toast.makeText(this, "Dang nhap OK: $result", Toast.LENGTH_SHORT).show()
-                        emailTxt.setText("")
-                        passwordTxt.setText("")
-                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
-                        changeUi.putExtra("NAME_ACCOUNT", result)
-                        startActivity(changeUi)
+//                    Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
+                    if(result != "fail"){
+                        if(result != ""){
+                            if (result!="null"){
+                                emailTxt.setText("")
+                                passwordTxt.setText("")
+
+                                val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+                                changeUi.putExtra("NAME_ACCOUNT", result)
+                                startActivity(changeUi)
+                            }
+                        }
+////                        Toast.makeText(this, "Dang nhap OK: $result", Toast.LENGTH_SHORT).show()
+//                        emailTxt.setText("")
+//                        passwordTxt.setText("")
+//
+//                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+//                        changeUi.putExtra("NAME_ACCOUNT", result)
+//                        startActivity(changeUi)
                     }
                     else {
+                        failLoginTxt.visibility = View.VISIBLE
                         Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
                     }
 
