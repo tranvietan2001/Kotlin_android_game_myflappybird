@@ -1,5 +1,6 @@
 package com.example.mybird
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -28,7 +29,12 @@ class InforAfterLoginActivity : AppCompatActivity() {
 
         nameAccountTxt.text = nameAccount
 
+        playBtn.setOnClickListener {  }
 
+        rankBtn.setOnClickListener {
+            val changeUi = Intent(this, RecyclerViewActivity::class.java)
+            startActivity(changeUi)
+        }
 
     }
 

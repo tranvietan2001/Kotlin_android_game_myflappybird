@@ -20,7 +20,7 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var passwardTxt: EditText
     private lateinit var nameAccTxt: EditText
     private lateinit var createAccBtn: Button
-    private lateinit var failCreateTxt: TextView
+    private lateinit var nofiticalCreateTxt: TextView
 
     private lateinit var firebaseManager: FirebaseManager
 
@@ -37,11 +37,13 @@ class CreateAccountActivity : AppCompatActivity() {
         passwardTxt = findViewById(R.id.passwordAccTxt)
         nameAccTxt = findViewById(R.id.nameAccTxt)
         createAccBtn = findViewById(R.id.createAccBtn)
-        failCreateTxt = findViewById(R.id.failCreateTxt)
+        nofiticalCreateTxt = findViewById(R.id.failCreateTxt)
 
-        failCreateTxt.visibility = View.VISIBLE
+        nofiticalCreateTxt.visibility = View.GONE
 
         createAccBtn.setOnClickListener {
+            nofiticalCreateTxt.visibility = View.GONE
+
             val email = emailTxt.text
             val password = passwardTxt.text
             val name = nameAccTxt.text
@@ -50,8 +52,8 @@ class CreateAccountActivity : AppCompatActivity() {
 
             Toast.makeText(this, "$isCheckEmail", Toast.LENGTH_SHORT).show()
 
-// nếu ok thì chuyển đế tram login
-            if (email.isNotEmpty() && password.isNotEmpty() && isCheckEmail && password.toString().length >=6) {
+            // nếu ok thì chuyển đế tram login
+            if (isCheckEmail && password.toString().length >=6) {
                 // Gọi hàm tạo tài khoản trong coroutine
                 lifecycleScope.launch {
                     val result = firebaseManager.createAccount(email.toString(), password.toString())
@@ -61,7 +63,9 @@ class CreateAccountActivity : AppCompatActivity() {
                     Toast.makeText(this@CreateAccountActivity, nameResult, Toast.LENGTH_SHORT).show()
                 }
             } else {
-//                Toast.makeText(this, "Vui lòng nhập email và mật khẩu", Toast.LENGTH_SHORT).show()
+                // rule create acc
+//                nofiticalCreateTxt.text = "Check if email is valid, password length must be over 6 characters"
+                nofiticalCreateTxt.visibility = View.VISIBLE
             }
         }
 
@@ -74,8 +78,6 @@ class CreateAccountActivity : AppCompatActivity() {
             Toast.makeText(this@CreateAccountActivity, resultUpdate, Toast.LENGTH_SHORT).show()
 
             testListData.text = resultUpdate
-
-
         }
     }
 
@@ -95,8 +97,7 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     fun isValidEmail(email: String): Boolean {
-        // Biểu thức chính quy cho địa chỉ email
-        val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+        val emailRegex = "^[a-zA-Z0-9._%+-]{3,}+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         return Regex(emailRegex).matches(email.trim())
     }
 }

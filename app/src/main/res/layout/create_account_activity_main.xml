@@ -98,13 +98,14 @@
 
     <TextView
         android:id="@+id/failCreateTxt"
-        android:layout_width="wrap_content"
+        android:layout_width="350sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="@string/account_already_exists_please_check_again"
+        android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
         android:fontFamily="@font/font_mybird_rocket"
         android:textSize="24sp"
         android:textColor="@color/txt_color_notif"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameAccTxt" />
