@@ -16,7 +16,8 @@ import com.example.mybird.*
 import com.example.mybird.sprites.*
 
 
-class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context), SurfaceHolder.Callback, GameManagerCallback{
+class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
+    SurfaceHolder.Callback, GameManagerCallback {
     private val thread: MainThread = MainThread(holder, this)
 
     private val APP_NAME = "MyBird"
@@ -34,6 +35,9 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     private lateinit var gameOver: GameOver
     private lateinit var gameMessage: GameMessage
     private lateinit var scoreSprite: Score
+
+    private lateinit var retryBtn: RetryButton
+
     private var score: Int = 0
     private var birdPosition: Rect = Rect()
     private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
@@ -61,11 +65,18 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         background = Background(resources, dm.heightPixels)
 
 //        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
-        obstacleManager = ObstacleManager(resources, dm.heightPixels, dm.widthPixels, this) // quản lý việc vật cản xuất bện và duy chuyển
+        obstacleManager = ObstacleManager(
+            resources,
+            dm.heightPixels,
+            dm.widthPixels,
+            this
+        ) // quản lý việc vật cản xuất bện và duy chuyển
 
         gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
         scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
+
+        retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels)
     }
 
     private fun initSounds() {
@@ -75,8 +86,6 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         mpHit = MediaPlayer.create(context, R.raw.hit)
         mpWing = MediaPlayer.create(context, R.raw.wing)
     }
-
-
 
 
     // Xử lý khi surface được tạo
@@ -111,9 +120,11 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
                 bird.update()
                 obstacleManager.update()
             }
+
             GameState.GAME_OVER -> {
                 bird.update()
             }
+
             else -> {}
         }
 
@@ -146,11 +157,14 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
                 bird.draw(canvas)
                 gameMessage.draw(canvas)
             }
+
             GameState.GAME_OVER -> {
                 obstacleManager.draw(canvas)
                 bird.draw(canvas)
                 gameOver.draw(canvas)
                 scoreSprite.draw(canvas)
+
+                retryBtn.draw(canvas)
             }
 
         }
@@ -165,6 +179,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
                 bird.onTouchEvent()
                 mpWing.start()
             }
+
             GameState.INITIAL -> {
 //                initGame()
 //                bird.onTouchEvent()
@@ -172,11 +187,28 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
                 gameState = GameState.PLAYING
                 mpSwoosh.start()
             }
+
             GameState.GAME_OVER -> {
 //                initGame()
 //                gameState = GameState.INITIAL
 
                 // game over thì có nút replay khi click vào đó thì mới init v game states
+                // vex nút retry, neu touch ddungs vaof vij tris nuts thif init vaf cguyeenr tranjg nthais
+
+                if (event != null) {
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+                        val x = event.x
+                        val y = event.y
+                        if (retryBtn.isTouched(x, y)) {
+//                            println("TOUCH -- $x --$y")
+                            initGame()
+                            gameState = GameState.INITIAL
+                        }
+//                        else println("TOUCH -- outside")
+
+                    }
+                }
+//                retryBtn.onTouchEvent()
             }
         }
 //        bird.onTouchEvent()
