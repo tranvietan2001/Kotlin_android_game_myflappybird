@@ -1,15 +1,32 @@
 package com.example.mybird
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 class PlayGameActivity : AppCompatActivity() {
+    private lateinit var namePlayer: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.activity_main)
+
+        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
+        namePlayer = findViewById(R.id.nameAccountPlayTxt)
+        if(nameAccount != "@Off_play"){
+            namePlayer.text = nameAccount
+        }
+        else namePlayer.text = ""
+
+
+
+//        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+//        changeUi.putExtra("NAME_ACCOUNT", result)
+//        startActivity(changeUi)
 
     }
 

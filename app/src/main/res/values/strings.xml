@@ -7,7 +7,7 @@
     <string name="email">Email</string>
     <string name="create_account">create account</string>
     <string name="emailTxt">Email</string>
-    <string name="check_if_email_is_valid_password_length_must_be_over_6_characters">Check if email is valid, password length must be over 6 characters</string>
+    <string name="check_if_email_is_valid_password_length_must_be_over_6_characters">Check if email is valid, password length must be over 6 characters, nickname length must be over 3 and under 10 characters without numbers and special characters</string>
     <string name="login_failed_please_check_your_information_again">Login failed, please check your information again!</string>
     <string name="if_you_do_not_have_an_account_please_click_here">If you do not have an account, please click here</string>
     <string name="forgot_password">Forgot password</string>
@@ -20,4 +20,5 @@
     <string name="email_dose_not_exist">Email does not exist, please check again</string>
     <string name="achievement_ranking">Achievement Ranking</string>
     <string name="search">Search</string>
+    <string name="no_name">---</string>
 </resources>

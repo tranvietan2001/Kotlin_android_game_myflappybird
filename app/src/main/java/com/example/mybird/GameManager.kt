@@ -181,11 +181,20 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
             }
 
             GameState.INITIAL -> {
-//                initGame()
-//                bird.onTouchEvent()
-                mpWing.start()
-                gameState = GameState.PLAYING
-                mpSwoosh.start()
+                if (event != null) {
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+                        val x = event.x
+                        val y = event.y
+                        if (gameMessage.isTouched(x, y)) {
+                            mpWing.start()
+                            gameState = GameState.PLAYING
+                            mpSwoosh.start()
+                        }
+                    }
+                }
+//                mpWing.start()
+//                gameState = GameState.PLAYING
+//                mpSwoosh.start()
             }
 
             GameState.GAME_OVER -> {

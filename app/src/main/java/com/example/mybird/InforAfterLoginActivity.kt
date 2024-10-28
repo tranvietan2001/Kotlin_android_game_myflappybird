@@ -29,7 +29,11 @@ class InforAfterLoginActivity : AppCompatActivity() {
 
         nameAccountTxt.text = nameAccount
 
-        playBtn.setOnClickListener {  }
+        playBtn.setOnClickListener {
+            val changeUi = Intent(this,PlayGameActivity::class.java)
+            changeUi.putExtra("NAME_ACCOUNT", nameAccount)
+            startActivity(changeUi)
+        }
 
         rankBtn.setOnClickListener {
             val changeUi = Intent(this, RankRecyclerViewActivity::class.java)

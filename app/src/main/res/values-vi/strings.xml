@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyBird</string>
+    <string name="account_already_exists_please_check_again">Tài khoản đã tồn tại, vui lòng kiểm tra lại</string>
+    <string name="create">Tạo mới</string>
+    <string name="nickname">Biệt danh</string>
+    <string name="password">Mật khẩu</string>
+    <string name="email">Email</string>
+    <string name="create_account">Tạo Tài Khoản</string>
+    <string name="emailTxt">Email</string>
+    <string name="check_if_email_is_valid_password_length_must_be_over_6_characters">Kiểm tra xem email có hợp lệ không, độ dài mật khẩu phải trên 6 ký tự, độ dài biệt danh phải trên 3 và dưới 10 ký tự không có số và ký tự đặc biệt</string>
+    <string name="login_failed_please_check_your_information_again">Đăng nhập không thành công, vui lòng kiểm tra lại thông tin của bạn!</string>
+    <string name="if_you_do_not_have_an_account_please_click_here">Nếu bạn không có tài khoản, vui lòng nhấp vào đây</string>
+    <string name="forgot_password">Quên mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="reset">Đặt lại</string>
+    <string name="back">Trở về</string>
+    <string name="wait_a_moment_for_verification">Chờ một lát để xác minh</string>
+    <string name="check_email_reset_password">Vui lòng kiểm tra email của bạn và làm theo các bước để đặt lại mật khẩu</string>
+    <string name="reset_password_fail">Yêu cầu đặt lại mật khẩu không thành công, vui lòng xác thực lại</string>
+    <string name="email_dose_not_exist">Email không tồn tại, vui lòng kiểm tra lại</string>
+    <string name="achievement_ranking">Xếp hạng thành tích</string>
+    <string name="search">Tìm</string>
+    <string name="no_name">---</string>
+</resources>

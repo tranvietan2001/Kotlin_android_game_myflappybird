@@ -15,4 +15,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="53dp" />
 
+    <TextView
+        android:id="@+id/nameAccountPlayTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/no_name"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="48sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

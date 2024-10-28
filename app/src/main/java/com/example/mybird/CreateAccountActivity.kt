@@ -49,18 +49,22 @@ class CreateAccountActivity : AppCompatActivity() {
             val name = nameAccTxt.text
 
             val isCheckEmail = isValidEmail(email.toString())
+            val isCheckName = isValidNameAcc(name.toString())
 
-            Toast.makeText(this, "$isCheckEmail", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "$isCheckEmail", Toast.LENGTH_SHORT).show()
 
             // nếu ok thì chuyển đế tram login
-            if (isCheckEmail && password.toString().length >=6) {
+            if (isCheckEmail && password.toString().length >=6 && isCheckName) {
                 // Gọi hàm tạo tài khoản trong coroutine
                 lifecycleScope.launch {
                     val result = firebaseManager.createAccount(email.toString(), password.toString())
                     Toast.makeText(this@CreateAccountActivity, result, Toast.LENGTH_SHORT).show()
-
                     val nameResult = firebaseManager.createAccountName(name.toString())
                     Toast.makeText(this@CreateAccountActivity, nameResult, Toast.LENGTH_SHORT).show()
+
+
+                    // thêm điều kiệm -> phải đổi kiểu trả về thành t/f hoặc string quy ước, -> xét hiển thị notifical
+
                 }
             } else {
                 // rule create acc
@@ -99,5 +103,9 @@ class CreateAccountActivity : AppCompatActivity() {
     fun isValidEmail(email: String): Boolean {
         val emailRegex = "^[a-zA-Z0-9._%+-]{3,}+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         return Regex(emailRegex).matches(email.trim())
+    }
+    fun isValidNameAcc(name: String): Boolean{
+        val nameRegex = "^[a-zA-Z]{3,10}$"
+        return Regex(nameRegex).matches(name.trim())
     }
 }

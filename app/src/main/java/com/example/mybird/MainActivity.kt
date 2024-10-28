@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"offline", Toast.LENGTH_SHORT).show()
 
             val changeUi = Intent(this,PlayGameActivity::class.java)
+            changeUi.putExtra("NAME_ACCOUNT", "@Off_play")
             startActivity(changeUi)
 //            finish()
         }
