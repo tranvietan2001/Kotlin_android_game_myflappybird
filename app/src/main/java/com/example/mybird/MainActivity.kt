@@ -18,7 +18,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sShopBtn: Button
     private lateinit var sConfigBtn: Button
 
-    var test = 10
+    var test = 20
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
