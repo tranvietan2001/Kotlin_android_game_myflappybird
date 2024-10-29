@@ -21,4 +21,12 @@
     <string name="achievement_ranking">Achievement Ranking</string>
     <string name="search">Search</string>
     <string name="no_name">---</string>
+    <string name="bird">Bird</string>
+    <string name="sound">Sound</string>
+    <string name="language">Language</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="confirm">Confirm</string>
 </resources>

@@ -1,8 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#96FFFF"
     android:backgroundTint="#96FFFF">
 
+    <TextView
+        android:id="@+id/BirdTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="368dp"
+        android:text="@string/bird"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/SoundTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/sound"
+        app:layout_constraintStart_toStartOf="@+id/BirdTxt"
+        app:layout_constraintTop_toBottomOf="@+id/BirdTxt" />
+
+    <TextView
+        android:id="@+id/languageTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/language"
+        app:layout_constraintStart_toStartOf="@+id/SoundTxt"
+        app:layout_constraintTop_toBottomOf="@+id/SoundTxt" />
+
+    <CheckBox
+        android:id="@+id/soundOnCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:text="@string/on"
+        app:layout_constraintBottom_toBottomOf="@+id/SoundTxt"
+        app:layout_constraintStart_toStartOf="@+id/SoundTxt"
+        app:layout_constraintTop_toTopOf="@+id/SoundTxt" />
+
+    <CheckBox
+        android:id="@+id/soundOffCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:text="@string/off"
+        app:layout_constraintBottom_toBottomOf="@+id/soundOnCB"
+        app:layout_constraintStart_toStartOf="@+id/soundOnCB"
+        app:layout_constraintTop_toTopOf="@+id/soundOnCB" />
+
+    <CheckBox
+        android:id="@+id/lgEnCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/english"
+        app:layout_constraintBottom_toBottomOf="@+id/languageTxt"
+        app:layout_constraintStart_toStartOf="@+id/soundOnCB"
+        app:layout_constraintTop_toTopOf="@+id/languageTxt" />
+
+    <CheckBox
+        android:id="@+id/lgViCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vietnamese"
+        app:layout_constraintBottom_toBottomOf="@+id/lgEnCB"
+        app:layout_constraintStart_toStartOf="@+id/soundOffCB"
+        app:layout_constraintTop_toTopOf="@+id/lgEnCB"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/confirmBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:text="@string/confirm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

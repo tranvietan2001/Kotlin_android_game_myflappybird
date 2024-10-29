@@ -30,14 +30,11 @@ class MainActivity : AppCompatActivity() {
         sConfigBtn = findViewById(R.id.sConfigBtn)
 
         sOnlineBtn.setOnClickListener {
-            Toast.makeText(this,"online", Toast.LENGTH_SHORT).show()
             val changeUi = Intent(this,LoginActivity::class.java)
             startActivity(changeUi)
         }
 
         sOfflineBtn.setOnClickListener {
-            Toast.makeText(this,"offline", Toast.LENGTH_SHORT).show()
-
             val changeUi = Intent(this,PlayGameActivity::class.java)
             changeUi.putExtra("NAME_ACCOUNT", "@Off_play")
             startActivity(changeUi)
@@ -45,13 +42,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         sShopBtn.setOnClickListener {
-            Toast.makeText(this,"shop", Toast.LENGTH_SHORT).show()
             val changeUi = Intent(this,ShopActivity::class.java)
             startActivity(changeUi)
         }
 
         sConfigBtn.setOnClickListener {
-            Toast.makeText(this,"config", Toast.LENGTH_SHORT).show()
             val changeUi = Intent(this,ConfigActivity::class.java)
             startActivity(changeUi)
         }
