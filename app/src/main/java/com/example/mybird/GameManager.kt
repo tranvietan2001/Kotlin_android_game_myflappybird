@@ -20,7 +20,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     SurfaceHolder.Callback, GameManagerCallback {
     private val thread: MainThread = MainThread(holder, this)
 
-    private val APP_NAME = "MyBird"
+    private val APP_NAME = "@MY_BIRD"
     private var gameState: GameState = GameState.INITIAL
 //    private var gameState: GameState = GameState.PLAYING
 

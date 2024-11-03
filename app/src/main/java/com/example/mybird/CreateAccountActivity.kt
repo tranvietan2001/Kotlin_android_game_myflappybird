@@ -1,10 +1,13 @@
 package com.example.mybird
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,9 +24,11 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var nameAccTxt: EditText
     private lateinit var createAccBtn: Button
     private lateinit var nofiticalCreateTxt: TextView
+    private lateinit var loadingIV: ImageView
 
     private lateinit var firebaseManager: FirebaseManager
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
@@ -38,11 +43,14 @@ class CreateAccountActivity : AppCompatActivity() {
         nameAccTxt = findViewById(R.id.nameAccTxt)
         createAccBtn = findViewById(R.id.createAccBtn)
         nofiticalCreateTxt = findViewById(R.id.failCreateTxt)
-
+        loadingIV = findViewById(R.id.loadingIV)
+        loadingIV.visibility = View.GONE
+        startRotationAnimation()
         nofiticalCreateTxt.visibility = View.GONE
 
         createAccBtn.setOnClickListener {
             nofiticalCreateTxt.visibility = View.GONE
+            loadingIV.visibility = View.VISIBLE
 
             val email = emailTxt.text
             val password = passwardTxt.text
@@ -70,6 +78,7 @@ class CreateAccountActivity : AppCompatActivity() {
                 // rule create acc
 //                nofiticalCreateTxt.text = "Check if email is valid, password length must be over 6 characters"
                 nofiticalCreateTxt.visibility = View.VISIBLE
+                loadingIV.visibility = View.GONE
             }
         }
 
@@ -107,5 +116,13 @@ class CreateAccountActivity : AppCompatActivity() {
     fun isValidNameAcc(name: String): Boolean{
         val nameRegex = "^[a-zA-Z]{3,10}$"
         return Regex(nameRegex).matches(name.trim())
+    }
+
+    fun startRotationAnimation() {
+        // Tạo ObjectAnimator để quay hình ảnh
+        val animator = ObjectAnimator.ofFloat(loadingIV, "rotation", 0f, 360f)
+        animator.duration = 2000 // Thời gian quay (2 giây)
+        animator.repeatCount = ObjectAnimator.INFINITE // Lặp lại vô hạn
+        animator.start() // Bắt đầu hoạt động
     }
 }
