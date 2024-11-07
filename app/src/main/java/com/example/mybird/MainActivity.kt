@@ -1,10 +1,13 @@
 package com.example.mybird
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sShopBtn: Button
     private lateinit var sConfigBtn: Button
 
-
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         sOfflineBtn = findViewById(R.id.sOfflineBtn)
         sShopBtn = findViewById(R.id.sShopBtn)
         sConfigBtn = findViewById(R.id.sConfigBtn)
+
 
         sOnlineBtn.setOnClickListener {
             val changeUi = Intent(this,LoginActivity::class.java)
@@ -49,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         sConfigBtn.setOnClickListener {
             val changeUi = Intent(this,ConfigActivity::class.java)
             startActivity(changeUi)
+            finish()
         }
     }
 

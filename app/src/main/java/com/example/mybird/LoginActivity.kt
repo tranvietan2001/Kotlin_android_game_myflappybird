@@ -1,10 +1,13 @@
 package com.example.mybird
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,12 +24,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var failLoginTxt: TextView
     private lateinit var createAccountTxt: TextView
     private lateinit var forgotPassTxt: TextView
-
-    private var accountEmail= ""
+    private lateinit var loadingIV: ImageView
+    private var accountEmail = ""
     private var password = ""
 
     private lateinit var firebaseManager: FirebaseManager
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
@@ -42,26 +46,31 @@ class LoginActivity : AppCompatActivity() {
         failLoginTxt = findViewById(R.id.failLoginTxt)
         createAccountTxt = findViewById(R.id.signAccountTxt)
         forgotPassTxt = findViewById(R.id.forgotPassTxt)
-
+        loadingIV = findViewById(R.id.loadingIV)
+        loadingIV.visibility = View.GONE
         failLoginTxt.visibility = View.GONE
 
+        startRotationAnimation()
+
         loginBtn.setOnClickListener {
+            loadingIV.visibility = View.VISIBLE
             accountEmail = emailTxt.text.toString()
             password = passwordTxt.text.toString()
             if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
                 failLoginTxt.visibility = View.VISIBLE
+                loadingIV.visibility = View.GONE
 //                Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
             } else {
                 failLoginTxt.visibility = View.GONE  // ẩn
-
-                firebaseManager.loginAccount(accountEmail, password){ result ->
+                loginBtn.visibility = View.VISIBLE
+                firebaseManager.loginAccount(accountEmail, password) { result ->
 //                    Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
-                    if(result != "fail"){
-                        if(result != ""){
-                            if (result!="null"){
+                    if (result != "fail") {
+                        if (result != "") {
+                            if (result != "null") {
                                 emailTxt.setText("")
                                 passwordTxt.setText("")
-
+                                loadingIV.visibility = View.GONE
                                 val changeUi = Intent(this, InforAfterLoginActivity::class.java)
                                 changeUi.putExtra("NAME_ACCOUNT", result)
                                 startActivity(changeUi)
@@ -74,9 +83,9 @@ class LoginActivity : AppCompatActivity() {
 //                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
 //                        changeUi.putExtra("NAME_ACCOUNT", result)
 //                        startActivity(changeUi)
-                    }
-                    else {
+                    } else {
                         failLoginTxt.visibility = View.VISIBLE
+                        loadingIV.visibility = View.GONE
                         Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
                     }
 
@@ -113,5 +122,13 @@ class LoginActivity : AppCompatActivity() {
         if (hasFocus) {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
         }
+    }
+
+    private fun startRotationAnimation() {
+        // Tạo ObjectAnimator để quay hình ảnh
+        val animator = ObjectAnimator.ofFloat(loadingIV, "rotation", 0f, 360f)
+        animator.duration = 2000 // Thời gian quay (2 giây)
+        animator.repeatCount = ObjectAnimator.INFINITE // Lặp lại vô hạn
+        animator.start() // Bắt đầu hoạt động
     }
 }
