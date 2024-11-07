@@ -9,16 +9,17 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="48dp"
-        android:layout_height="24dp"
+        android:layout_width="84dp"
+        android:layout_height="22dp"
         android:layout_marginTop="50dp"
+        android:fontFamily="@font/font_mybird_rocket"
         android:text="@string/create_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintVertical_bias="0.051" />
 
     <TextView
         android:id="@+id/textView4"
@@ -28,7 +29,7 @@
         android:layout_marginTop="50dp"
         android:text="@string/email"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="27sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -40,7 +41,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/password"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="25sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -49,11 +50,11 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/nickname"
+        android:layout_marginTop="28dp"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:text="@string/nickname"
         android:textColor="@color/txt_color"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -100,13 +101,14 @@
         android:id="@+id/failCreateTxt"
         android:layout_width="350sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
-        android:textColor="@color/txt_color_notif"
         android:gravity="center"
+        android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
+        android:textColor="@color/txt_color_notif"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameAccTxt" />
 
@@ -130,7 +132,8 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="text"
-        android:text="mark"
+        android:text="Mark"
+        android:fontFamily="@font/font_mybird_rocket"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createAccBtn" />
 
@@ -138,7 +141,8 @@
         android:id="@+id/updateMarkBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="update mark"
+        android:text="Update Mark"
+        android:fontFamily="@font/font_mybird_default"
         app:layout_constraintBottom_toBottomOf="@+id/testMarkTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"

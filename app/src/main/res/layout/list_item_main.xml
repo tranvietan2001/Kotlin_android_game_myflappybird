@@ -19,6 +19,7 @@
             android:layout_weight="1"
             android:text="000"
             android:textSize="20sp"
+            android:fontFamily="@font/font_mybird_rocket"
             android:gravity="center"
             />
 
@@ -32,6 +33,7 @@
                 android:id="@+id/item_nameAccountTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/font_mybird_rocket"
                 android:text="Name"
                 android:textSize="20sp"
 
@@ -41,7 +43,8 @@
                 android:id="@+id/item_markTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="mark"
+                android:text="Mark"
+                android:fontFamily="@font/font_mybird_rocket"
                 android:textSize="20sp"
                 />
 
@@ -49,7 +52,8 @@
                 android:id="@+id/item_emailTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="email"
+                android:text="Email"
+                android:fontFamily="@font/font_mybird_rocket"
                 android:textSize="20sp"
                 />
         </LinearLayout>

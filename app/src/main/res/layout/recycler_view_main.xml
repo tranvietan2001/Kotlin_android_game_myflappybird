@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/achievement_ranking"
+        android:fontFamily="@font/font_mybird_default"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search"
+        android:fontFamily="@font/font_mybird_rocket"
         app:layout_constraintBottom_toBottomOf="@+id/searchTxt"
         app:layout_constraintStart_toEndOf="@+id/searchTxt" />
 
@@ -55,6 +57,7 @@
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:text="Rf"
+        android:fontFamily="@font/font_mybird_rocket"
         app:layout_constraintBottom_toBottomOf="@+id/searchBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/searchBtn" />
