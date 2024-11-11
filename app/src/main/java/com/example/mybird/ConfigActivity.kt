@@ -37,8 +37,8 @@ class ConfigActivity : AppCompatActivity() {
         lgViCb = findViewById(R.id.lgViCB)
         confirmBtn = findViewById(R.id.confirmBtn)
 
-        var sttSound = sharedPrefManager.getStatusSoundConfig()
-        var sttLang = sharedPrefManager.getLanguageConfig()
+        val sttSound = sharedPrefManager.getStatusSoundConfig()
+        val sttLang = sharedPrefManager.getLanguageConfig()
 
         if (sttSound) {
             soundOnCb.isChecked = true
@@ -99,18 +99,18 @@ class ConfigActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideSystemUI() {
-        // Thiết lập chế độ toàn màn hình
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
-        }
-    }
+//    private fun hideSystemUI() {
+//        // Thiết lập chế độ toàn màn hình
+//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+//                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+//    }
+//
+//    override fun onWindowFocusChanged(hasFocus: Boolean) {
+//        super.onWindowFocusChanged(hasFocus)
+//        if (hasFocus) {
+//            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+//        }
+//    }
 
 }

@@ -249,14 +249,14 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         if (birdPosition.bottom > dm.heightPixels) {
             collision = true
         } else {
-            println("=========================================>xxxxx$obstaclePositions")
+//            println("=========================================>xxxxx$obstaclePositions")
             for (obstacle in obstaclePositions.keys) {
-                println("=========================================>yyyy")
+//                println("=========================================>yyyy")
                 val bottomRectangle = obstaclePositions[obstacle]!![0]
                 val topRectangle = obstaclePositions[obstacle]!![1]
-                println("=========================================>")
-                println("=========================================>OB: ${bottomRectangle.left}==${topRectangle.left}")
-                println("=========================================>Bird: $birdPosition.right ")
+//                println("=========================================>")
+//                println("=========================================>OB: ${bottomRectangle.left}==${topRectangle.left}")
+//                println("=========================================>Bird: $birdPosition.right ")
                 if (birdPosition.right > bottomRectangle.left && birdPosition.left < bottomRectangle.right && birdPosition.bottom > bottomRectangle.top) {
                     collision = true
                 } else if (birdPosition.right > topRectangle.left && birdPosition.left < topRectangle.right && birdPosition.top < topRectangle.bottom) {

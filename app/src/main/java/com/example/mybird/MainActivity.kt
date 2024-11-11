@@ -21,11 +21,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sShopBtn: Button
     private lateinit var sConfigBtn: Button
 
+    private lateinit var sharedPrefManager: SharedPreferenceManager
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.select_game_mode_activity_main)
+
+        sharedPrefManager = SharedPreferenceManager(this)
 
         sOnlineBtn = findViewById(R.id.sOnlineBtn)
         sOfflineBtn = findViewById(R.id.sOfflineBtn)
@@ -34,11 +38,13 @@ class MainActivity : AppCompatActivity() {
 
 
         sOnlineBtn.setOnClickListener {
+            sharedPrefManager.savePlayerMode("online")
             val changeUi = Intent(this,LoginActivity::class.java)
             startActivity(changeUi)
         }
 
         sOfflineBtn.setOnClickListener {
+            sharedPrefManager.savePlayerMode("offline")
             val changeUi = Intent(this,PlayGameActivity::class.java)
             changeUi.putExtra("NAME_ACCOUNT", "@Off_play")
             startActivity(changeUi)
@@ -58,17 +64,17 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun hideSystemUI() {
-        // Thiết lập chế độ toàn màn hình
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
-        }
-    }
+//    private fun hideSystemUI() {
+//        // Thiết lập chế độ toàn màn hình
+//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+//                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+//    }
+//
+//    override fun onWindowFocusChanged(hasFocus: Boolean) {
+//        super.onWindowFocusChanged(hasFocus)
+//        if (hasFocus) {
+//            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+//        }
+//    }
 }

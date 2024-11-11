@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 class  SharedPreferenceManager(context: Context){
 
     private var APP_NAME = "@MY_BIRD"
+    private var PLAYER_MODE = "offline"
     private var CONF_LANG = "en"
     private var CONF_SOUND = "off"
     private var CONF_BIRD = ""
@@ -45,5 +46,18 @@ class  SharedPreferenceManager(context: Context){
     fun getLanguageConfig(): String {
         return sharedPreferences.getString(CONF_LANG, "en") ?: "en" // Mặc định là "en"
     }
+
+
+    // Hàm lưu chế độ người chơi
+    fun savePlayerMode(playerMode: String) {
+        sharedPreferences.edit().putString(PLAYER_MODE, playerMode).apply()
+    }
+
+    // Hàm lấy chế độ người chơi
+    fun getPlayerMode(): String {
+        return sharedPreferences.getString(PLAYER_MODE, "offline") ?: "offline" // Mặc định là "en"
+    }
+
+
 
 }
