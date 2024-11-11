@@ -9,11 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 
 class PlayGameActivity : AppCompatActivity() {
     private lateinit var namePlayer: TextView
+//    private lateinit var gameManager: GameManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.activity_main)
+
+//        gameManager = findViewById(R.id.gameManager)
 
         val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
         namePlayer = findViewById(R.id.nameAccountPlayTxt)
@@ -22,14 +25,7 @@ class PlayGameActivity : AppCompatActivity() {
         }
         else namePlayer.text = ""
 
-
-
-//        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
-//        changeUi.putExtra("NAME_ACCOUNT", result)
-//        startActivity(changeUi)
-
     }
-
 
 //    private fun hideSystemUI() {
 //        // Thiết lập chế độ toàn màn hình

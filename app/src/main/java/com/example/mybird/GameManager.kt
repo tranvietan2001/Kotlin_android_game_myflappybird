@@ -16,14 +16,17 @@ import com.example.mybird.*
 import com.example.mybird.sprites.*
 
 
-class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
+class GameManager(
+    context: Context,
+    attrs: AttributeSet
+) : SurfaceView(context, attrs),
     SurfaceHolder.Callback, GameManagerCallback {
     private val thread: MainThread = MainThread(holder, this)
 
     private val APP_NAME = "@MY_BIRD"
     private var gameState: GameState = GameState.INITIAL
-//    private var gameState: GameState = GameState.PLAYING
 
+    private lateinit var sharedPrefManager: SharedPreferenceManager
 
     private lateinit var bird: Bird
     private lateinit var background: Background
@@ -48,13 +51,18 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
     private lateinit var mpHit: MediaPlayer
     private lateinit var mpWing: MediaPlayer
 
+    var playerMode = ""
+    var soundStt = false
+
+    var isRetry: Boolean = false
 
     init {
-        initSounds()
+
         holder.addCallback(this)
         dm = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(dm)
         initGame()
+        initSounds()
     }
 
     private fun initGame() {
@@ -77,19 +85,34 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
 
         retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels)
+
+        sharedPrefManager = SharedPreferenceManager(context)
+        playerMode = sharedPrefManager.getPlayerMode()
+        soundStt = sharedPrefManager.getStatusSoundConfig()
+
     }
 
     private fun initSounds() {
-        mpPoint = MediaPlayer.create(context, R.raw.point)
-        mpSwoosh = MediaPlayer.create(context, R.raw.swoosh)
-        mpDie = MediaPlayer.create(context, R.raw.die)
-        mpHit = MediaPlayer.create(context, R.raw.hit)
-        mpWing = MediaPlayer.create(context, R.raw.wing)
+        if(soundStt) {
+            mpPoint = MediaPlayer.create(context, R.raw.point)
+            mpSwoosh = MediaPlayer.create(context, R.raw.swoosh)
+            mpDie = MediaPlayer.create(context, R.raw.die)
+            mpHit = MediaPlayer.create(context, R.raw.hit)
+            mpWing = MediaPlayer.create(context, R.raw.wing)
+        }
+        else{
+            mpPoint = MediaPlayer.create(context, R.raw.mute)
+            mpSwoosh = MediaPlayer.create(context, R.raw.mute)
+            mpDie = MediaPlayer.create(context, R.raw.mute)
+            mpHit = MediaPlayer.create(context, R.raw.mute)
+            mpWing = MediaPlayer.create(context, R.raw.mute)
+        }
     }
 
 
     // Xử lý khi surface được tạo
     override fun surfaceCreated(holder: SurfaceHolder) {
+        isRetry = true
         thread.setRunning(true)
         thread.start()
     }
@@ -101,17 +124,37 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
     // Xử lý khi surface bị hủy
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        var retry = true
-        thread.setRunning(false)
-        while (retry) {
-            try {
-                thread.join()
-                retry = false
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }
+//        var retry = true
+//        isRetry = true
+//        thread.setRunning(false)
+//        while (isRetry) {
+//            try {
+//                thread.join()
+//                isRetry = false
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+//        }
     }
+
+//    fun resumeGame(){
+//        println("==========Te")
+//        isRetry = true
+//        thread.setRunning(true)
+//        thread.start()
+//    }
+//    fun pauseGame(){
+//        isRetry = true
+//        thread.setRunning(false)
+//        while (isRetry) {
+//            try {
+//                thread.join()
+//                isRetry = false
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
 
     fun update() {
 
@@ -127,11 +170,6 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
 
             else -> {}
         }
-
-
-//        bird.update()
-//        obstacleManager.update()
-//        println("====================> GameManager Update --- AnTV test")
     }
 
     override fun draw(canvas: Canvas) {
@@ -268,7 +306,7 @@ class GameManager(context: Context, attrs: AttributeSet) : SurfaceView(context),
         if (collision) {
             gameState = GameState.GAME_OVER
             bird.collision()
-            println("=========================================> GAME OVER")
+//            println("=========================================> GAME OVER")
             scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
             mpHit.start()
             mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
