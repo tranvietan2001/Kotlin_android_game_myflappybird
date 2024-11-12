@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,17 +23,21 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var emailTxt: EditText
     private lateinit var passwardTxt: EditText
     private lateinit var nameAccTxt: EditText
-    private lateinit var createAccBtn: Button
+    private lateinit var createAccBtn: ImageButton
     private lateinit var nofiticalCreateTxt: TextView
     private lateinit var loadingIV: ImageView
 
     private lateinit var firebaseManager: FirebaseManager
+    private lateinit var sharedPrefManager: SharedPreferenceManager
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.create_account_activity_main)
+
+        sharedPrefManager = SharedPreferenceManager(this)
+        val language = sharedPrefManager.getLanguageConfig()
 
         // Khởi tạo FirebaseManager
         firebaseManager = FirebaseManager()
@@ -47,6 +52,13 @@ class CreateAccountActivity : AppCompatActivity() {
         loadingIV.visibility = View.GONE
         startRotationAnimation()
         nofiticalCreateTxt.visibility = View.GONE
+
+        if(language == "en"){
+            createAccBtn.setImageResource(R.drawable.create_button_en)
+        }
+        else if(language == "vi"){
+            createAccBtn.setImageResource(R.drawable.create_button_vi)
+        }
 
         createAccBtn.setOnClickListener {
             nofiticalCreateTxt.visibility = View.GONE

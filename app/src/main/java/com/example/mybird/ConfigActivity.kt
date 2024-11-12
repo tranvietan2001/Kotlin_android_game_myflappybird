@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +19,7 @@ class ConfigActivity : AppCompatActivity() {
     private lateinit var soundOffCb: CheckBox
     private lateinit var lgEnCb: CheckBox
     private lateinit var lgViCb: CheckBox
-    private lateinit var confirmBtn: Button
+    private lateinit var confirmBtn: ImageButton
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
 
@@ -30,12 +31,21 @@ class ConfigActivity : AppCompatActivity() {
         setContentView(R.layout.config_activity_main)
 
         sharedPrefManager = SharedPreferenceManager(this)
+        val language = sharedPrefManager.getLanguageConfig()
 
         soundOnCb = findViewById(R.id.soundOnCB)
         soundOffCb = findViewById(R.id.soundOffCB)
         lgEnCb = findViewById(R.id.lgEnCB)
         lgViCb = findViewById(R.id.lgViCB)
         confirmBtn = findViewById(R.id.confirmBtn)
+
+        if(language == "en"){
+            confirmBtn.setImageResource(R.drawable.setting_button_en)
+        }
+        else if(language == "vi"){
+            confirmBtn.setImageResource(R.drawable.setting_button_vi)
+        }
+
 
         val sttSound = sharedPrefManager.getStatusSoundConfig()
         val sttLang = sharedPrefManager.getLanguageConfig()

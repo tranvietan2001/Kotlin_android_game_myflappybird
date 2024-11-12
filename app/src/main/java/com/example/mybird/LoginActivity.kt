@@ -5,22 +5,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var emailTxt: EditText
     private lateinit var passwordTxt: EditText
-    private lateinit var loginBtn: Button
+    private lateinit var loginBtn: ImageButton
     private lateinit var failLoginTxt: TextView
     private lateinit var createAccountTxt: TextView
     private lateinit var forgotPassTxt: TextView
@@ -29,12 +26,16 @@ class LoginActivity : AppCompatActivity() {
     private var password = ""
 
     private lateinit var firebaseManager: FirebaseManager
+    private lateinit var sharedPrefManager: SharedPreferenceManager
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.login_activity_main)
+
+        sharedPrefManager = SharedPreferenceManager(this)
+        val language = sharedPrefManager.getLanguageConfig()
 
         // Khởi tạo FirebaseManager
         firebaseManager = FirebaseManager()
@@ -49,6 +50,13 @@ class LoginActivity : AppCompatActivity() {
         loadingIV = findViewById(R.id.loadingIV)
         loadingIV.visibility = View.GONE
         failLoginTxt.visibility = View.GONE
+
+        if(language == "en"){
+            loginBtn.setImageResource(R.drawable.login_button_en)
+        }
+        else if (language == "vi"){
+            loginBtn.setImageResource(R.drawable.login_button_vi)
+        }
 
         startRotationAnimation()
 

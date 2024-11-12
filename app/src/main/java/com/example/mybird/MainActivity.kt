@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -16,10 +17,10 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var sOnlineBtn: Button
-    private lateinit var sOfflineBtn: Button
-    private lateinit var sShopBtn: Button
-    private lateinit var sConfigBtn: Button
+    private lateinit var sOnlineBtn: ImageButton
+    private lateinit var sOfflineBtn: ImageButton
+    private lateinit var sShopBtn: ImageButton
+    private lateinit var sConfigBtn: ImageButton
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
 
@@ -30,11 +31,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.select_game_mode_activity_main)
 
         sharedPrefManager = SharedPreferenceManager(this)
+        val language = sharedPrefManager.getLanguageConfig()
 
         sOnlineBtn = findViewById(R.id.sOnlineBtn)
         sOfflineBtn = findViewById(R.id.sOfflineBtn)
         sShopBtn = findViewById(R.id.sShopBtn)
         sConfigBtn = findViewById(R.id.sConfigBtn)
+
+        if(language == "en"){
+            sOnlineBtn.setImageResource(R.drawable.online_button_en)
+            sOfflineBtn.setImageResource(R.drawable.offline_button_en)
+            sShopBtn.setImageResource(R.drawable.shop_button_en)
+            sConfigBtn.setImageResource(R.drawable.setting_button_en)
+        }
+        else if(language == "vi"){
+            sOnlineBtn.setImageResource(R.drawable.online_button_vi)
+            sOfflineBtn.setImageResource(R.drawable.offline_button_vi)
+            sShopBtn.setImageResource(R.drawable.shop_button_vi)
+            sConfigBtn.setImageResource(R.drawable.setting_button_vi)
+        }
 
 
         sOnlineBtn.setOnClickListener {

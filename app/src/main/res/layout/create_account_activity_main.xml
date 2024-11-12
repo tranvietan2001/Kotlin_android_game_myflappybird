@@ -28,7 +28,7 @@
         android:layout_marginTop="50dp"
         android:text="@string/email"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="20sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -40,7 +40,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/password"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="20sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -52,7 +52,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/nickname"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="20sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -61,15 +61,14 @@
         android:id="@+id/emailAccTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginEnd="24dp"
         android:ems="10"
-        android:inputType="text"
         android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
+        android:inputType="text"
         android:textColor="@color/txt_color"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
         tools:ignore="TextFields" />
 
     <EditText
@@ -79,7 +78,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toStartOf="@+id/emailAccTxt" />
@@ -91,7 +90,7 @@
         android:ems="10"
         android:inputType="text"
         android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/textView6"
         app:layout_constraintStart_toStartOf="@+id/passwordAccTxt" />
@@ -102,37 +101,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
-        android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="12sp"
         android:textColor="@color/txt_color_notif"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameAccTxt" />
 
-    <Button
-        android:id="@+id/createAccBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/font_mybird_default"
-        android:text="@string/create"
-        android:textColor="@color/txt_color"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/failCreateTxt" />
-
     <EditText
         android:id="@+id/testMarkTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="text"
         android:text="mark"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createAccBtn" />
+        tools:layout_editor_absoluteY="488dp" />
 
     <Button
         android:id="@+id/updateMarkBtn"
@@ -158,9 +143,22 @@
         android:id="@+id/loadingIV"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/createAccBtn"
         app:layout_constraintStart_toEndOf="@+id/createAccBtn"
-        app:layout_constraintTop_toTopOf="@+id/createAccBtn"
+        app:layout_constraintTop_toBottomOf="@+id/failCreateTxt"
         app:srcCompat="@drawable/loading" />
+
+    <ImageButton
+        android:id="@+id/createAccBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameAccTxt"
+        app:srcCompat="@drawable/create_button_en" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,6 +53,7 @@ class GameManager(
 
     var playerMode = ""
     var soundStt = false
+    var language = "en"
 
     var isRetry: Boolean = false
 
@@ -80,16 +81,15 @@ class GameManager(
             this
         ) // quản lý việc vật cản xuất bện và duy chuyển
 
-        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
-        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels)
-        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
-
-        retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels)
-
         sharedPrefManager = SharedPreferenceManager(context)
         playerMode = sharedPrefManager.getPlayerMode()
         soundStt = sharedPrefManager.getStatusSoundConfig()
+        language = sharedPrefManager.getLanguageConfig()
 
+        gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
+        gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels, language)
+        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
+        retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels, language)
     }
 
     private fun initSounds() {

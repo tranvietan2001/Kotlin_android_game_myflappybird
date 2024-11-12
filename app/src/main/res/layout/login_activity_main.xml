@@ -25,7 +25,7 @@
         android:layout_marginTop="50dp"
         android:text="@string/email"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="20sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -37,7 +37,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/password"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="48sp"
+        android:textSize="20sp"
         android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -46,64 +46,55 @@
         android:id="@+id/emailTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
         android:ems="10"
-        android:fontFamily="@font/font_mybird_rocket"
+        android:fontFamily="@font/font_mybird_default"
+        android:importantForAutofill="no"
         android:inputType="text"
         android:textColor="@color/txt_color"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        tools:ignore="TextFields" />
+        tools:ignore="LabelFor,TextFields" />
 
     <EditText
         android:id="@+id/passwordTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:inputType="textPassword"
-        android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="18sp"
         android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="@+id/emailTxt" />
-
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:fontFamily="@font/font_mybird_default"
-        android:text="@string/login"
-        android:textColor="@color/txt_color"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTxt" />
+        app:layout_constraintStart_toStartOf="@+id/emailTxt"
+        tools:ignore="LabelFor" />
 
     <TextView
         android:id="@+id/signAccountTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/font_mybird_rocket"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/font_mybird_default"
         android:text="@string/if_you_do_not_have_an_account_please_click_here"
         android:textColor="@color/txt_color_notif"
-        android:textSize="24sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/failLoginTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/font_mybird_rocket"
+        android:fontFamily="@font/font_mybird_default"
         android:text="@string/login_failed_please_check_your_information_again"
         android:textColor="#F20202"
-        android:textSize="24sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTxt" />
@@ -114,8 +105,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/forgot_password"
-        android:fontFamily="@font/font_mybird_rocket"
-        android:textSize="24sp"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="12sp"
         android:textColor="@color/txt_color_notif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -126,9 +117,23 @@
         android:id="@+id/loadingIV"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/loginBtn"
         app:layout_constraintStart_toEndOf="@+id/loginBtn"
-        app:layout_constraintTop_toTopOf="@+id/loginBtn"
-        app:srcCompat="@drawable/loading" />
+        app:layout_constraintTop_toBottomOf="@+id/failLoginTxt"
+        app:srcCompat="@drawable/loading"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/loginBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTxt"
+        app:srcCompat="@drawable/login_button_en" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,15 +6,17 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.widget.Toast
 import com.example.mybird.R
+import org.intellij.lang.annotations.Language
 
 class RetryButton(
     resources: Resources,
     private val screenHeight: Int,
-    private val screenWidth: Int
+    private val screenWidth: Int,
+    private val language: String
 ) : Sprite {
 
-    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.retry_button)
-
+//    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.retry_button)
+    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, getRetryButtonResource())
     override fun draw(canvas: Canvas) {
 //        canvas.drawBitmap(retryBtn, (screenWidth / 2 - retryBtn.width / 2).toFloat(), (screenHeight / 4).toFloat(),null)
 
@@ -53,4 +55,14 @@ class RetryButton(
                 y >= top && y <= top + scaledHeight
 
     }
+
+
+    private fun getRetryButtonResource(): Int {
+        return if (language == "en") {
+            R.drawable.retry_button_en // Tài nguyên cho tiếng Anh
+        } else {
+            R.drawable.retry_button_vi // Tài nguyên cho ngôn ngữ khác (ví dụ: tiếng Việt)
+        }
+    }
+
 }

@@ -12,57 +12,73 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-18dp"
+        android:importantForAccessibility="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/sky" />
-
-    <Button
-        android:id="@+id/sOnlineBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play Online"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/skybg" />
-
-    <Button
-        android:id="@+id/sOfflineBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Play Offline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sOnlineBtn" />
-
-    <Button
-        android:id="@+id/sShopBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Shop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sOfflineBtn" />
-
-    <Button
-        android:id="@+id/sConfigBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Config"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sShopBtn" />
 
     <ImageView
         android:id="@+id/groundbg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="-30dp"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ground" />
+
+    <ImageButton
+        android:id="@+id/sOnlineBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/skybg"
+        app:srcCompat="@drawable/online_button_en"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/sOfflineBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sOnlineBtn"
+        app:srcCompat="@drawable/offline_button_en" />
+
+    <ImageButton
+        android:id="@+id/sShopBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sOfflineBtn"
+        app:srcCompat="@drawable/shop_button_en" />
+
+    <ImageButton
+        android:id="@+id/sConfigBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sShopBtn"
+        app:srcCompat="@drawable/setting_button_en" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

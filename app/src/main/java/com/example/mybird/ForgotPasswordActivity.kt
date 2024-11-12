@@ -3,8 +3,8 @@ package com.example.mybird
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,17 +12,21 @@ import androidx.appcompat.app.AppCompatActivity
 class ForgotPasswordActivity : AppCompatActivity() {
 
     private lateinit var emailForgotTxt:EditText
-    private lateinit var resetBtn:Button
-    private lateinit var backBtn: Button
+    private lateinit var resetBtn:ImageButton
+    private lateinit var backBtn: ImageButton
     private lateinit var nofitiTxt: TextView
 
     private lateinit var firebaseManager: FirebaseManager
+    private lateinit var sharedPrefManager: SharedPreferenceManager
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.forgot_password_activity_main)
+
+        sharedPrefManager = SharedPreferenceManager(this)
+        val language = sharedPrefManager.getLanguageConfig()
 
         // Khởi tạo FirebaseManager
         firebaseManager = FirebaseManager()
@@ -32,6 +36,15 @@ class ForgotPasswordActivity : AppCompatActivity() {
         resetBtn = findViewById(R.id.resetBtn)
         backBtn = findViewById(R.id.backBtn)
         nofitiTxt = findViewById(R.id.notifiTxt)
+
+        if(language == "en"){
+            resetBtn.setImageResource(R.drawable.reset_button_en)
+            backBtn.setImageResource(R.drawable.back_button_en)
+        }
+        else if(language == "vi"){
+            resetBtn.setImageResource(R.drawable.reset_button_vi)
+            backBtn.setImageResource(R.drawable.back_button_vi)
+        }
 
         nofitiTxt.visibility = View.GONE
         val emailForgot = emailForgotTxt.text

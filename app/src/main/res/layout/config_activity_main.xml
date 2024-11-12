@@ -74,13 +74,18 @@
         app:layout_constraintTop_toTopOf="@+id/lgEnCB"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
+    <ImageButton
         android:id="@+id/confirmBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
         android:layout_marginBottom="100dp"
-        android:text="@string/confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.407"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/confirm_button_en" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

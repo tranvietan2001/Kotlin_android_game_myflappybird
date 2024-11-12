@@ -5,15 +5,17 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import com.example.mybird.R
+import org.intellij.lang.annotations.Language
 
 class GameMessage(
     resources: Resources,
     private val screenHeight: Int,
-    private val screenWidth: Int
+    private val screenWidth: Int,
+    private val language: String
 ) : Sprite {
 
     private val message: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.message)
-    private val playBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_button)
+    private val playBtn: Bitmap = BitmapFactory.decodeResource(resources, getPlayButtonResource())
 
     override fun draw(canvas: Canvas) {
         canvas.drawBitmap(message, (screenWidth / 2 - message.width / 2).toFloat(), (screenHeight / 4).toFloat(), null)
@@ -51,4 +53,11 @@ class GameMessage(
 
     }
 
+    private fun getPlayButtonResource(): Int {
+        return if (language == "en") {
+            R.drawable.play_button_en // Tài nguyên cho tiếng Anh
+        } else {
+            R.drawable.play_button_vi // Tài nguyên cho ngôn ngữ khác (ví dụ: tiếng Việt)
+        }
+    }
 }
