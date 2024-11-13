@@ -19,7 +19,18 @@
     <string name="check_email_reset_password">Vui lòng kiểm tra email của bạn và làm theo các bước để đặt lại mật khẩu</string>
     <string name="reset_password_fail">Yêu cầu đặt lại mật khẩu không thành công, vui lòng xác thực lại</string>
     <string name="email_dose_not_exist">Email không tồn tại, vui lòng kiểm tra lại</string>
+    <string name="error_connect">Có vấn đề về kết nối, vui lòng kiểm tra lại.</string>
     <string name="achievement_ranking">Xếp hạng thành tích</string>
     <string name="search">Tìm</string>
     <string name="no_name">---</string>
+    <string name="bird">Bird</string>
+    <string name="sound">Âm thanh</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="on">Bật</string>
+    <string name="off">Tắt</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="name_game">My Flappy Brid</string>
+    <string name="forgot_password_text">Quên mật khẩu</string>
 </resources>

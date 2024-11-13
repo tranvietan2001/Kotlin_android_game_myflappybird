@@ -18,6 +18,7 @@
     <string name="check_email_reset_password">Please check your email and follow the steps to reset your password</string>
     <string name="reset_password_fail">Password reset request failed, please re-authenticate</string>
     <string name="email_dose_not_exist">Email does not exist, please check again</string>
+    <string name="error_connect">There is a problem with the connection, please check again.</string>
     <string name="achievement_ranking">Achievement Ranking</string>
     <string name="search">Search</string>
     <string name="no_name">---</string>
@@ -29,4 +30,6 @@
     <string name="english">English</string>
     <string name="vietnamese">Vietnamese</string>
     <string name="confirm">Confirm</string>
+    <string name="name_game">My Flappy Brid</string>
+    <string name="forgot_password_text">Forgot password</string>
 </resources>

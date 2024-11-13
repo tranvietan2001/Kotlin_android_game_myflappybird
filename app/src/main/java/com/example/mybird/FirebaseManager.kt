@@ -25,24 +25,61 @@ class FirebaseManager {
         auth = FirebaseAuth.getInstance()
     }
 
-    suspend fun createAccount(email: String, password: String): String {
-        return try {
-            auth.createUserWithEmailAndPassword(email, password).await()
-            "Tạo tài khoản thành công"
-        } catch (e: Exception) {
-            if (e.message?.contains("already in use") == true) {
-                "Tài khoản đã tồn tại"
-            } else {
-                "Lỗi: ${e.message}"
+//    suspend fun createAccount(email: String, password: String): String {
+//        return try {
+//            auth.createUserWithEmailAndPassword(email, password).await()
+//            "account created successfully"
+//        } catch (e: Exception) {
+//            if (e.message?.contains("already in use") == true) {
+//                "Tài khoản đã tồn tại"
+//            } else {
+//                "Lỗi: ${e.message}"
+//            }
+//        }
+//    }
+//
+//    fun createAccountName(name: String): String {
+//        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+//
+//        val userAccount = UserAccount(email = user.email ?: "", accountName = name)
+//
+//        val data = hashMapOf(
+//            nameField to userAccount.accountName,
+//            markField to userAccount.mark
+//        )
+//
+//        database.collection(nameDb).document(userAccount.email)
+//            .set(data)
+//            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+//            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+//
+//        return "name account created successfully"
+//    }
+
+    fun createAccount(email: String, password: String, callback: (String) -> Unit){
+        auth.createUserWithEmailAndPassword(email,password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback("account created successfully")
+                } else {
+                    // Xử lý lỗi nếu có
+                    val exception = task.exception
+                    val message = exception?.message ?: "Unknown error"
+                    if (message.contains("already in use", ignoreCase = true)) {
+                        callback("Account already exists")
+                    } else {
+                        callback("Error: $message")
+                    }
+                }
             }
-        }
+            .addOnFailureListener { e ->
+                callback("Created Account Fail: ${e.message}")
+            }
     }
 
-    fun createAccountName(name: String): String {
-        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-
-        val userAccount = UserAccount(email = user.email ?: "", accountName = name)
-
+    fun createAccountName(name: String, callback: (String) -> Unit){
+        val user = auth.currentUser
+        val userAccount = UserAccount(email = user?.email ?: "", accountName = name)
         val data = hashMapOf(
             nameField to userAccount.accountName,
             markField to userAccount.mark
@@ -50,11 +87,14 @@ class FirebaseManager {
 
         database.collection(nameDb).document(userAccount.email)
             .set(data)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
-        return "Tạo tên người chơi thành công"
+            .addOnSuccessListener {
+                callback("name account created successfully")
+            }
+            .addOnFailureListener { e ->
+                callback("created fail: $e")
+            }
     }
+
 
     fun loginAccount(email: String, password: String, callback: (String) -> Unit) {
         logoutAccount()

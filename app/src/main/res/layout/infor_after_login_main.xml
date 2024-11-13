@@ -12,29 +12,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="TextView"
-        android:textSize="34sp"
+        android:text="Account"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="32sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07" />
 
-    <Button
+    <ImageButton
         android:id="@+id/playBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
         android:layout_marginTop="32dp"
-        android:text="Play"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameAccountTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/nameAccountTxt"
+        app:srcCompat="@drawable/play_button_en" />
 
-    <Button
+    <ImageButton
         android:id="@+id/rankBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Rank"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/playBtn"
+        app:srcCompat="@drawable/rank_button_en" />
 </androidx.constraintlayout.widget.ConstraintLayout>

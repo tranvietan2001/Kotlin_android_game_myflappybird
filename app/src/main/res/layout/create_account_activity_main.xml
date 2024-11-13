@@ -9,10 +9,13 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="48dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="@string/create_account"
+        android:text="@string/name_game"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="32sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -104,54 +107,26 @@
         android:id="@+id/failCreateTxt"
         android:layout_width="350sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="12sp"
-        android:textColor="@color/txt_color_notif"
         android:gravity="center"
+        android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
+        android:textColor="@color/txt_error"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameAccTxt" />
-
-    <EditText
-        android:id="@+id/testMarkTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="mark"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="488dp" />
-
-    <Button
-        android:id="@+id/updateMarkBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="update mark"
-        app:layout_constraintBottom_toBottomOf="@+id/testMarkTxt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toEndOf="@+id/testMarkTxt" />
-
-    <TextView
-        android:id="@+id/testListDataTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="data fb list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testMarkTxt" />
 
     <ImageView
         android:id="@+id/loadingIV"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="@+id/createAccBtn"
         app:layout_constraintStart_toEndOf="@+id/createAccBtn"
-        app:layout_constraintTop_toBottomOf="@+id/failCreateTxt"
+        app:layout_constraintTop_toTopOf="@+id/createAccBtn"
         app:srcCompat="@drawable/loading" />
 
     <ImageButton

@@ -1,6 +1,9 @@
 package com.example.mybird
 
+//import android.annotation.SuppressLint
 import android.annotation.SuppressLint
+import android.content.res.Configuration
+import android.graphics.ColorSpace.Rgb
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -8,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import java.util.Locale
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
@@ -19,14 +23,23 @@ class ForgotPasswordActivity : AppCompatActivity() {
     private lateinit var firebaseManager: FirebaseManager
     private lateinit var sharedPrefManager: SharedPreferenceManager
 
-    @SuppressLint("MissingInflatedId")
+//    @SuppressLint("MissingInflatedId")
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.forgot_password_activity_main)
+
+//        setContentView(R.layout.forgot_password_activity_main)
 
         sharedPrefManager = SharedPreferenceManager(this)
         val language = sharedPrefManager.getLanguageConfig()
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        setContentView(R.layout.forgot_password_activity_main)
 
         // Khởi tạo FirebaseManager
         firebaseManager = FirebaseManager()
@@ -62,12 +75,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 }else if(result == "emailNotExist"){
                     nofitiTxt.text = getString(R.string.email_dose_not_exist)
                 }
+                else if(result == "There is a problem with the connection, please check again."){
+                    nofitiTxt.text = getString(R.string.error_connect)
+                }
 //                nofitiTxt.text = result
+                nofitiTxt.setTextColor(R.color.txt_error)
                 nofitiTxt.visibility = View.VISIBLE
             }
-//            {result ->
-//                nofitiTxt.setText(result)
-//            }
+
 
 
         }

@@ -1,9 +1,9 @@
 package com.example.mybird
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import java.util.Locale
 
 class ConfigActivity : AppCompatActivity() {
 
@@ -28,10 +29,18 @@ class ConfigActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
-        setContentView(R.layout.config_activity_main)
 
         sharedPrefManager = SharedPreferenceManager(this)
         val language = sharedPrefManager.getLanguageConfig()
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        setContentView(R.layout.config_activity_main)
+
+
 
         soundOnCb = findViewById(R.id.soundOnCB)
         soundOffCb = findViewById(R.id.soundOffCB)
