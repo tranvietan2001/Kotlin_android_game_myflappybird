@@ -161,4 +161,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:srcCompat="@drawable/next_button" />
 
+    <TextView
+        android:id="@+id/birdNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Funny Bird"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintBottom_toBottomOf="@+id/BirdTxt"
+        app:layout_constraintStart_toStartOf="@+id/soundOnCB"
+        app:layout_constraintTop_toTopOf="@+id/BirdTxt" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

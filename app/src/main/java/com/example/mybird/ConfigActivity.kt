@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ class ConfigActivity : AppCompatActivity() {
     private lateinit var birdView: ImageView
     private lateinit var nextBtn: ImageButton
     private lateinit var preBtn: ImageButton
+    private lateinit var birdName: TextView
     var i = 0
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
@@ -56,6 +58,7 @@ class ConfigActivity : AppCompatActivity() {
         birdView = findViewById(R.id.birdView)
         nextBtn = findViewById(R.id.nextBtn)
         preBtn = findViewById(R.id.preBtn)
+        birdName = findViewById(R.id.birdNameTxt)
 
         val drawableNames = listOf("bird_level", "bird_down", "bird_up") // Danh sách tên drawable
 
@@ -122,7 +125,7 @@ class ConfigActivity : AppCompatActivity() {
 
                     i--
                     if (i < 0) i = 2
-
+                    birdName.text = drawableNames[i].toString()
                     val drawableId = resources.getIdentifier(
                         drawableNames[i],
                         "drawable",
@@ -157,6 +160,8 @@ class ConfigActivity : AppCompatActivity() {
 
                     i++
                     if (i > 2) i = 0
+
+                    birdName.text = drawableNames[i].toString()
 
                     val drawableId = resources.getIdentifier(
                         drawableNames[i],
