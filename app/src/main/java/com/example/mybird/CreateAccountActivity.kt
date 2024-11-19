@@ -7,6 +7,8 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -168,5 +170,17 @@ class CreateAccountActivity : AppCompatActivity() {
         animator.duration = 2000 // Thời gian quay (2 giây)
         animator.repeatCount = ObjectAnimator.INFINITE // Lặp lại vô hạn
         animator.start() // Bắt đầu hoạt động
+    }
+
+    private fun scaleView(view: View, scale: Float) {
+        val animation = ScaleAnimation(
+            scale, scale, // Scale X
+            scale, scale, // Scale Y
+            Animation.RELATIVE_TO_SELF, 0.5f, // Pivot X
+            Animation.RELATIVE_TO_SELF, 0.5f // Pivot Y
+        )
+        animation.duration = 100 // Thời gian cho animation
+        animation.fillAfter = true // Giữ trạng thái cuối
+        view.startAnimation(animation)
     }
 }

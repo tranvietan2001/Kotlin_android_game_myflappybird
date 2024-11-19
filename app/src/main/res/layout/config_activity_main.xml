@@ -31,6 +31,9 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="368dp"
         android:text="@string/bird"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,6 +43,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/sound"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/BirdTxt"
         app:layout_constraintTop_toBottomOf="@+id/BirdTxt" />
 
@@ -49,6 +55,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/language"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintStart_toStartOf="@+id/SoundTxt"
         app:layout_constraintTop_toBottomOf="@+id/SoundTxt" />
 
@@ -56,8 +65,11 @@
         android:id="@+id/soundOnCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:text="@string/on"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="16sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/SoundTxt"
         app:layout_constraintStart_toStartOf="@+id/SoundTxt"
         app:layout_constraintTop_toTopOf="@+id/SoundTxt" />
@@ -66,8 +78,11 @@
         android:id="@+id/soundOffCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
+        android:layout_marginStart="132dp"
         android:text="@string/off"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="16sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/soundOnCB"
         app:layout_constraintStart_toStartOf="@+id/soundOnCB"
         app:layout_constraintTop_toTopOf="@+id/soundOnCB" />
@@ -77,6 +92,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/english"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="16sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/languageTxt"
         app:layout_constraintStart_toStartOf="@+id/soundOnCB"
         app:layout_constraintTop_toTopOf="@+id/languageTxt" />
@@ -86,6 +104,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/vietnamese"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="16sp"
+        android:textColor="@color/txt_color"
         app:layout_constraintBottom_toBottomOf="@+id/lgEnCB"
         app:layout_constraintStart_toStartOf="@+id/soundOffCB"
         app:layout_constraintTop_toTopOf="@+id/lgEnCB"
@@ -95,14 +116,49 @@
         android:id="@+id/confirmBtn"
         android:layout_width="160dp"
         android:layout_height="73dp"
+        android:layout_marginBottom="100dp"
         android:backgroundTint="@color/cardview_shadow_end_color"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
-        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.407"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/confirm_button_en" />
+
+    <ImageView
+        android:id="@+id/birdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/BirdTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/bird_level" />
+
+    <ImageButton
+        android:id="@+id/preBtn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/BirdTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/pre_button" />
+
+    <ImageButton
+        android:id="@+id/nextBtn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/BirdTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/next_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

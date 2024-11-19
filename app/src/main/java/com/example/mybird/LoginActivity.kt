@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -30,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var firebaseManager: FirebaseManager
     private lateinit var sharedPrefManager: SharedPreferenceManager
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //ẩn phần viền trên
@@ -60,58 +62,107 @@ class LoginActivity : AppCompatActivity() {
         loadingIV.visibility = View.GONE
         failLoginTxt.visibility = View.GONE
 
-        if(language == "en"){
+        if (language == "en") {
             loginBtn.setImageResource(R.drawable.login_button_en)
-        }
-        else if (language == "vi"){
+        } else if (language == "vi") {
             loginBtn.setImageResource(R.drawable.login_button_vi)
         }
 
         startRotationAnimation()
 
-        loginBtn.setOnClickListener {
-            loadingIV.visibility = View.VISIBLE
-            accountEmail = emailTxt.text.toString()
-            password = passwordTxt.text.toString()
-            if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
-                failLoginTxt.visibility = View.VISIBLE
-                loadingIV.visibility = View.GONE
-//                Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
-            } else {
-                failLoginTxt.visibility = View.GONE  // ẩn
-                loginBtn.visibility = View.VISIBLE
-                firebaseManager.loginAccount(accountEmail, password) { result ->
-//                    Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
-                    if (result != "fail") {
-                        if (result != "") {
-                            if (result != "null") {
-                                emailTxt.setText("")
-                                passwordTxt.setText("")
-                                loadingIV.visibility = View.GONE
-                                val changeUi = Intent(this, InforAfterLoginActivity::class.java)
-                                changeUi.putExtra("NAME_ACCOUNT", result)
-                                startActivity(changeUi)
-                            }
-                        }
-////                        Toast.makeText(this, "Dang nhap OK: $result", Toast.LENGTH_SHORT).show()
-//                        emailTxt.setText("")
-//                        passwordTxt.setText("")
-//
-//                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
-//                        changeUi.putExtra("NAME_ACCOUNT", result)
-//                        startActivity(changeUi)
-                    } else {
+//        loginBtn.setOnClickListener {
+//            loadingIV.visibility = View.VISIBLE
+//            accountEmail = emailTxt.text.toString()
+//            password = passwordTxt.text.toString()
+//            if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
+//                failLoginTxt.visibility = View.VISIBLE
+//                loadingIV.visibility = View.GONE
+////                Toast.makeText(this, "ERROR: =========", Toast.LENGTH_LONG).show()
+//            } else {
+//                failLoginTxt.visibility = View.GONE  // ẩn
+//                loginBtn.visibility = View.VISIBLE
+//                firebaseManager.loginAccount(accountEmail, password) { result ->
+////                    Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
+//                    if (result != "fail") {
+//                        if (result != "") {
+//                            if (result != "null") {
+//                                emailTxt.setText("")
+//                                passwordTxt.setText("")
+//                                loadingIV.visibility = View.GONE
+//                                val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+//                                changeUi.putExtra("NAME_ACCOUNT", result)
+//                                startActivity(changeUi)
+//                            }
+//                        }
+//////                        Toast.makeText(this, "Dang nhap OK: $result", Toast.LENGTH_SHORT).show()
+////                        emailTxt.setText("")
+////                        passwordTxt.setText("")
+////
+////                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+////                        changeUi.putExtra("NAME_ACCOUNT", result)
+////                        startActivity(changeUi)
+//                    } else {
+//                        failLoginTxt.visibility = View.VISIBLE
+//                        loadingIV.visibility = View.GONE
+//                        Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+////                Toast.makeText(this, "$accountName---$password", Toast.LENGTH_LONG).show()
+////                val changeUi = Intent(this,PlayGameActivity::class.java)
+////                startActivity(changeUi)
+//            }
+//        }
+
+
+        loginBtn.setOnTouchListener { v, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_UP -> {
+                    scaleView(v, 1f)
+
+                    loadingIV.visibility = View.VISIBLE
+                    accountEmail = emailTxt.text.toString()
+                    password = passwordTxt.text.toString()
+                    if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
                         failLoginTxt.visibility = View.VISIBLE
                         loadingIV.visibility = View.GONE
-                        Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT).show()
+                    } else {
+                        failLoginTxt.visibility = View.GONE  // ẩn
+                        loginBtn.visibility = View.VISIBLE
+                        firebaseManager.loginAccount(accountEmail, password) { result ->
+                            if (result != "fail") {
+                                if (result != "") {
+                                    if (result != "null") {
+                                        emailTxt.setText("")
+                                        passwordTxt.setText("")
+                                        loadingIV.visibility = View.GONE
+                                        val changeUi =
+                                            Intent(this, InforAfterLoginActivity::class.java)
+                                        changeUi.putExtra("NAME_ACCOUNT", result)
+                                        startActivity(changeUi)
+                                    }
+                                }
+                            } else {
+                                failLoginTxt.visibility = View.VISIBLE
+                                loadingIV.visibility = View.GONE
+//                                Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT)
+//                                    .show()
+                            }
+
+                        }
                     }
 
+                    true
                 }
-//                Toast.makeText(this, "$accountName---$password", Toast.LENGTH_LONG).show()
-//                val changeUi = Intent(this,PlayGameActivity::class.java)
-//                startActivity(changeUi)
-            }
 
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    scaleView(v, 1.2f)
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
         }
 
         createAccountTxt.setOnClickListener {
@@ -147,5 +198,17 @@ class LoginActivity : AppCompatActivity() {
         animator.duration = 2000 // Thời gian quay (2 giây)
         animator.repeatCount = ObjectAnimator.INFINITE // Lặp lại vô hạn
         animator.start() // Bắt đầu hoạt động
+    }
+
+    private fun scaleView(view: View, scale: Float) {
+        val animation = ScaleAnimation(
+            scale, scale, // Scale X
+            scale, scale, // Scale Y
+            Animation.RELATIVE_TO_SELF, 0.5f, // Pivot X
+            Animation.RELATIVE_TO_SELF, 0.5f // Pivot Y
+        )
+        animation.duration = 100 // Thời gian cho animation
+        animation.fillAfter = true // Giữ trạng thái cuối
+        view.startAnimation(animation)
     }
 }
