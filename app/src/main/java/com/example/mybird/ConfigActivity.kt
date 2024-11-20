@@ -60,7 +60,7 @@ class ConfigActivity : AppCompatActivity() {
         preBtn = findViewById(R.id.preBtn)
         birdName = findViewById(R.id.birdNameTxt)
 
-        val drawableNames = listOf("bird_level", "bird_down", "bird_up") // Danh sách tên drawable
+        val drawableNames = listOf("bird1_down", "bird2_down", "bird3_down", "bird4_down", "bird5_down") // Danh sách tên drawable
 
 
 
@@ -124,7 +124,8 @@ class ConfigActivity : AppCompatActivity() {
                     scaleView(v, 1f)
 
                     i--
-                    if (i < 0) i = 2
+                    if (i < 0) i = 4
+
                     birdName.text = drawableNames[i].toString()
                     val drawableId = resources.getIdentifier(
                         drawableNames[i],
@@ -159,7 +160,7 @@ class ConfigActivity : AppCompatActivity() {
                     scaleView(v, 1f)
 
                     i++
-                    if (i > 2) i = 0
+                    if (i > 4) i = 0
 
                     birdName.text = drawableNames[i].toString()
 

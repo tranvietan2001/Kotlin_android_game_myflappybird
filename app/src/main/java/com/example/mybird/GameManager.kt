@@ -125,16 +125,16 @@ class GameManager(
     // Xử lý khi surface bị hủy
     override fun surfaceDestroyed(holder: SurfaceHolder) {
 //        var retry = true
-//        isRetry = true
-//        thread.setRunning(false)
-//        while (isRetry) {
-//            try {
-//                thread.join()
-//                isRetry = false
-//            } catch (e: InterruptedException) {
-//                e.printStackTrace()
-//            }
-//        }
+        isRetry = true
+        thread.setRunning(false)
+        while (isRetry) {
+            try {
+                thread.join()
+                isRetry = false
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }
     }
 
 //    fun resumeGame(){
