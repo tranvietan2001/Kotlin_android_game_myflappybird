@@ -29,11 +29,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="368dp"
-        android:text="@string/bird"
+        android:layout_marginTop="420dp"
         android:fontFamily="@font/font_mybird_default"
-        android:textSize="20sp"
+        android:text="@string/bird"
         android:textColor="@color/txt_color"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,6 +129,7 @@
         android:id="@+id/birdView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/BirdTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
