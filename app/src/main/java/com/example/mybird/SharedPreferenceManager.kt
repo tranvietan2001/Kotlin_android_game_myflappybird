@@ -10,6 +10,7 @@ class  SharedPreferenceManager(context: Context){
     private var CONF_LANG = "en"
     private var CONF_SOUND = "off"
     private var CONF_BIRD = ""
+    private var PURCHASED_BIRDS = "purchased_birds"
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
 
@@ -57,6 +58,24 @@ class  SharedPreferenceManager(context: Context){
     fun getPlayerMode(): String {
         return sharedPreferences.getString(PLAYER_MODE, "offline") ?: "offline" // Mặc định là "en"
     }
+
+    // hàm lưu ds chim đã mua
+    fun savePurchasedBird(nameBird: String) {
+        val editor = sharedPreferences.edit()
+        // Lấy danh sách hiện tại, nếu có
+        val existingList = getPurchasedBirds().toMutableSet()
+        existingList.add(nameBird) // Thêm tên mới vào danh sách
+        editor.putStringSet(PURCHASED_BIRDS, existingList)
+        editor.apply()
+    }
+
+    // hàm get ds chim đã mua
+    fun getPurchasedBirds(): Set<String> {
+        return sharedPreferences.getStringSet(PURCHASED_BIRDS, emptySet()) ?: emptySet()
+    }
+
+
+
 
 
 

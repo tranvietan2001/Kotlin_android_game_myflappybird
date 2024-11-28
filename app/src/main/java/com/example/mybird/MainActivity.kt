@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
-                    val changeUi = Intent(this, ShopActivity::class.java)
+                    val changeUi = Intent(this, ShopRecyclerViewActivity::class.java)
                     startActivity(changeUi)
 
                     true

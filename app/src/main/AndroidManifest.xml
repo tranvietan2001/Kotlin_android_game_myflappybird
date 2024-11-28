@@ -29,6 +29,7 @@
         <activity android:name=".ShopActivity"/>
         <activity android:name=".InforAfterLoginActivity"/>
         <activity android:name=".RankRecyclerViewActivity"/>
+        <activity android:name=".ShopRecyclerViewActivity"/>
     </application>
 
 </manifest>
