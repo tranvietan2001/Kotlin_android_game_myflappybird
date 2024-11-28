@@ -13,11 +13,11 @@ class Bird(
     private val callback: GameManagerCallback
 ) : Sprite{
 
-    private val birdDown: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_down)
+    private val birdDown: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird1_down)
         .let { Bitmap.createScaledBitmap(it, resources.getDimension(R.dimen.bird_width).toInt(),
             resources.getDimension(R.dimen.bird_height).toInt(), false) }
 
-    private val birdUp: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_up)
+    private val birdUp: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird1_up)
         .let { Bitmap.createScaledBitmap(it, resources.getDimension(R.dimen.bird_width).toInt(),
             resources.getDimension(R.dimen.bird_height).toInt(), false) }
 

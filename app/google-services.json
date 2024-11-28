@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "972404825720",
+    "project_id": "kotlin-mybird",
+    "storage_bucket": "kotlin-mybird.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972404825720:android:3d5a1bc0ceeec4faeed78d",
+        "android_client_info": {
+          "package_name": "com.example.mybird"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADdNzMWoXC92C1u8lLSxlOs7G94U-vR-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

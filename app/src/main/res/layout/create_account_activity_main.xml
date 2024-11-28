@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#96FFFF"
+    android:backgroundTint="#96FFFF">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/name_game"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="32sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/email"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/password"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/nickname"
+        android:fontFamily="@font/font_mybird_default"
+        android:textSize="20sp"
+        android:textColor="@color/txt_color"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <EditText
+        android:id="@+id/emailAccTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:fontFamily="@font/font_mybird_default"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="LabelFor,TextFields" />
+
+    <EditText
+        android:id="@+id/passwordAccTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:fontFamily="@font/font_mybird_default"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/emailAccTxt"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/nameAccTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:fontFamily="@font/font_mybird_default"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="@+id/passwordAccTxt"
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/failCreateTxt"
+        android:layout_width="350sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/font_mybird_default"
+        android:gravity="center"
+        android:text="@string/check_if_email_is_valid_password_length_must_be_over_6_characters"
+        android:textColor="@color/txt_error"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameAccTxt" />
+
+    <ImageView
+        android:id="@+id/loadingIV"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@+id/createAccBtn"
+        app:layout_constraintStart_toEndOf="@+id/createAccBtn"
+        app:layout_constraintTop_toTopOf="@+id/createAccBtn"
+        app:srcCompat="@drawable/loading" />
+
+    <ImageButton
+        android:id="@+id/createAccBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameAccTxt"
+        app:srcCompat="@drawable/create_button_en" />
+</androidx.constraintlayout.widget.ConstraintLayout>
