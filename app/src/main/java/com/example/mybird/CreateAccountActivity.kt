@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 
+@Suppress("DEPRECATION")
 class CreateAccountActivity : AppCompatActivity() {
 
     private lateinit var emailTxt: EditText
@@ -31,6 +32,7 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var createAccBtn: ImageButton
     private lateinit var nofiticalCreateTxt: TextView
     private lateinit var loadingIV: ImageView
+    private lateinit var backBtn: ImageButton
 
     private lateinit var firebaseManager: FirebaseManager
     private lateinit var sharedPrefManager: SharedPreferenceManager
@@ -63,6 +65,7 @@ class CreateAccountActivity : AppCompatActivity() {
         createAccBtn = findViewById(R.id.createAccBtn)
         nofiticalCreateTxt = findViewById(R.id.failCreateTxt)
         loadingIV = findViewById(R.id.loadingIV)
+        backBtn = findViewById(R.id.backBtn)
 
         loadingIV.visibility = View.GONE
         startRotationAnimation()
@@ -151,8 +154,9 @@ class CreateAccountActivity : AppCompatActivity() {
                                 firebaseManager.createAccountName(name.toString()) { result2 ->
                                     if (result2 == "name account created successfully") {
                                         loadingIV.visibility = View.GONE
-                                        val changeUi = Intent(this, LoginActivity::class.java)
-                                        startActivity(changeUi)
+//                                        val changeUi = Intent(this, LoginActivity::class.java)
+//                                        startActivity(changeUi)
+                                        finish()
                                     } else nofiticalCreateTxt.text = result2
                                 }
                             } else {
@@ -179,6 +183,23 @@ class CreateAccountActivity : AppCompatActivity() {
             }
         }
 
+        backBtn.setOnTouchListener { v, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_UP -> {
+                    scaleView(v, 1f)
+                    finish()
+                    true
+                }
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    scaleView(v, 1.2f)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
 //        val valMark = findViewById<EditText>(R.id.testMarkTxt)
 //        val updateMarlBtn = findViewById<Button>(R.id.updateMarkBtn)
 //        val testListData = findViewById<TextView>(R.id.testListDataTxt)
@@ -193,19 +214,19 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
 
-//    private fun hideSystemUI() {
-//        // Thiết lập chế độ toàn màn hình
-//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
-//                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//    }
-//
-//    override fun onWindowFocusChanged(hasFocus: Boolean) {
-//        super.onWindowFocusChanged(hasFocus)
-//        if (hasFocus) {
-//            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
-//        }
-//    }
+    private fun hideSystemUI() {
+        // Thiết lập chế độ toàn màn hình
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
 
     fun isValidEmail(email: String): Boolean {
         val emailRegex = "^[a-zA-Z0-9._%+-]{3,}+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"

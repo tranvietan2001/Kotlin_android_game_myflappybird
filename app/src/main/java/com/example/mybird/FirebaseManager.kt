@@ -1,16 +1,24 @@
 package com.example.mybird
 
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.util.Log
 import android.widget.Toast
+import com.example.mybird.sprites.Bird
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-data class UserAccount(val email: String, val accountName: String, var mark: Int = 0)
+data class UserAccount(
+    val email: String,
+    val accountName: String,
+    var score: Int = 0,
+    var listBirdPurchased: String = "",
+    var coinGold: Int = 0
+)
 
 class FirebaseManager {
 
@@ -18,8 +26,10 @@ class FirebaseManager {
     val database = Firebase.firestore
 
     val nameDb = "users"
-    val markField = "mark"
     val nameField = "nameAccount"
+    val scoreField = "score"
+    val coinGoldField = "coinGold"
+    val listBirdPurchased = "listBirdPurchased"
 
     fun initFirebase() {
         auth = FirebaseAuth.getInstance()
@@ -56,8 +66,8 @@ class FirebaseManager {
 //        return "name account created successfully"
 //    }
 
-    fun createAccount(email: String, password: String, callback: (String) -> Unit){
-        auth.createUserWithEmailAndPassword(email,password)
+    fun createAccount(email: String, password: String, callback: (String) -> Unit) {
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     callback("account created successfully")
@@ -77,12 +87,14 @@ class FirebaseManager {
             }
     }
 
-    fun createAccountName(name: String, callback: (String) -> Unit){
+    fun createAccountName(name: String, callback: (String) -> Unit) {
         val user = auth.currentUser
         val userAccount = UserAccount(email = user?.email ?: "", accountName = name)
         val data = hashMapOf(
             nameField to userAccount.accountName,
-            markField to userAccount.mark
+            scoreField to userAccount.score,
+            listBirdPurchased to userAccount.listBirdPurchased,
+            coinGoldField to userAccount.coinGold
         )
 
         database.collection(nameDb).document(userAccount.email)
@@ -132,7 +144,7 @@ class FirebaseManager {
 
                 if (isCheck) {
                     auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
-                        var notif:String = ""
+                        var notif: String = ""
                         if (task.isSuccessful) {
                             callback("checkMail")
                         } else callback("resetFail")
@@ -146,78 +158,102 @@ class FirebaseManager {
             }
     }
 
-    fun updateMark(nameAccount: String, mark: Int): String {
+    fun updateScore(mark: Int): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
         val updateData = database.collection(nameDb).document(user.email.toString())
 
         updateData
-            .update(markField, mark)
+            .update(scoreField, mark)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
-
-        // truy van sap xep
-
-        val testList: MutableList<String> = mutableListOf()
-
-        database.collection(nameDb).orderBy(markField, Query.Direction.ASCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-//                    testList.add(document.id+"-"+document.data)
-                    println("=====>${document.id} === ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-            }
-
-        return "Update done!"
+        return "Update Score done!"
     }
+
+    fun getScore(callback: (String) -> Unit): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val docRef = database.collection(nameDb).document(user.email.toString())
+        docRef.get().addOnSuccessListener { result ->
+            val score = result.get(scoreField)
+            callback(score.toString())
+        }
+        return "GET Score done!"
+    }
+
+
+    fun updateCoin(coinGold: Int): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val updateData = database.collection(nameDb).document(user.email.toString())
+
+        updateData
+            .update(coinGoldField, coinGold)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+        return "Update Score done!"
+    }
+
+    fun getCoinGold(callback: (String) -> Unit): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val docRef = database.collection(nameDb).document(user.email.toString())
+        docRef.get().addOnSuccessListener { result ->
+            val coinGold = result.get(coinGoldField)
+            callback(coinGold.toString())
+        }
+        return "GET Score done!"
+    }
+
+
+    fun updateBirds(newBird: String): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val docRef = database.collection(nameDb).document(user.email.toString())
+        docRef.get().addOnSuccessListener { result ->
+            if (result != null) {
+                val currentListBird = result.get(listBirdPurchased)
+                val updatedList = if (currentListBird != "") {
+                    "$currentListBird,$newBird"
+                } else {
+                    newBird
+                }
+
+                docRef.update(listBirdPurchased, updatedList)
+                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+            }
+        }
+        return "Update Birds done!"
+    }
+
+    fun getListBird(callback: (String) -> Unit): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val docRef = database.collection(nameDb).document(user.email.toString())
+        docRef.get().addOnSuccessListener { result ->
+            val score = result.get(listBirdPurchased)
+            callback(score.toString())
+        }
+        return "GET Score done!"
+    }
+
 
     fun rankQuery(callback: (ArrayList<User>) -> Unit) {
         val userList: ArrayList<User> = arrayListOf()
 
-        database.collection(nameDb).orderBy(markField, Query.Direction.DESCENDING)
+        database.collection(nameDb).orderBy(scoreField, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
-//                for (document in result) {
-////                    testList.add(document.id+"-"+document.data)
-//                    println("=====>${document.id} === ${document.data}")
-//                    val email = document.id
-//                    val name = document.get(nameField)
-//                    val mark = document.get(markField)
-//                    val user = User(name.toString(), mark.toString(), email)
-//                    userList.add(user)
-//                }
-
                 result.documents.forEachIndexed { index, document ->
                     val name = document.get(nameField)
-                    val mark = document.get(markField)
+                    val mark = document.get(scoreField)
                     val email = document.id
                     val maskEmail = maskEmail(email)
-                    val user = User((index+1).toString(), name.toString(), mark.toString(), maskEmail)
+                    val user =
+                        User((index + 1).toString(), name.toString(), mark.toString(), maskEmail)
                     userList.add(user)
                 }
-
-
-
                 callback(userList)
-//                println("ARR -t: " + userList.size.toString())
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
             }
-//        println("ARR: -s" + userList.size.toString())
     }
-
-    suspend fun getMark(nameAccount: String): Any {
-        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
-//        val mark = database.child("users").child(user.uid).child("mark").get().await().getValue(Int::class.java)
-        return "Không tìm thấy thông tin"
-    }
-
-
-
 
     fun maskEmail(email: String): String {
         // Tách phần tên và phần miền
@@ -239,6 +275,4 @@ class FirebaseManager {
         // Kết hợp lại
         return maskedNamePart + domainPart
     }
-
-
 }

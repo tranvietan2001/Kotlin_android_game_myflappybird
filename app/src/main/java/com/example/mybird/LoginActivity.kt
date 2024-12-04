@@ -17,6 +17,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var emailTxt: EditText
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var createAccountTxt: TextView
     private lateinit var forgotPassTxt: TextView
     private lateinit var loadingIV: ImageView
+    private lateinit var backBtn: ImageButton
     private var accountEmail = ""
     private var password = ""
 
@@ -38,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge() //ẩn phần viền trên
 
         sharedPrefManager = SharedPreferenceManager(this)
+
         val language = sharedPrefManager.getLanguageConfig()
         val locale = Locale(language)
         Locale.setDefault(locale)
@@ -59,6 +62,7 @@ class LoginActivity : AppCompatActivity() {
         createAccountTxt = findViewById(R.id.signAccountTxt)
         forgotPassTxt = findViewById(R.id.forgotPassTxt)
         loadingIV = findViewById(R.id.loadingIV)
+        backBtn = findViewById(R.id.backBtn)
         loadingIV.visibility = View.GONE
         failLoginTxt.visibility = View.GONE
 
@@ -135,8 +139,13 @@ class LoginActivity : AppCompatActivity() {
                                         emailTxt.setText("")
                                         passwordTxt.setText("")
                                         loadingIV.visibility = View.GONE
-                                        val changeUi =
-                                            Intent(this, InforAfterLoginActivity::class.java)
+
+
+                                        firebaseManager.getScore { resultScore ->
+                                            Toast.makeText(this, resultScore, Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
                                         changeUi.putExtra("NAME_ACCOUNT", result)
                                         startActivity(changeUi)
                                     }
@@ -144,8 +153,8 @@ class LoginActivity : AppCompatActivity() {
                             } else {
                                 failLoginTxt.visibility = View.VISIBLE
                                 loadingIV.visibility = View.GONE
-//                                Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT)
-//                                    .show()
+                                Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT)
+                                    .show()
                             }
 
                         }
@@ -175,22 +184,39 @@ class LoginActivity : AppCompatActivity() {
             startActivity(changeUi)
         }
 
+        backBtn.setOnTouchListener { v, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_UP -> {
+                    scaleView(v, 1f)
+                    finish()
+                    true
+                }
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    scaleView(v, 1.2f)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
     }
 
 
-//    private fun hideSystemUI() {
-//        // Thiết lập chế độ toàn màn hình
-//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
-//                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//    }
-//
-//    override fun onWindowFocusChanged(hasFocus: Boolean) {
-//        super.onWindowFocusChanged(hasFocus)
-//        if (hasFocus) {
-//            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
-//        }
-//    }
+    private fun hideSystemUI() {
+        // Thiết lập chế độ toàn màn hình
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
 
     private fun startRotationAnimation() {
         // Tạo ObjectAnimator để quay hình ảnh

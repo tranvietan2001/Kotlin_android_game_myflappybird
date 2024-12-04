@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/bg_color"
     android:backgroundTint="@color/bg_color">
-
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_btn" />
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -123,7 +132,7 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/loginBtn"
         app:layout_constraintStart_toEndOf="@+id/loginBtn"
-        app:layout_constraintTop_toBottomOf="@+id/failLoginTxt"
+        app:layout_constraintTop_toTopOf="@+id/loginBtn"
         app:srcCompat="@drawable/loading"
         tools:ignore="MissingConstraints" />
 

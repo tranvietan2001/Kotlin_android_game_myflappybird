@@ -18,6 +18,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class ConfigActivity : AppCompatActivity() {
 
     private lateinit var soundOnCb: CheckBox
@@ -29,6 +30,7 @@ class ConfigActivity : AppCompatActivity() {
     private lateinit var nextBtn: ImageButton
     private lateinit var preBtn: ImageButton
     private lateinit var birdName: TextView
+    private lateinit var backBtn: ImageButton
     var i = 0
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
@@ -49,7 +51,6 @@ class ConfigActivity : AppCompatActivity() {
 
         setContentView(R.layout.config_activity_main)
 
-
         soundOnCb = findViewById(R.id.soundOnCB)
         soundOffCb = findViewById(R.id.soundOffCB)
         lgEnCb = findViewById(R.id.lgEnCB)
@@ -59,9 +60,10 @@ class ConfigActivity : AppCompatActivity() {
         nextBtn = findViewById(R.id.nextBtn)
         preBtn = findViewById(R.id.preBtn)
         birdName = findViewById(R.id.birdNameTxt)
+        backBtn = findViewById(R.id.backBtn)
 
         val drawableNames = listOf("bird1_down", "bird2_down", "bird3_down", "bird4_down", "bird5_down") // Danh sách tên drawable
-
+        // -> chuyển đọc từ list trong SP
 
 
         if (language == "en") {
@@ -154,6 +156,7 @@ class ConfigActivity : AppCompatActivity() {
                 }
             }
         }
+
         nextBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
@@ -177,10 +180,8 @@ class ConfigActivity : AppCompatActivity() {
                         // Xử lý khi không tìm thấy drawable
 //            Log.e("TAG", "Drawable not found")
                     }
-
                     true
                 }
-
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
@@ -198,17 +199,32 @@ class ConfigActivity : AppCompatActivity() {
                     scaleView(v, 1f)
 
                     val changeUi = Intent(this, MainActivity::class.java)
+                    changeUi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(changeUi)
                     finish()
-
                     true
                 }
-
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+                else -> {
+                    false
+                }
+            }
+        }
 
+        backBtn.setOnTouchListener { v, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_UP -> {
+                    scaleView(v, 1f)
+                    finish()
+                    true
+                }
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    scaleView(v, 1.2f)
+                    true
+                }
                 else -> {
                     false
                 }
@@ -227,5 +243,17 @@ class ConfigActivity : AppCompatActivity() {
         animation.fillAfter = true // Giữ trạng thái cuối
         view.startAnimation(animation)
     }
+    private fun hideSystemUI() {
+        // Thiết lập chế độ toàn màn hình
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
 }

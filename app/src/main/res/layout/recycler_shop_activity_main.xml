@@ -11,27 +11,77 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/list_item_shop_main" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="60dp"
         android:fontFamily="@font/font_mybird_default"
-        android:text="@string/name_game"
+        android:text="@string/shop"
         android:textColor="@color/txt_color"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_btn" />
+
+    <TextView
+        android:id="@+id/sttPlayerMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/font_mybird_default"
+        android:text="---"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+        app:layout_constraintStart_toEndOf="@+id/backBtn"
+        app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
+    <ImageView
+        android:id="@+id/coinImg"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sttPlayerMode"
+        app:layout_constraintStart_toEndOf="@+id/sttPlayerMode"
+        app:layout_constraintTop_toTopOf="@+id/sttPlayerMode"
+        app:srcCompat="@drawable/coin_gold" />
+
+    <TextView
+        android:id="@+id/coinTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/font_mybird_default"
+        android:text="1"
+        android:textColor="@color/txt_color"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/coinImg"
+        app:layout_constraintStart_toEndOf="@+id/coinImg"
+        app:layout_constraintTop_toTopOf="@+id/coinImg" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

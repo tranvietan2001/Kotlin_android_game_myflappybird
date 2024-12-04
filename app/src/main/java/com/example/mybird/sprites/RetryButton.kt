@@ -39,10 +39,6 @@ class RetryButton(
         // Không có logic cập nhật trong lớp GameMessage
     }
 
-    fun onTouchEvent() {
-        println("TOUCH --->")
-    }
-
     fun isTouched(x: Float, y: Float): Boolean {
         val scaledWidth = (retryBtn.width * 0.35).toInt() // Thay đổi tỉ lệ theo ý muốn
         val scaledHeight = (retryBtn.height * 0.35).toInt() // Thay đổi tỉ lệ theo ý muốn
@@ -55,7 +51,6 @@ class RetryButton(
                 y >= top && y <= top + scaledHeight
 
     }
-
 
     private fun getRetryButtonResource(): Int {
         return if (language == "en") {

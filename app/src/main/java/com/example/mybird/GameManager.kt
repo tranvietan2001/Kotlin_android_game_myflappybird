@@ -3,6 +3,7 @@ package com.example.mybird
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.media.MediaPlayer
@@ -12,6 +13,7 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.Toast
 import com.example.mybird.*
 import com.example.mybird.sprites.*
 
@@ -40,6 +42,7 @@ class GameManager(
     private lateinit var scoreSprite: Score
 
     private lateinit var retryBtn: RetryButton
+    private lateinit var backBtn: BackButton
 
     private var score: Int = 0
     private var birdPosition: Rect = Rect()
@@ -51,11 +54,11 @@ class GameManager(
     private lateinit var mpHit: MediaPlayer
     private lateinit var mpWing: MediaPlayer
 
+    private var isPlaying: Boolean = false
+
     var playerMode = ""
     var soundStt = false
     var language = "en"
-
-    var isRetry: Boolean = false
 
     init {
 
@@ -90,6 +93,7 @@ class GameManager(
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels, language)
         scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
         retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels, language)
+        backBtn = BackButton(resources, dm.heightPixels, dm.widthPixels, language)
     }
 
     private fun initSounds() {
@@ -112,7 +116,7 @@ class GameManager(
 
     // Xử lý khi surface được tạo
     override fun surfaceCreated(holder: SurfaceHolder) {
-        isRetry = true
+        isPlaying = true
         thread.setRunning(true)
         thread.start()
     }
@@ -124,64 +128,35 @@ class GameManager(
 
     // Xử lý khi surface bị hủy
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-//        var retry = true
-        isRetry = true
-        thread.setRunning(false)
-        while (isRetry) {
+        isPlaying = true
+//        thread.setRunning(isPlaying)
+        while (isPlaying) {
             try {
-                thread.join()
-                isRetry = false
+//                thread.join()
+                isPlaying = false
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
         }
     }
 
-//    fun resumeGame(){
-//        println("==========Te")
-//        isRetry = true
-//        thread.setRunning(true)
-//        thread.start()
-//    }
-//    fun pauseGame(){
-//        isRetry = true
-//        thread.setRunning(false)
-//        while (isRetry) {
-//            try {
-//                thread.join()
-//                isRetry = false
-//            } catch (e: InterruptedException) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-
     fun update() {
-
         when (gameState) {
             GameState.PLAYING -> {
                 bird.update()
                 obstacleManager.update()
             }
-
             GameState.GAME_OVER -> {
                 bird.update()
             }
-
             else -> {}
         }
     }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-
-
         canvas.drawRGB(150, 255, 255)
         background.draw(canvas)
-
-//        bird.draw(canvas)
-////        obstacle.draw(canvas) // test
-//        obstacleManager.draw(canvas)
 
         when (gameState) {
             GameState.PLAYING -> {
@@ -203,21 +178,18 @@ class GameManager(
                 scoreSprite.draw(canvas)
 
                 retryBtn.draw(canvas)
+                backBtn.draw(canvas)
             }
-
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-//        bird.onTouchEvent()
-
         when (gameState) {
             GameState.PLAYING -> {
                 bird.onTouchEvent()
                 mpWing.start()
             }
-
             GameState.INITIAL -> {
                 if (event != null) {
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -230,14 +202,9 @@ class GameManager(
                         }
                     }
                 }
-//                mpWing.start()
-//                gameState = GameState.PLAYING
-//                mpSwoosh.start()
             }
 
             GameState.GAME_OVER -> {
-//                initGame()
-//                gameState = GameState.INITIAL
 
                 // game over thì có nút replay khi click vào đó thì mới init v game states
                 // vex nút retry, neu touch ddungs vaof vij tris nuts thif init vaf cguyeenr tranjg nthais
@@ -251,14 +218,24 @@ class GameManager(
                             initGame()
                             gameState = GameState.INITIAL
                         }
-//                        else println("TOUCH -- outside")
 
+                        if(backBtn.isTouched(x,y)){
+                            while (isPlaying) {
+                                try {
+//                                    thread.join()
+                                    isPlaying = false
+                                } catch (e: InterruptedException) {
+                                    e.printStackTrace()
+                                }
+                            }
+                            gotoBack()
+                            println("------> BACK")
+                        }
                     }
                 }
-//                retryBtn.onTouchEvent()
+
             }
         }
-//        bird.onTouchEvent()
         return super.onTouchEvent(event)
     }
 
@@ -267,17 +244,14 @@ class GameManager(
     }
 
     override fun updatePosition(obstacle: Obstacle, positions: ArrayList<Rect>) {
-//        if (obstaclePositions.containsKey(obstacle)) {
-//            obstaclePositions.remove(obstacle)
-//        }
         obstaclePositions.remove(obstacle)
         obstaclePositions[obstacle] = positions
     }
 
     override fun removeObstacle(obstacle: Obstacle) {
         obstaclePositions.remove(obstacle)
-//        score +=10000
-        score++
+        score += 5
+//        score++
         scoreSprite.updateScore(score)
         mpPoint.start()
     }
@@ -287,14 +261,9 @@ class GameManager(
         if (birdPosition.bottom > dm.heightPixels) {
             collision = true
         } else {
-//            println("=========================================>xxxxx$obstaclePositions")
             for (obstacle in obstaclePositions.keys) {
-//                println("=========================================>yyyy")
                 val bottomRectangle = obstaclePositions[obstacle]!![0]
                 val topRectangle = obstaclePositions[obstacle]!![1]
-//                println("=========================================>")
-//                println("=========================================>OB: ${bottomRectangle.left}==${topRectangle.left}")
-//                println("=========================================>Bird: $birdPosition.right ")
                 if (birdPosition.right > bottomRectangle.left && birdPosition.left < bottomRectangle.right && birdPosition.bottom > bottomRectangle.top) {
                     collision = true
                 } else if (birdPosition.right > topRectangle.left && birdPosition.left < topRectangle.right && birdPosition.top < topRectangle.bottom) {
@@ -306,10 +275,23 @@ class GameManager(
         if (collision) {
             gameState = GameState.GAME_OVER
             bird.collision()
-//            println("=========================================> GAME OVER")
             scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
             mpHit.start()
             mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
         }
+    }
+
+    private fun gotoBack(){
+        if(playerMode == "online"){
+            val intent = Intent(context, InforAfterLoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+        else {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+
     }
 }

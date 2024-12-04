@@ -48,7 +48,6 @@ class  SharedPreferenceManager(context: Context){
         return sharedPreferences.getString(CONF_LANG, "en") ?: "en" // Mặc định là "en"
     }
 
-
     // Hàm lưu chế độ người chơi
     fun savePlayerMode(playerMode: String) {
         sharedPreferences.edit().putString(PLAYER_MODE, playerMode).apply()

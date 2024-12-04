@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var sOnlineBtn: ImageButton
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge() //ẩn phần viền trên
 
         sharedPrefManager = SharedPreferenceManager(this)
+
         val language = sharedPrefManager.getLanguageConfig()
         val locale = Locale(language)
         Locale.setDefault(locale)
@@ -43,12 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.select_game_mode_activity_main)
 
-
         sOnlineBtn = findViewById(R.id.sOnlineBtn)
         sOfflineBtn = findViewById(R.id.sOfflineBtn)
         sShopBtn = findViewById(R.id.sShopBtn)
         sConfigBtn = findViewById(R.id.sConfigBtn)
 
+        Toast.makeText(this, language, Toast.LENGTH_SHORT).show()
         if (language == "en") {
             sOnlineBtn.setImageResource(R.drawable.online_button_en)
             sOfflineBtn.setImageResource(R.drawable.offline_button_en)
@@ -60,6 +62,8 @@ class MainActivity : AppCompatActivity() {
             sShopBtn.setImageResource(R.drawable.shop_button_vi)
             sConfigBtn.setImageResource(R.drawable.setting_button_vi)
         }
+
+//        sharedPrefManager.savePlayerMode("offline")
 
 
 //        sOnlineBtn.setOnClickListener {
@@ -134,8 +138,8 @@ class MainActivity : AppCompatActivity() {
                     scaleView(v, 1f)
 
                     val changeUi = Intent(this, ShopRecyclerViewActivity::class.java)
+                    changeUi.putExtra("MODE_PLAYER", "@Off_play")
                     startActivity(changeUi)
-
                     true
                 }
 
@@ -192,17 +196,17 @@ class MainActivity : AppCompatActivity() {
         view.startAnimation(animation)
     }
 
-//    private fun hideSystemUI() {
-//        // Thiết lập chế độ toàn màn hình
-//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
-//                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//    }
-//
-//    override fun onWindowFocusChanged(hasFocus: Boolean) {
-//        super.onWindowFocusChanged(hasFocus)
-//        if (hasFocus) {
-//            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
-//        }
-//    }
+    private fun hideSystemUI() {
+        // Thiết lập chế độ toàn màn hình
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
 }

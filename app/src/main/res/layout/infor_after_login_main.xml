@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:background="#96FFFF"
     android:backgroundTint="#96FFFF">
-
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_btn" />
     <TextView
         android:id="@+id/nameAccountTxt"
         android:layout_width="wrap_content"
@@ -48,4 +57,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playBtn"
         app:srcCompat="@drawable/rank_button_en" />
+
+    <ImageButton
+        android:id="@+id/shopBtn"
+        android:layout_width="160dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rankBtn"
+        app:srcCompat="@drawable/shop_button_en" />
 </androidx.constraintlayout.widget.ConstraintLayout>
