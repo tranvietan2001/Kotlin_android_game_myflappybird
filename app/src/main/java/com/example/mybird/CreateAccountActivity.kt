@@ -151,6 +151,7 @@ class CreateAccountActivity : AppCompatActivity() {
                             if (result1 == "account created successfully") {
                                 nofiticalCreateTxt.text = "====================================="
                                 loadingIV.visibility = View.VISIBLE
+
                                 firebaseManager.createAccountName(name.toString()) { result2 ->
                                     if (result2 == "name account created successfully") {
                                         loadingIV.visibility = View.GONE
@@ -234,7 +235,7 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     fun isValidNameAcc(name: String): Boolean {
-        val nameRegex = "^[a-zA-Z]{3,10}$"
+        val nameRegex = "^[a-zA-Z]{3,6}$"
         return Regex(nameRegex).matches(name.trim())
     }
 

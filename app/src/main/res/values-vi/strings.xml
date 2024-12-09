@@ -8,7 +8,7 @@
     <string name="email">Email</string>
     <string name="create_account">Tạo Tài Khoản</string>
     <string name="emailTxt">Email</string>
-    <string name="check_if_email_is_valid_password_length_must_be_over_6_characters">Kiểm tra xem email có hợp lệ không, độ dài mật khẩu phải trên 6 ký tự, độ dài biệt danh phải trên 3 và dưới 10 ký tự không có số và ký tự đặc biệt</string>
+    <string name="check_if_email_is_valid_password_length_must_be_over_6_characters">Kiểm tra xem email có hợp lệ không, độ dài mật khẩu phải trên 6 ký tự, độ dài biệt danh phải trên 3 và dưới 6 ký tự không có số và ký tự đặc biệt</string>
     <string name="login_failed_please_check_your_information_again">Đăng nhập không thành công, vui lòng kiểm tra lại thông tin của bạn!</string>
     <string name="if_you_do_not_have_an_account_please_click_here">Nếu bạn không có tài khoản, vui lòng nhấp vào đây</string>
     <string name="forgot_password">Quên mật khẩu</string>
@@ -33,4 +33,5 @@
     <string name="confirm">Xác nhận</string>
     <string name="name_game">My Flappy Brid</string>
     <string name="forgot_password_text">Quên mật khẩu</string>
+    <string name="shop">Cửa hàng</string>
 </resources>

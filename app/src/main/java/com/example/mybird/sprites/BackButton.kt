@@ -9,10 +9,7 @@ import com.example.mybird.R
 import org.intellij.lang.annotations.Language
 
 class BackButton(
-    resources: Resources,
-    private val screenHeight: Int,
-    private val screenWidth: Int,
-    private val language: String
+    resources: Resources
 ) : Sprite {
 
     //    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.retry_button)

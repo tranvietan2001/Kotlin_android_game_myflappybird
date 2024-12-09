@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.SpannedString
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
@@ -16,6 +17,12 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
+
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.view.MotionEvent
 
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
@@ -120,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
 
         loginBtn.setOnTouchListener { v, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
                     loadingIV.visibility = View.VISIBLE
@@ -140,10 +147,12 @@ class LoginActivity : AppCompatActivity() {
                                         passwordTxt.setText("")
                                         loadingIV.visibility = View.GONE
 
-
-                                        firebaseManager.getScore { resultScore ->
-                                            Toast.makeText(this, resultScore, Toast.LENGTH_SHORT).show()
-                                        }
+                                        var x = 0
+//                                        firebaseManager.getScore { resultScore ->
+//                                            x = resultScore.toInt()
+//                                            Toast.makeText(this, "coin 1 : $x", Toast.LENGTH_SHORT).show()
+//                                        }
+//                                        Toast.makeText(this, "coin 2 : $x", Toast.LENGTH_SHORT).show()
 
                                         val changeUi = Intent(this, InforAfterLoginActivity::class.java)
                                         changeUi.putExtra("NAME_ACCOUNT", result)
@@ -163,7 +172,7 @@ class LoginActivity : AppCompatActivity() {
                     true
                 }
 
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
@@ -186,12 +195,12 @@ class LoginActivity : AppCompatActivity() {
 
         backBtn.setOnTouchListener { v, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
                     finish()
                     true
                 }
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }

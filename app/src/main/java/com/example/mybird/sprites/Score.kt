@@ -5,15 +5,19 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import com.example.mybird.FirebaseManager
 import com.example.mybird.R
+import com.example.mybird.SharedPreferenceManager
 
 class Score(
     resources: Resources,
     private val screenHeight: Int,
-    private val screenWidth: Int
+    private val screenWidth: Int,
+    private val playerMode: String
+
 ) : Sprite {
 
-    private val SCORE_PREF = "Score pref"
+    private val SCORE_PREF = "Score_pref"
     private val zero: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zero)
     private val one: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.one)
     private val two: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.two)
@@ -45,27 +49,50 @@ class Score(
     private var collision: Boolean = false
 
     override fun draw(canvas: Canvas) {
+        // khi play se + score tang dan
         if (!collision) {
             val digits = convertToBitmaps(score)
             for (i in digits.indices) {
                 val x = screenWidth / 2 - digits.size * zero.width / 2 + zero.width * i
                 canvas.drawBitmap(digits[i], x.toFloat(), (screenHeight / 4).toFloat(), null)
             }
-        } else {
+        }
+        // khi gameover se show scores
+        else {
             val currentDigits = convertToBitmaps(score)
             val topDigits = convertToBitmaps(topScore)
 
-            canvas.drawBitmap(bmpScore, (screenWidth / 2 - bmpScore.width / 2).toFloat(), (3 * screenHeight / 4 - 2* zero.height - bmpScore.height).toFloat(), null)
+            canvas.drawBitmap(
+                bmpScore,
+                (screenWidth / 2 - bmpScore.width / 2).toFloat(),
+                (3 * screenHeight / 4 - 2 * zero.height - bmpScore.height).toFloat(),
+                null
+            )
 
             for (i in currentDigits.indices) {
-                val x = screenWidth / 2 - currentDigits.size * zero.width/2 + zero.width * i
-                canvas.drawBitmap(currentDigits[i], x.toFloat(), (3 * screenHeight / 4 - zero.height - bmpScore.height).toFloat(), null)
+                val x = screenWidth / 2 - currentDigits.size * zero.width / 2 + zero.width * i
+                canvas.drawBitmap(
+                    currentDigits[i],
+                    x.toFloat(),
+                    (3 * screenHeight / 4 - zero.height - bmpScore.height).toFloat(),
+                    null
+                )
             }
 
-            canvas.drawBitmap(bmpBest, (screenWidth / 2 - bmpBest.width / 2).toFloat(), (3 * screenHeight / 4 + zero.height - bmpBest.height).toFloat(), null)
+            canvas.drawBitmap(
+                bmpBest,
+                (screenWidth / 2 - bmpBest.width / 2).toFloat(),
+                (3 * screenHeight / 4 + zero.height - bmpBest.height).toFloat(),
+                null
+            )
             for (i in topDigits.indices) {
                 val x = screenWidth / 2 - topDigits.size * zero.width / 2 + zero.width * i
-                canvas.drawBitmap(topDigits[i], x.toFloat(), (3 * screenHeight / 4 + 2 * zero.height - bmpScore.height).toFloat(), null)
+                canvas.drawBitmap(
+                    topDigits[i],
+                    x.toFloat(),
+                    (3 * screenHeight / 4 + 2 * zero.height - bmpScore.height).toFloat(),
+                    null
+                )
             }
         }
     }
@@ -95,10 +122,29 @@ class Score(
 
     fun collision(prefs: SharedPreferences) {
         collision = true
-        topScore = prefs.getInt(SCORE_PREF, 0)
-        if (topScore < score) {
-            prefs.edit().putInt(SCORE_PREF, score).apply()
-            topScore = score
+        if (playerMode == "offline") {
+            topScore = prefs.getInt(SCORE_PREF, 0)
+            if (topScore < score) {
+                prefs.edit().putInt(SCORE_PREF, score).apply()
+                topScore = score
+            }
+        } else {
+            val firebaseManager: FirebaseManager = FirebaseManager()
+            firebaseManager.initFirebase()
+            firebaseManager.getScore { resultScore ->
+                topScore = resultScore.toInt()
+                if (topScore < score) {
+                    firebaseManager.updateScore(score)
+                    topScore = score
+                }
+            }
+//            topScore = 10000
         }
+
     }
+
+//    fun swapScore(vScore: Int){
+//
+//    }
+
 }

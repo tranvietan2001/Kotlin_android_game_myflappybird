@@ -158,6 +158,17 @@ class FirebaseManager {
             }
     }
 
+    fun getNameAccount(callback: (String) -> Unit): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val docRef = database.collection(nameDb).document(user.email.toString())
+        docRef.get().addOnSuccessListener { result ->
+            val score = result.get(nameField)
+            callback(score.toString())
+        }
+        return "GET nameAcc done!"
+    }
+
+
     fun updateScore(mark: Int): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
         val updateData = database.collection(nameDb).document(user.email.toString())
@@ -178,7 +189,6 @@ class FirebaseManager {
         }
         return "GET Score done!"
     }
-
 
     fun updateCoin(coinGold: Int): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"

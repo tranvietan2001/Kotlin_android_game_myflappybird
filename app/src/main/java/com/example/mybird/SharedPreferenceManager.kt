@@ -6,11 +6,13 @@ import android.content.SharedPreferences
 class  SharedPreferenceManager(context: Context){
 
     private var APP_NAME = "@MY_BIRD"
-    private var PLAYER_MODE = "offline"
-    private var CONF_LANG = "en"
-    private var CONF_SOUND = "off"
-    private var CONF_BIRD = ""
+    private var PLAYER_MODE = "player_mode"
+    private var CONF_LANG = "language"
+    private var CONF_SOUND = "sound"
     private var PURCHASED_BIRDS = "purchased_birds"
+    private var CONF_BIRD = "bird_use"
+    private var COIN_SILVER = "coin"
+    private val SCORE_PREF = "Score_pref"
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
 
@@ -73,7 +75,20 @@ class  SharedPreferenceManager(context: Context){
         return sharedPreferences.getStringSet(PURCHASED_BIRDS, emptySet()) ?: emptySet()
     }
 
+    fun setCoinSilver(coin:Int){
+        sharedPreferences.edit().putInt(COIN_SILVER, coin).apply()
+    }
+    fun getCoinSilver(): Int{
+        return sharedPreferences.getInt(COIN_SILVER, 0) ?: 0
+    }
 
+
+    fun setMaxScore(score:Int){
+        sharedPreferences.edit().putInt(SCORE_PREF, score).apply()
+    }
+    fun getMaxScore(): Int{
+        return sharedPreferences.getInt(SCORE_PREF, 0) ?: 0
+    }
 
 
 

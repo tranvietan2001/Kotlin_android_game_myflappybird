@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         sShopBtn = findViewById(R.id.sShopBtn)
         sConfigBtn = findViewById(R.id.sConfigBtn)
 
-        Toast.makeText(this, language, Toast.LENGTH_SHORT).show()
         if (language == "en") {
             sOnlineBtn.setImageResource(R.drawable.online_button_en)
             sOfflineBtn.setImageResource(R.drawable.offline_button_en)

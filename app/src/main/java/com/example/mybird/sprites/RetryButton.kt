@@ -15,7 +15,7 @@ class RetryButton(
     private val language: String
 ) : Sprite {
 
-//    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.retry_button)
+    //    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.retry_button)
     private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, getRetryButtonResource())
     override fun draw(canvas: Canvas) {
 //        canvas.drawBitmap(retryBtn, (screenWidth / 2 - retryBtn.width / 2).toFloat(), (screenHeight / 4).toFloat(),null)

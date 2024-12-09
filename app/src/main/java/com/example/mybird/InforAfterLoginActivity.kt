@@ -22,6 +22,7 @@ class InforAfterLoginActivity : AppCompatActivity() {
     private lateinit var backBtn: ImageButton
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
+    private lateinit var firebaseManager: FirebaseManager
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +30,11 @@ class InforAfterLoginActivity : AppCompatActivity() {
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.infor_after_login_main)
 
-        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
 
 
         sharedPrefManager = SharedPreferenceManager(this)
         val language = sharedPrefManager.getLanguageConfig()
+        val sttPlayerMode = sharedPrefManager.getPlayerMode()
 
         nameAccountTxt = findViewById(R.id.nameAccountTxt)
         playBtn = findViewById(R.id.playBtn)
@@ -52,7 +53,18 @@ class InforAfterLoginActivity : AppCompatActivity() {
             shopBtn.setImageResource(R.drawable.shop_button_vi)
         }
 
-        nameAccountTxt.text = nameAccount
+        if(sttPlayerMode == "offline"){
+            nameAccountTxt.text = ""
+        }else {
+            firebaseManager = FirebaseManager()
+            firebaseManager.initFirebase()
+            firebaseManager.getNameAccount { result->
+                nameAccountTxt.text = result
+            }
+        }
+
+//        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
+//        nameAccountTxt.text = nameAccount
 
 //        playBtn.setOnClickListener {
 //            val changeUi = Intent(this,PlayGameActivity::class.java)
@@ -65,7 +77,7 @@ class InforAfterLoginActivity : AppCompatActivity() {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
                     val changeUi = Intent(this,PlayGameActivity::class.java)
-                    changeUi.putExtra("NAME_ACCOUNT", nameAccount)
+//                    changeUi.putExtra("NAME_ACCOUNT", nameAccount)
                     startActivity(changeUi)
                     true
                 }

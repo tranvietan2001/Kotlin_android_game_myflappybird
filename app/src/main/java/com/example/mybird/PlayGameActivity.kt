@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 @Suppress("DEPRECATION")
 class PlayGameActivity : AppCompatActivity() {
     private lateinit var namePlayer: TextView
+
+    private lateinit var sharedPrefManager: SharedPreferenceManager
+    private lateinit var firebaseManager: FirebaseManager
 //    private lateinit var gameManager: GameManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,14 +20,28 @@ class PlayGameActivity : AppCompatActivity() {
         enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.activity_main)
 
+        sharedPrefManager = SharedPreferenceManager(this)
+        val sttPlayerMode = sharedPrefManager.getPlayerMode()
+
+        namePlayer = findViewById(R.id.nameAccountPlayTxt)
+
+        if(sttPlayerMode == "offline"){
+            namePlayer.text = ""
+        }else {
+            firebaseManager = FirebaseManager()
+            firebaseManager.initFirebase()
+            firebaseManager.getNameAccount { result->
+                namePlayer.text = result
+            }
+        }
+
 //        gameManager = findViewById(R.id.gameManager)
 
-        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
-        namePlayer = findViewById(R.id.nameAccountPlayTxt)
-        if(nameAccount != "@Off_play"){
-            namePlayer.text = nameAccount
-        }
-        else namePlayer.text = ""
+//        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
+//        if(nameAccount != "@Off_play"){
+//            namePlayer.text = nameAccount
+//        }
+//        else namePlayer.text = ""
 
     }
 

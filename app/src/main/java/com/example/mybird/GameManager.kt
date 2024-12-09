@@ -43,6 +43,7 @@ class GameManager(
 
     private lateinit var retryBtn: RetryButton
     private lateinit var backBtn: BackButton
+    private lateinit var coinImg: Coin
 
     private var score: Int = 0
     private var birdPosition: Rect = Rect()
@@ -59,6 +60,7 @@ class GameManager(
     var playerMode = ""
     var soundStt = false
     var language = "en"
+
 
     init {
 
@@ -91,20 +93,20 @@ class GameManager(
 
         gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels, language)
-        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels)
+        scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels, playerMode)
         retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels, language)
-        backBtn = BackButton(resources, dm.heightPixels, dm.widthPixels, language)
+        backBtn = BackButton(resources)
+        coinImg = Coin(resources, dm.heightPixels, dm.widthPixels, playerMode)
     }
 
     private fun initSounds() {
-        if(soundStt) {
+        if (soundStt) {
             mpPoint = MediaPlayer.create(context, R.raw.point)
             mpSwoosh = MediaPlayer.create(context, R.raw.swoosh)
             mpDie = MediaPlayer.create(context, R.raw.die)
             mpHit = MediaPlayer.create(context, R.raw.hit)
             mpWing = MediaPlayer.create(context, R.raw.wing)
-        }
-        else{
+        } else {
             mpPoint = MediaPlayer.create(context, R.raw.mute)
             mpSwoosh = MediaPlayer.create(context, R.raw.mute)
             mpDie = MediaPlayer.create(context, R.raw.mute)
@@ -146,9 +148,11 @@ class GameManager(
                 bird.update()
                 obstacleManager.update()
             }
+
             GameState.GAME_OVER -> {
                 bird.update()
             }
+
             else -> {}
         }
     }
@@ -169,6 +173,10 @@ class GameManager(
             GameState.INITIAL -> {
                 bird.draw(canvas)
                 gameMessage.draw(canvas)
+
+                backBtn.draw(canvas)
+
+//                coinImg.draw(canvas)
             }
 
             GameState.GAME_OVER -> {
@@ -181,6 +189,7 @@ class GameManager(
                 backBtn.draw(canvas)
             }
         }
+        coinImg.draw(canvas) // test
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -190,6 +199,7 @@ class GameManager(
                 bird.onTouchEvent()
                 mpWing.start()
             }
+
             GameState.INITIAL -> {
                 if (event != null) {
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -199,6 +209,19 @@ class GameManager(
                             mpWing.start()
                             gameState = GameState.PLAYING
                             mpSwoosh.start()
+                        }
+
+                        if (backBtn.isTouched(x, y)) {
+                            while (isPlaying) {
+                                try {
+//                                    thread.join()
+                                    isPlaying = false
+                                } catch (e: InterruptedException) {
+                                    e.printStackTrace()
+                                }
+                            }
+                            gotoBack()
+//                            println("------> BACK")
                         }
                     }
                 }
@@ -219,7 +242,7 @@ class GameManager(
                             gameState = GameState.INITIAL
                         }
 
-                        if(backBtn.isTouched(x,y)){
+                        if (backBtn.isTouched(x, y)) {
                             while (isPlaying) {
                                 try {
 //                                    thread.join()
@@ -229,7 +252,7 @@ class GameManager(
                                 }
                             }
                             gotoBack()
-                            println("------> BACK")
+//                            println("------> BACK")
                         }
                     }
                 }
@@ -281,13 +304,12 @@ class GameManager(
         }
     }
 
-    private fun gotoBack(){
-        if(playerMode == "online"){
+    private fun gotoBack() {
+        if (playerMode == "online") {
             val intent = Intent(context, InforAfterLoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
-        }
-        else {
+        } else {
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
