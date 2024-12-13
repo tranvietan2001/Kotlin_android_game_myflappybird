@@ -46,6 +46,7 @@ class GameManager(
     private lateinit var coinImg: Coin
 
     private var score: Int = 0
+    private var vCoin: Int = 0
     private var birdPosition: Rect = Rect()
     private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
 
@@ -60,6 +61,7 @@ class GameManager(
     var playerMode = ""
     var soundStt = false
     var language = "en"
+    var coinSilver = 0
 
 
     init {
@@ -73,6 +75,7 @@ class GameManager(
 
     private fun initGame() {
         score = 0
+        vCoin = 0
         birdPosition = Rect()
         obstaclePositions = HashMap()
         bird = Bird(resources, dm.heightPixels, this)
@@ -90,13 +93,14 @@ class GameManager(
         playerMode = sharedPrefManager.getPlayerMode()
         soundStt = sharedPrefManager.getStatusSoundConfig()
         language = sharedPrefManager.getLanguageConfig()
+        coinSilver = sharedPrefManager.getCoinSilver()
 
         gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels, language)
         scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels, playerMode)
         retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels, language)
         backBtn = BackButton(resources)
-        coinImg = Coin(resources, dm.heightPixels, dm.widthPixels, playerMode)
+        coinImg = Coin(resources, dm.heightPixels, dm.widthPixels, playerMode, coinSilver)
     }
 
     private fun initSounds() {
@@ -176,7 +180,7 @@ class GameManager(
 
                 backBtn.draw(canvas)
 
-//                coinImg.draw(canvas)
+                coinImg.draw(canvas) // test
             }
 
             GameState.GAME_OVER -> {
@@ -187,9 +191,11 @@ class GameManager(
 
                 retryBtn.draw(canvas)
                 backBtn.draw(canvas)
+                coinImg.draw(canvas) // test
+
             }
         }
-        coinImg.draw(canvas) // test
+//        coinImg.draw(canvas) // test
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -275,10 +281,20 @@ class GameManager(
         obstaclePositions.remove(obstacle)
         score += 5
 //        score++
+
+        if(score  % 10 == 0 && score > 5){
+            vCoin++
+        }
+        // update
+        println("----> $vCoin")
         scoreSprite.updateScore(score)
+        coinImg.updateCoin(vCoin)
+//        sharedPrefManager.setCoinSilver(vCoin)
+
         mpPoint.start()
     }
 
+    // tính toán khi va chạm
     fun calculateCollision() {
         var collision = false
         if (birdPosition.bottom > dm.heightPixels) {
@@ -299,6 +315,9 @@ class GameManager(
             gameState = GameState.GAME_OVER
             bird.collision()
             scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+
+            coinImg.collision(context)
+
             mpHit.start()
             mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
         }

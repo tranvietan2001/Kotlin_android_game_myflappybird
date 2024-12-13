@@ -122,6 +122,7 @@ class Score(
 
     fun collision(prefs: SharedPreferences) {
         collision = true
+        topScore = 0
         if (playerMode == "offline") {
             topScore = prefs.getInt(SCORE_PREF, 0)
             if (topScore < score) {
