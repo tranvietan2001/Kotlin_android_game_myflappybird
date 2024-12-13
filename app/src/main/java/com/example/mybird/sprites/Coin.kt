@@ -18,7 +18,7 @@ class Coin(
     private val coinSilver: Int
 ) : Sprite {
 
-    private val coinImg:Bitmap = BitmapFactory.decodeResource(resources, getRetryButtonResource())
+    private val coinImg: Bitmap = BitmapFactory.decodeResource(resources, getRetryButtonResource())
 
     private val zero: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zero)
     private val one: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.one)
@@ -46,27 +46,22 @@ class Coin(
     private var collision: Boolean = false
 
     override fun draw(canvas: Canvas) {
-//        if(collision) {
-            if (playerMode == "offline") {
-                updateCoin(coinSilver)
-            } else {
-                val firebaseManager: FirebaseManager = FirebaseManager()
-                firebaseManager.initFirebase()
-                firebaseManager.getCoinGold { result ->
-                    val coin = result.toInt()
-//                    updateCoin(coin)
-//                if(coin >= vCoin)
-//                    updateCoin(coin)
-//                else updateCoin(vCoin)
-                }
+        if (playerMode == "offline") {
+            updateCoin(coinSilver)
+        } else {
+            val firebaseManager: FirebaseManager = FirebaseManager()
+            firebaseManager.initFirebase()
+            firebaseManager.getCoinGold { result ->
+                val coin = result.toInt()
+                    updateCoin(coin)
             }
-//        }
+        }
 
         val scaledWidth = (coinImg.width * 0.075).toInt() // Thay đổi tỉ lệ theo ý muốn
         val scaledHeight = (coinImg.height * 0.075).toInt() // Thay đổi tỉ lệ theo ý muốn
         // Tính toán vị trí để căn giữa
         val left = (screenWidth / 3).toFloat()
-        val top = (scaledHeight/2).toFloat()
+        val top = (scaledHeight / 2).toFloat()
 
         canvas.drawBitmap(
             Bitmap.createScaledBitmap(coinImg, scaledWidth, scaledHeight, true),
@@ -74,79 +69,50 @@ class Coin(
             top,
             null
         )
-//// khi play se + score tang dan
-//        if (!collision) {
-//            val digits = convertToBitmaps(vCoin)
-//            for (i in digits.indices) {
-//                val x = screenWidth / 2 - digits.size * zero.width / 2 + zero.width * i
-//                canvas.drawBitmap(digits[i], x.toFloat(), (screenHeight / 4).toFloat(), null)
-//            }
-//        }
-//        // khi gameover se show scores
-//        else {
-            val currentDigits = convertToBitmaps(vCoin)   // hiển thị số lượng coin
-            for (i in currentDigits.indices) {
-                val x = left + scaledWidth + 15 /*- currentDigits.size * zero.width / 2*/ + zero.width * i
-                canvas.drawBitmap(
-                    currentDigits[i],
-                    x,
-                    top,
-                    null
-                )
-            }
+
+        val currentDigits = convertToBitmaps(vCoin)   // hiển thị số lượng coin
+        for (i in currentDigits.indices) {
+            val x =
+                left + scaledWidth + 15 /*- currentDigits.size * zero.width / 2*/ + zero.width * i
+            canvas.drawBitmap(
+                currentDigits[i],
+                x,
+                top,
+                null
+            )
+        }
 //
 //        }
 
     }
 
     override fun update() {
-//        if (playerMode == "offline") {
-//            updateCoin(coinSilver)
-//            println("----> s$coinSilver  -  $vCoin")
-//        } else {
-//            val firebaseManager: FirebaseManager = FirebaseManager()
-//            firebaseManager.initFirebase()
-//            firebaseManager.getCoinGold { resultCoin ->
-//                val coin = resultCoin.toInt()
-////                vCoin += coin
-////                firebaseManager.updateCoin(vCoin)
-//                updateCoin(coin)
-//                println("----> d$coin  -  $vCoin")
-//            }
-////            topScore = 10000
-//        }
-
     }
-
-//    fun updateCoin(coin: Int) {
-//        this.vCoin = coin
-//    }
 
     // update số lượng coin vào biến vCoin -> biến này dẽ đc gọi và hiển thị thông qua img number
     fun updateCoin(coin: Int) {
         this.vCoin = coin
     }
 
-    fun collision(context: Context) {
+    fun collision(context: Context, score: Int) {
         collision = true
+        if (score != 0) {
 
-        if (playerMode == "offline") {
-            val sharedPrefManager = SharedPreferenceManager(context)
-            val coin =  sharedPrefManager.getCoinSilver()
-            // ???????
-            vCoin += coin
-            sharedPrefManager.setCoinSilver(vCoin)
-            println("----> $coin  -  $vCoin")
-        } else {
-            val firebaseManager: FirebaseManager = FirebaseManager()
-            firebaseManager.initFirebase()
-            firebaseManager.getCoinGold { resultCoin ->
-                val coin = resultCoin.toInt()
+            if (playerMode == "offline") {
+                val sharedPrefManager = SharedPreferenceManager(context)
+                val coin = sharedPrefManager.getCoinSilver()
                 vCoin += coin
-                firebaseManager.updateCoin(vCoin)
-                println("----> $coin  -  $vCoin")
-            }
+                sharedPrefManager.setCoinSilver(vCoin)
+            } else {
+                val firebaseManager: FirebaseManager = FirebaseManager()
+                firebaseManager.initFirebase()
+                firebaseManager.getCoinGold { resultCoin ->
+                    val coin = resultCoin.toInt()
+                    vCoin += coin
+                    firebaseManager.updateCoin(vCoin)
+                }
 //            topScore = 10000
+            }
         }
 
 

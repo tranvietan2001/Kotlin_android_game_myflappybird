@@ -172,6 +172,9 @@ class GameManager(
                 bird.draw(canvas)
                 scoreSprite.draw(canvas)
                 calculateCollision()
+
+
+                coinImg.draw(canvas) // test
             }
 
             GameState.INITIAL -> {
@@ -281,15 +284,12 @@ class GameManager(
         obstaclePositions.remove(obstacle)
         score += 5
 //        score++
-
-        if(score  % 10 == 0 && score > 5){
+        if(score  % 10 == 0){
             vCoin++
         }
         // update
-        println("----> $vCoin")
         scoreSprite.updateScore(score)
         coinImg.updateCoin(vCoin)
-//        sharedPrefManager.setCoinSilver(vCoin)
 
         mpPoint.start()
     }
@@ -316,7 +316,7 @@ class GameManager(
             bird.collision()
             scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
 
-            coinImg.collision(context)
+            coinImg.collision(context, score)
 
             mpHit.start()
             mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })

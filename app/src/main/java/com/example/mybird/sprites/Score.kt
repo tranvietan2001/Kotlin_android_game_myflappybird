@@ -143,9 +143,4 @@ class Score(
         }
 
     }
-
-//    fun swapScore(vScore: Int){
-//
-//    }
-
 }
