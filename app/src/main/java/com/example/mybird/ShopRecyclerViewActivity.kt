@@ -28,6 +28,8 @@ class ShopRecyclerViewActivity: AppCompatActivity() {
 
     private lateinit var backBtn: ImageButton
 
+    private var coin: Int = 0
+
     @SuppressLint("NotifyDataSetChanged", "ClickableViewAccessibility", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,20 +41,34 @@ class ShopRecyclerViewActivity: AppCompatActivity() {
         coinImg = findViewById(R.id.coinImg)
         coinTxt = findViewById(R.id.coinTxt)
 
+        sharedPreferenceManager = SharedPreferenceManager(this)
+
+
         val modePlayer = intent.getStringExtra("MODE_PLAYER")
         if(modePlayer == "@Onl_play"){
             sttPlayerMode.text = "ONL"
             coinImg.setImageResource(R.drawable.coin_gold)
-            coinTxt.text = "200"
+            val firebaseManager: FirebaseManager = FirebaseManager()
+            firebaseManager.initFirebase()
+
+            firebaseManager.getCoinGold { resultCoin ->
+                coin = resultCoin.toInt()
+                coinTxt.text = coin.toString()
+            }
+
+//            coinTxt.text = "200"
         }
         else if(modePlayer == "@Off_play"){
             sttPlayerMode.text = ""
             coinImg.setImageResource(R.drawable.coin_silver)
-            coinTxt.text = "0"
+            coin = sharedPreferenceManager.getCoinSilver()
+            coinTxt.text = coin.toString()
+
+//            coinTxt.text =
         }
         else Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
 
-        sharedPreferenceManager = SharedPreferenceManager(this)
+
 
         backBtn = findViewById(R.id.backBtn)
 

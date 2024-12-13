@@ -59,8 +59,8 @@
 
     <ImageView
         android:id="@+id/coinImg"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:backgroundTint="@color/cardview_shadow_end_color"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
@@ -82,7 +82,7 @@
         android:shadowDy = "0"
         android:shadowColor="@color/black"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="@+id/coinImg"
         app:layout_constraintStart_toEndOf="@+id/coinImg"
         app:layout_constraintTop_toTopOf="@+id/coinImg" />
