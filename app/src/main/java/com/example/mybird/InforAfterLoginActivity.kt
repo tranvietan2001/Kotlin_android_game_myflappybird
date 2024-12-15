@@ -27,7 +27,7 @@ class InforAfterLoginActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.infor_after_login_main)
 
 

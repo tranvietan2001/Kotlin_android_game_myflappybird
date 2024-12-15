@@ -39,7 +39,7 @@ class ConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
 
         sharedPrefManager = SharedPreferenceManager(this)
         val language = sharedPrefManager.getLanguageConfig()
@@ -62,9 +62,10 @@ class ConfigActivity : AppCompatActivity() {
         birdName = findViewById(R.id.birdNameTxt)
         backBtn = findViewById(R.id.backBtn)
 
-        val drawableNames = listOf("bird1_down", "bird2_down", "bird3_down", "bird4_down", "bird5_down") // Danh sách tên drawable
+//        val drawableNames = listOf("bird1_down", "bird2_down", "bird3_down", "bird4_down", "bird5_down") // Danh sách tên drawable
+        val drawableNames = sharedPrefManager.getPurchasedBirds().toList()
         // -> chuyển đọc từ list trong SP
-
+        println("-----> $drawableNames")
 
         if (language == "en") {
             confirmBtn.setImageResource(R.drawable.confirm_button_en)
@@ -124,11 +125,13 @@ class ConfigActivity : AppCompatActivity() {
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-
                     i--
-                    if (i < 0) i = 4
+                    if (i < 0) i = drawableNames.size-1
 
                     birdName.text = drawableNames[i].toString()
+                    sharedPrefManager.setBirdUsed(drawableNames[i])
+
+
                     val drawableId = resources.getIdentifier(
                         drawableNames[i],
                         "drawable",
@@ -161,11 +164,11 @@ class ConfigActivity : AppCompatActivity() {
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-
                     i++
-                    if (i > 4) i = 0
+                    if (i > drawableNames.size-1) i = 0
 
                     birdName.text = drawableNames[i].toString()
+                    sharedPrefManager.setBirdUsed(drawableNames[i])
 
                     val drawableId = resources.getIdentifier(
                         drawableNames[i],

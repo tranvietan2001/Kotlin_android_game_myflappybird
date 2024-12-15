@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.SpannedString
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
@@ -17,11 +16,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
-
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.MotionEvent
 
 @Suppress("DEPRECATION")
@@ -44,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
 
         sharedPrefManager = SharedPreferenceManager(this)
 
@@ -197,6 +191,9 @@ class LoginActivity : AppCompatActivity() {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
+                    val changeUi = Intent(this, MainActivity::class.java)
+                    changeUi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(changeUi)
                     finish()
                     true
                 }
@@ -209,6 +206,8 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // text bird đang sử dụng
 
     }
 

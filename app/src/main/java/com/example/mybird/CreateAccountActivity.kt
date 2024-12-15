@@ -40,7 +40,7 @@ class CreateAccountActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
 //        setContentView(R.layout.create_account_activity_main)
 
         sharedPrefManager = SharedPreferenceManager(this)

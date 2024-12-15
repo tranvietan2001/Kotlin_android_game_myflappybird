@@ -13,10 +13,7 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Toast
-import com.example.mybird.*
 import com.example.mybird.sprites.*
-
 
 class GameManager(
     context: Context,
@@ -25,11 +22,8 @@ class GameManager(
     SurfaceHolder.Callback, GameManagerCallback {
     private val thread: MainThread = MainThread(holder, this)
 
-    private val APP_NAME = "@MY_BIRD"
     private var gameState: GameState = GameState.INITIAL
-
     private lateinit var sharedPrefManager: SharedPreferenceManager
-
     private lateinit var bird: Bird
     private lateinit var background: Background
 
@@ -78,7 +72,7 @@ class GameManager(
         vCoin = 0
         birdPosition = Rect()
         obstaclePositions = HashMap()
-        bird = Bird(resources, dm.heightPixels, this)
+//        bird = Bird(resources, dm.heightPixels, this)
         background = Background(resources, dm.heightPixels)
 
 //        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
@@ -89,11 +83,14 @@ class GameManager(
             this
         ) // quản lý việc vật cản xuất bện và duy chuyển
 
+
         sharedPrefManager = SharedPreferenceManager(context)
         playerMode = sharedPrefManager.getPlayerMode()
         soundStt = sharedPrefManager.getStatusSoundConfig()
         language = sharedPrefManager.getLanguageConfig()
         coinSilver = sharedPrefManager.getCoinSilver()
+
+        bird = Bird(resources, dm.heightPixels, this, playerMode, context)
 
         gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels, language)
@@ -173,8 +170,6 @@ class GameManager(
                 scoreSprite.draw(canvas)
                 calculateCollision()
 
-
-                coinImg.draw(canvas) // test
             }
 
             GameState.INITIAL -> {
@@ -182,8 +177,8 @@ class GameManager(
                 gameMessage.draw(canvas)
 
                 backBtn.draw(canvas)
+                coinImg.draw(canvas)
 
-                coinImg.draw(canvas) // test
             }
 
             GameState.GAME_OVER -> {
@@ -194,8 +189,7 @@ class GameManager(
 
                 retryBtn.draw(canvas)
                 backBtn.draw(canvas)
-                coinImg.draw(canvas) // test
-
+                coinImg.draw(canvas)
             }
         }
 //        coinImg.draw(canvas) // test
@@ -286,6 +280,7 @@ class GameManager(
 //        score++
         if(score  % 10 == 0){
             vCoin++
+//            vCoin+=1000
         }
         // update
         scoreSprite.updateScore(score)
@@ -314,8 +309,10 @@ class GameManager(
         if (collision) {
             gameState = GameState.GAME_OVER
             bird.collision()
-            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+//            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+                scoreSprite.collision(context)
 
+//            if(score > 0)
             coinImg.collision(context, score)
 
             mpHit.start()

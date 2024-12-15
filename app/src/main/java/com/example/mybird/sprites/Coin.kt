@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.util.Printer
 import com.example.mybird.FirebaseManager
 import com.example.mybird.R
 import com.example.mybird.SharedPreferenceManager

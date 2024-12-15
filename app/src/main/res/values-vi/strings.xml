@@ -34,4 +34,5 @@
     <string name="name_game">My Flappy Brid</string>
     <string name="forgot_password_text">Quên mật khẩu</string>
     <string name="shop">Cửa hàng</string>
+    <string name="bird_used">Bird sử dụng:</string>
 </resources>
