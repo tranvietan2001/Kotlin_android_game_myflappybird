@@ -1,6 +1,7 @@
 package com.example.mybird
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -15,11 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 @Suppress("DEPRECATION")
-class ShopRecyclerViewActivity: AppCompatActivity() {
+class ShopRecyclerViewActivity : AppCompatActivity() {
     private lateinit var sttPlayerMode: TextView
     private lateinit var coinImg: ImageView
     private lateinit var coinTxt: TextView
-
+    private lateinit var birdUsedNameTxt: TextView
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ShopAdapter
@@ -28,31 +29,53 @@ class ShopRecyclerViewActivity: AppCompatActivity() {
 
     private lateinit var backBtn: ImageButton
 
+    private var coin: Int = 0
+    private var coinOnline = 0
+    private var listBirdOnline: List<String>? = null
+
     @SuppressLint("NotifyDataSetChanged", "ClickableViewAccessibility", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
 
         setContentView(R.layout.recycler_shop_activity_main)
 
         sttPlayerMode = findViewById(R.id.sttPlayerMode)
         coinImg = findViewById(R.id.coinImg)
         coinTxt = findViewById(R.id.coinTxt)
-
-        val modePlayer = intent.getStringExtra("MODE_PLAYER")
-        if(modePlayer == "@Onl_play"){
-            sttPlayerMode.text = "ONL"
-            coinImg.setImageResource(R.drawable.coin_gold)
-            coinTxt.text = "200"
-        }
-        else if(modePlayer == "@Off_play"){
-            sttPlayerMode.text = ""
-            coinImg.setImageResource(R.drawable.coin_silver)
-            coinTxt.text = "0"
-        }
-        else Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
+        birdUsedNameTxt = findViewById(R.id.birdUsedNameTxt)
 
         sharedPreferenceManager = SharedPreferenceManager(this)
+
+
+        val modePlayer = intent.getStringExtra("MODE_PLAYER")
+        if (modePlayer == "@Onl_play") {
+            val firebaseManager: FirebaseManager = FirebaseManager()
+            firebaseManager.initFirebase()
+
+            firebaseManager.getNameAccount { result->
+                sttPlayerMode.text = result
+            }
+            coinImg.setImageResource(R.drawable.coin_gold)
+
+            firebaseManager.getCoinGold { resultCoin ->
+                coin = resultCoin.toInt()
+                coinTxt.text = coin.toString()
+                setCoinOnline(coin)
+            }
+
+            firebaseManager.getBirdUsed { result->
+                birdUsedNameTxt.text = result
+            }
+
+        } else if (modePlayer == "@Off_play") {
+            sttPlayerMode.text = ""
+            coinImg.setImageResource(R.drawable.coin_silver)
+            coin = sharedPreferenceManager.getCoinSilver()
+            coinTxt.text = coin.toString()
+            birdUsedNameTxt.text = sharedPreferenceManager.getBirdUsed()
+        } else Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
+
 
         backBtn = findViewById(R.id.backBtn)
 
@@ -68,28 +91,103 @@ class ShopRecyclerViewActivity: AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ShopAdapter(this, shopList, sharedPreferenceManager) { shopInfo ->
-            // Lưu tên bird đã mua vào SharedPreference
-            sharedPreferenceManager.savePurchasedBird(shopInfo.nameBird)
-            // Cập nhật RecyclerView
-            adapter.notifyDataSetChanged() // Hoặc bạn có thể tạo lại adapter nếu cần
-            Toast.makeText(this, "Buying ${shopInfo.nameBird}", Toast.LENGTH_SHORT).show()
+
+            if (modePlayer == "@Onl_play") {
+                val firebaseManager: FirebaseManager = FirebaseManager()
+                firebaseManager.initFirebase()
+
+                firebaseManager.getListBird { birdsString ->
+                    val birdsList: List<String> = birdsString.split(",").map { it.trim() }
+                    if (birdsList.contains(shopInfo.nameBird)) {
+                        firebaseManager.updateBirdUsed(shopInfo.nameBird)
+                        firebaseManager.getBirdUsed { nameBird ->
+                            birdUsedNameTxt.text = nameBird
+                        }
+                    } else {
+                        val birdPrice = shopInfo.coinSilver
+                        if (coin >= birdPrice) {
+                            coin -= birdPrice
+//                            // update lại coin -> update lại coinTxt
+//                            sharedPreferenceManager.setCoinSilver(coin)
+                            firebaseManager.updateCoin(coin)
+                            firebaseManager.getCoinGold { result->
+                                coin= result.toInt()
+                                coinTxt.text = coin.toString()
+                            }
+
+                            firebaseManager.updateBirds(shopInfo.nameBird) {
+                                adapter.notifyDataSetChanged()      // Cập nhật RecyclerView
+                            }
+                            firebaseManager.updateBirdUsed(shopInfo.nameBird)
+                            firebaseManager.getBirdUsed { nameBird ->
+                                birdUsedNameTxt.text = nameBird
+                            }
+//
+//                            // thêm bird mua vào ds
+//                            sharedPreferenceManager.savePurchasedBird(shopInfo.nameBird)
+//                            // Cập nhật RecyclerView
+//                            adapter.notifyDataSetChanged()
+//
+//                            sharedPreferenceManager.setBirdUsed(shopInfo.nameBird)
+//                            birdUsedNameTxt.text = sharedPreferenceManager.getBirdUsed().toString()
+                        } else Toast.makeText(this, "not enough coins -ON", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+
+            } else if (modePlayer == "@Off_play") {
+
+                // kiểm tra ds mua đã tồn tại hay chưa nếu chưa thì thực hiện mua nếu đã có thì ko trừ tiên
+
+                if (sharedPreferenceManager.getPurchasedBirds().contains(shopInfo.nameBird)) {
+                    sharedPreferenceManager.setBirdUsed(shopInfo.nameBird)
+                    birdUsedNameTxt.text = sharedPreferenceManager.getBirdUsed().toString()
+                } else {
+
+                    val birdPrice = shopInfo.coinSilver
+                    if (coin >= birdPrice) {
+                        coin -= birdPrice
+                        // update lại coin -> update lại coinTxt
+                        sharedPreferenceManager.setCoinSilver(coin)
+                        coin = sharedPreferenceManager.getCoinSilver()
+                        coinTxt.text = coin.toString()
+
+                        // thêm bird mua vào ds
+                        sharedPreferenceManager.savePurchasedBird(shopInfo.nameBird)
+                        // Cập nhật RecyclerView
+                        adapter.notifyDataSetChanged()
+
+                        sharedPreferenceManager.setBirdUsed(shopInfo.nameBird)
+                        birdUsedNameTxt.text = sharedPreferenceManager.getBirdUsed().toString()
+                    } else Toast.makeText(this, "not enough coins - OFF", Toast.LENGTH_SHORT).show()
+                }
+            } else Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
         }
         recyclerView.adapter = adapter
-
-
-
 
         backBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-                    finish()
+                    if (modePlayer == "@Off_play") {
+                        val changeUi = Intent(this, MainActivity::class.java)
+                        changeUi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(changeUi)
+                        finish()
+                    } else {
+                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+                        changeUi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(changeUi)
+                        finish()
+                    }
                     true
                 }
+
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -122,5 +220,13 @@ class ShopRecyclerViewActivity: AppCompatActivity() {
         animation.duration = 100 // Thời gian cho animation
         animation.fillAfter = true // Giữ trạng thái cuối
         view.startAnimation(animation)
+    }
+
+    private fun setCoinOnline(coin: Int) {
+        this.coinOnline = coin
+    }
+
+    private fun setListBirdOnline(list: List<String>) {
+        this.listBirdOnline = list
     }
 }

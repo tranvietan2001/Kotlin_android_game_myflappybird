@@ -16,9 +16,9 @@ class ShopAdapter(
     private val shopList: List<ShopInfor>,
     private val sharedPreferenceManager: SharedPreferenceManager,
     private val onBuyClick: (ShopInfor) -> Unit // Callback khi nhấn nút Buy
-): RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
+) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
 
-    inner class ShopViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageBird: ImageView = itemView.findViewById(R.id.imageBirdShop)
         val coinSilver: TextView = itemView.findViewById(R.id.coinSilverTxt)
         val coinGold: TextView = itemView.findViewById(R.id.coinGoldTxt)
@@ -26,17 +26,32 @@ class ShopAdapter(
 
         fun bind(shopInfo: ShopInfor) {
             // Giả sử các hình ảnh nằm trong thư mục drawable
-            val resId = context.resources.getIdentifier(shopInfo.nameBird, "drawable", context.packageName)
+            val resId =
+                context.resources.getIdentifier(shopInfo.nameBird, "drawable", context.packageName)
             imageBird.setImageResource(resId)
 
             coinSilver.text = shopInfo.coinSilver.toString()
             coinGold.text = shopInfo.coinGold.toString()
 
             // Kiểm tra xem tên đã được mua chưa
-            if (sharedPreferenceManager.getPurchasedBirds().contains(shopInfo.nameBird)) {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
+            if (sharedPreferenceManager.getPlayerMode() == "offline") {
+                if (sharedPreferenceManager.getPurchasedBirds().contains(shopInfo.nameBird)) {
+                    itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
+                } else {
+                    itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
             } else {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                // test list ra ds bird trên firebase
+                val firebaseManager: FirebaseManager = FirebaseManager()
+                firebaseManager.initFirebase()
+                firebaseManager.getListBird { result ->
+                    val birdsList: List<String> = result.split(",").map { it.trim() }
+
+                    if (birdsList.contains(shopInfo.nameBird))
+                        itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
+                    else itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
+                println("-----> LOAD VIEW SHOP ONLINE")
             }
 
 
@@ -48,7 +63,8 @@ class ShopAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_shop_main, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_item_shop_main, parent, false)
 
         return ShopViewHolder(itemView)
     }

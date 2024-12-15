@@ -1,20 +1,23 @@
 package com.example.mybird.sprites
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import com.example.mybird.FirebaseManager
 import com.example.mybird.R
+import com.example.mybird.SharedPreferenceManager
 
 class Coin(
     resources: Resources,
     private val screenHeight: Int,
     private val screenWidth: Int,
-    private val playerMode: String
+    private val playerMode: String,
+    private val coinSilver: Int
 ) : Sprite {
 
-    private val coinImg:Bitmap = BitmapFactory.decodeResource(resources, getRetryButtonResource())
+    private val coinImg: Bitmap = BitmapFactory.decodeResource(resources, getRetryButtonResource())
 
     private val zero: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zero)
     private val one: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.one)
@@ -39,21 +42,17 @@ class Coin(
         9 to nine
     )
     private var vCoin: Int = 0
-
-    private var score: Int = 0
     private var collision: Boolean = false
 
     override fun draw(canvas: Canvas) {
-
-        if(playerMode == "offline"){
-            updateCoinFromFB(2223)
-        }
-        else {
+        if (playerMode == "offline") {
+            updateCoin(coinSilver)
+        } else {
             val firebaseManager: FirebaseManager = FirebaseManager()
             firebaseManager.initFirebase()
             firebaseManager.getCoinGold { result ->
                 val coin = result.toInt()
-                updateCoinFromFB(coin)
+                    updateCoin(coin)
             }
         }
 
@@ -61,7 +60,7 @@ class Coin(
         val scaledHeight = (coinImg.height * 0.075).toInt() // Thay đổi tỉ lệ theo ý muốn
         // Tính toán vị trí để căn giữa
         val left = (screenWidth / 3).toFloat()
-        val top = (scaledHeight/2).toFloat()
+        val top = (scaledHeight / 2).toFloat()
 
         canvas.drawBitmap(
             Bitmap.createScaledBitmap(coinImg, scaledWidth, scaledHeight, true),
@@ -69,47 +68,53 @@ class Coin(
             top,
             null
         )
-//// khi play se + score tang dan
-//        if (!collision) {
-//            val digits = convertToBitmaps(vCoin)
-//            for (i in digits.indices) {
-//                val x = screenWidth / 2 - digits.size * zero.width / 2 + zero.width * i
-//                canvas.drawBitmap(digits[i], x.toFloat(), (screenHeight / 4).toFloat(), null)
-//            }
-//        }
-//        // khi gameover se show scores
-//        else {
-            val currentDigits = convertToBitmaps(vCoin)
-            for (i in currentDigits.indices) {
-                val x = left + scaledWidth + 15 /*- currentDigits.size * zero.width / 2*/ + zero.width * i
-                canvas.drawBitmap(
-                    currentDigits[i],
-                    x,
-                    top,
-                    null
-                )
-            }
+
+        val currentDigits = convertToBitmaps(vCoin)   // hiển thị số lượng coin
+        for (i in currentDigits.indices) {
+            val x =
+                left + scaledWidth + 15 /*- currentDigits.size * zero.width / 2*/ + zero.width * i
+            canvas.drawBitmap(
+                currentDigits[i],
+                x,
+                top,
+                null
+            )
+        }
 //
 //        }
-
-
-
-
-
 
     }
 
     override fun update() {
-
-
     }
 
-//    fun updateCoin(coin: Int) {
-//        this.vCoin = coin
-//    }
-
-    private fun updateCoinFromFB(coin: Int) {
+    // update số lượng coin vào biến vCoin -> biến này dẽ đc gọi và hiển thị thông qua img number
+    fun updateCoin(coin: Int) {
         this.vCoin = coin
+    }
+
+    fun collision(context: Context, score: Int) {
+        collision = true
+        if (score != 0) {
+
+            if (playerMode == "offline") {
+                val sharedPrefManager = SharedPreferenceManager(context)
+                val coin = sharedPrefManager.getCoinSilver()
+                vCoin += coin
+                sharedPrefManager.setCoinSilver(vCoin)
+            } else {
+                val firebaseManager: FirebaseManager = FirebaseManager()
+                firebaseManager.initFirebase()
+                firebaseManager.getCoinGold { resultCoin ->
+                    val coin = resultCoin.toInt()
+                    vCoin += coin
+                    firebaseManager.updateCoin(vCoin)
+                }
+//            topScore = 10000
+            }
+        }
+
+
     }
 
     private fun getRetryButtonResource(): Int {
@@ -134,4 +139,6 @@ class Coin(
         }
         return ArrayList(digits.reversed())
     }
+
+
 }

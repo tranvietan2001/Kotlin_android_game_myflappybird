@@ -4,15 +4,12 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.widget.Toast
 import com.example.mybird.R
-import org.intellij.lang.annotations.Language
 
 class BackButton(
     resources: Resources
 ) : Sprite {
 
-    //    private val retryBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.retry_button)
     private val backBtn: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.back_btn)
     override fun draw(canvas: Canvas) {
 //        canvas.drawBitmap(retryBtn, (screenWidth / 2 - retryBtn.width / 2).toFloat(), (screenHeight / 4).toFloat(),null)

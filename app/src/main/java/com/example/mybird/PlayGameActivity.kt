@@ -17,7 +17,7 @@ class PlayGameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.activity_main)
 
         sharedPrefManager = SharedPreferenceManager(this)

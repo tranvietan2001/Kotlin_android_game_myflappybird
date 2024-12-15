@@ -13,7 +13,7 @@ class ShopActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
 
         sharedPrefManager = SharedPreferenceManager(this)
         val language = sharedPrefManager.getLanguageConfig()

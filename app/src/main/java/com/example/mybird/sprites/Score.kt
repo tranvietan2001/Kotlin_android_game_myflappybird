@@ -1,5 +1,6 @@
 package com.example.mybird.sprites
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -120,12 +121,17 @@ class Score(
         this.score = score
     }
 
-    fun collision(prefs: SharedPreferences) {
+//    fun collision(prefs: SharedPreferences)
+    fun collision(context: Context){
         collision = true
+        topScore = 0
         if (playerMode == "offline") {
-            topScore = prefs.getInt(SCORE_PREF, 0)
+//            topScore = prefs.getInt(SCORE_PREF, 0)
+            val sharedPrefManager = SharedPreferenceManager(context)
+            topScore = sharedPrefManager.getMaxScore()
             if (topScore < score) {
-                prefs.edit().putInt(SCORE_PREF, score).apply()
+//                prefs.edit().putInt(SCORE_PREF, score).apply()
+                sharedPrefManager.setMaxScore(score)
                 topScore = score
             }
         } else {
@@ -142,9 +148,4 @@ class Score(
         }
 
     }
-
-//    fun swapScore(vScore: Int){
-//
-//    }
-
 }

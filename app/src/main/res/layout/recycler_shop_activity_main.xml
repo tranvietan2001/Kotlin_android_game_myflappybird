@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="120dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -48,7 +49,6 @@
         android:id="@+id/sttPlayerMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:fontFamily="@font/font_mybird_default"
         android:text="---"
         android:textColor="@color/txt_color"
@@ -59,8 +59,8 @@
 
     <ImageView
         android:id="@+id/coinImg"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:backgroundTint="@color/cardview_shadow_end_color"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
@@ -82,10 +82,37 @@
         android:shadowDy = "0"
         android:shadowColor="@color/black"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="@+id/coinImg"
         app:layout_constraintStart_toEndOf="@+id/coinImg"
         app:layout_constraintTop_toTopOf="@+id/coinImg" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/font_mybird_default"
+        android:text="@string/bird_used"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <TextView
+        android:id="@+id/birdUsedNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="bird name"
+        android:fontFamily="@font/font_mybird_default"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

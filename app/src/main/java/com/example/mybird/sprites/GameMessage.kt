@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import com.example.mybird.R
-import org.intellij.lang.annotations.Language
 
 class GameMessage(
     resources: Resources,

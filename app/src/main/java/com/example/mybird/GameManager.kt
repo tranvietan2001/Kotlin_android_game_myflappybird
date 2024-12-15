@@ -13,10 +13,7 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Toast
-import com.example.mybird.*
 import com.example.mybird.sprites.*
-
 
 class GameManager(
     context: Context,
@@ -25,11 +22,8 @@ class GameManager(
     SurfaceHolder.Callback, GameManagerCallback {
     private val thread: MainThread = MainThread(holder, this)
 
-    private val APP_NAME = "@MY_BIRD"
     private var gameState: GameState = GameState.INITIAL
-
     private lateinit var sharedPrefManager: SharedPreferenceManager
-
     private lateinit var bird: Bird
     private lateinit var background: Background
 
@@ -46,6 +40,7 @@ class GameManager(
     private lateinit var coinImg: Coin
 
     private var score: Int = 0
+    private var vCoin: Int = 0
     private var birdPosition: Rect = Rect()
     private var obstaclePositions: HashMap<Obstacle, List<Rect>> = HashMap()
 
@@ -60,6 +55,7 @@ class GameManager(
     var playerMode = ""
     var soundStt = false
     var language = "en"
+    var coinSilver = 0
 
 
     init {
@@ -73,9 +69,10 @@ class GameManager(
 
     private fun initGame() {
         score = 0
+        vCoin = 0
         birdPosition = Rect()
         obstaclePositions = HashMap()
-        bird = Bird(resources, dm.heightPixels, this)
+//        bird = Bird(resources, dm.heightPixels, this)
         background = Background(resources, dm.heightPixels)
 
 //        obstacle = Obstacle(resources,dm.heightPixels, dm.widthPixels) // test vật cản
@@ -86,17 +83,21 @@ class GameManager(
             this
         ) // quản lý việc vật cản xuất bện và duy chuyển
 
+
         sharedPrefManager = SharedPreferenceManager(context)
         playerMode = sharedPrefManager.getPlayerMode()
         soundStt = sharedPrefManager.getStatusSoundConfig()
         language = sharedPrefManager.getLanguageConfig()
+        coinSilver = sharedPrefManager.getCoinSilver()
+
+        bird = Bird(resources, dm.heightPixels, this, playerMode, context)
 
         gameOver = GameOver(resources, dm.heightPixels, dm.widthPixels)
         gameMessage = GameMessage(resources, dm.heightPixels, dm.widthPixels, language)
         scoreSprite = Score(resources, dm.heightPixels, dm.widthPixels, playerMode)
         retryBtn = RetryButton(resources, dm.heightPixels, dm.widthPixels, language)
         backBtn = BackButton(resources)
-        coinImg = Coin(resources, dm.heightPixels, dm.widthPixels, playerMode)
+        coinImg = Coin(resources, dm.heightPixels, dm.widthPixels, playerMode, coinSilver)
     }
 
     private fun initSounds() {
@@ -168,6 +169,7 @@ class GameManager(
                 bird.draw(canvas)
                 scoreSprite.draw(canvas)
                 calculateCollision()
+
             }
 
             GameState.INITIAL -> {
@@ -175,8 +177,8 @@ class GameManager(
                 gameMessage.draw(canvas)
 
                 backBtn.draw(canvas)
+                coinImg.draw(canvas)
 
-//                coinImg.draw(canvas)
             }
 
             GameState.GAME_OVER -> {
@@ -187,9 +189,10 @@ class GameManager(
 
                 retryBtn.draw(canvas)
                 backBtn.draw(canvas)
+                coinImg.draw(canvas)
             }
         }
-        coinImg.draw(canvas) // test
+//        coinImg.draw(canvas) // test
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -275,10 +278,18 @@ class GameManager(
         obstaclePositions.remove(obstacle)
         score += 5
 //        score++
+        if(score  % 10 == 0){
+            vCoin++
+//            vCoin+=1000
+        }
+        // update
         scoreSprite.updateScore(score)
+        coinImg.updateCoin(vCoin)
+
         mpPoint.start()
     }
 
+    // tính toán khi va chạm
     fun calculateCollision() {
         var collision = false
         if (birdPosition.bottom > dm.heightPixels) {
@@ -298,7 +309,12 @@ class GameManager(
         if (collision) {
             gameState = GameState.GAME_OVER
             bird.collision()
-            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+//            scoreSprite.collision(context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE))
+                scoreSprite.collision(context)
+
+//            if(score > 0)
+            coinImg.collision(context, score)
+
             mpHit.start()
             mpHit.setOnCompletionListener(OnCompletionListener { mpDie.start() })
         }

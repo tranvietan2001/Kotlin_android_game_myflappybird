@@ -16,8 +16,9 @@ data class UserAccount(
     val email: String,
     val accountName: String,
     var score: Int = 0,
-    var listBirdPurchased: String = "",
-    var coinGold: Int = 0
+    var listBirdPurchased: String = "bird1_down",
+    var coinGold: Int = 0,
+    var birdUsed:String = "bird1_down"
 )
 
 class FirebaseManager {
@@ -30,6 +31,7 @@ class FirebaseManager {
     val scoreField = "score"
     val coinGoldField = "coinGold"
     val listBirdPurchased = "listBirdPurchased"
+    val birdUsedField = "birdUsed"
 
     fun initFirebase() {
         auth = FirebaseAuth.getInstance()
@@ -94,7 +96,8 @@ class FirebaseManager {
             nameField to userAccount.accountName,
             scoreField to userAccount.score,
             listBirdPurchased to userAccount.listBirdPurchased,
-            coinGoldField to userAccount.coinGold
+            coinGoldField to userAccount.coinGold,
+            birdUsedField to userAccount.birdUsed
         )
 
         database.collection(nameDb).document(userAccount.email)
@@ -212,7 +215,7 @@ class FirebaseManager {
     }
 
 
-    fun updateBirds(newBird: String): String {
+    fun updateBirds(newBird: String, onComplete: () -> Unit): String {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
         val docRef = database.collection(nameDb).document(user.email.toString())
         docRef.get().addOnSuccessListener { result ->
@@ -228,7 +231,9 @@ class FirebaseManager {
                     .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
                     .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
             }
+            onComplete()
         }
+
         return "Update Birds done!"
     }
 
@@ -236,11 +241,35 @@ class FirebaseManager {
         val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
         val docRef = database.collection(nameDb).document(user.email.toString())
         docRef.get().addOnSuccessListener { result ->
-            val score = result.get(listBirdPurchased)
-            callback(score.toString())
+            val listBird = result.get(listBirdPurchased)
+            callback(listBird.toString())
         }
         return "GET Score done!"
     }
+
+
+    fun updateBirdUsed(nameBird: String): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val updateData = database.collection(nameDb).document(user.email.toString())
+
+        updateData
+            .update(birdUsedField, nameBird)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+        return "Update Score done!"
+    }
+
+    fun getBirdUsed(callback: (String) -> Unit): String {
+        val user = auth.currentUser ?: return "Bạn chưa đăng nhập"
+        val docRef = database.collection(nameDb).document(user.email.toString())
+        docRef.get().addOnSuccessListener { result ->
+            val birdUsedName = result.get(birdUsedField)
+            callback(birdUsedName.toString())
+        }
+        return "GET Score done!"
+    }
+
+
 
 
     fun rankQuery(callback: (ArrayList<User>) -> Unit) {

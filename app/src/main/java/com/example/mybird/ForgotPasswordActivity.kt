@@ -30,7 +30,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     @SuppressLint("ResourceAsColor", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
 
 //        setContentView(R.layout.forgot_password_activity_main)
 

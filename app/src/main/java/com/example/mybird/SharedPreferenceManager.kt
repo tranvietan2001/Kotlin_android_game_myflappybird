@@ -10,26 +10,11 @@ class  SharedPreferenceManager(context: Context){
     private var CONF_LANG = "language"
     private var CONF_SOUND = "sound"
     private var PURCHASED_BIRDS = "purchased_birds"
-    private var CONF_BIRD = "bird_use"
+    private var BIRD_UESD = "bird_used"
     private var COIN_SILVER = "coin"
     private val SCORE_PREF = "Score_pref"
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
-
-//    private val gson = Gson()
-
-//    // Hàm lưu danh sách chim
-//    fun saveListBird(birdList: List<String>) {
-//        val json = sharedPreferences.toJson(birdList)
-//        sharedPreferences.edit().putString("BIRD_LIST", json).apply()
-//    }
-//    // Hàm lấy danh sách chim
-//    fun getListBird(): List<String> {
-//        val json = prefs.getString("BIRD_LIST", null)
-//        val type = object : TypeToken<List<String>>() {}.type
-//        return gson.fromJson(json, type) ?: emptyList()
-//    }
-
 
     // Hàm lưu trạng thái âm thanh
     fun saveStatusSoundConfig(isSoundOn: Boolean) {
@@ -80,6 +65,13 @@ class  SharedPreferenceManager(context: Context){
     }
     fun getCoinSilver(): Int{
         return sharedPreferences.getInt(COIN_SILVER, 0) ?: 0
+    }
+
+    fun setBirdUsed(nameBird:String){
+        sharedPreferences.edit().putString(BIRD_UESD, nameBird).apply()
+    }
+    fun getBirdUsed(): String{
+        return sharedPreferences.getString(BIRD_UESD, "bird1_down") ?: "bird1_down"
     }
 
 

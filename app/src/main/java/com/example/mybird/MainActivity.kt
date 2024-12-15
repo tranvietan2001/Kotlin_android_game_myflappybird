@@ -32,9 +32,11 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //ẩn phần viền trên
+//        enableEdgeToEdge() //ẩn phần viền trên
 
         sharedPrefManager = SharedPreferenceManager(this)
+        sharedPrefManager.savePlayerMode("offline")
+        sharedPrefManager.savePurchasedBird("bird1_down")
 
         val language = sharedPrefManager.getLanguageConfig()
         val locale = Locale(language)
@@ -62,19 +64,15 @@ class MainActivity : AppCompatActivity() {
             sConfigBtn.setImageResource(R.drawable.setting_button_vi)
         }
 
-//        sharedPrefManager.savePlayerMode("offline")
-
-
-//        sOnlineBtn.setOnClickListener {
-//            sharedPrefManager.savePlayerMode("online")
-//            val changeUi = Intent(this,LoginActivity::class.java)
-//            startActivity(changeUi)
-//        }
-
         sOnlineBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
+
+                    //XIN CAP QUYEN SU DUNG INTERNET -> OK thì chuyển trang ko thì vân ở lại trang MAIN
+
+
+                    ///////
 
                     sharedPrefManager.savePlayerMode("online")
                     val changeUi = Intent(this, LoginActivity::class.java)
