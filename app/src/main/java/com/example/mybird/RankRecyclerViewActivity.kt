@@ -56,21 +56,6 @@ class RankRecyclerViewActivity : AppCompatActivity() {
             recyclerView.adapter = RankAdapter(list)
         }
 
-//        searchBtn.setOnClickListener {
-//            firebaseManager.rankQuery { list ->
-//                val nameToFind = searchTxt.text.toString()
-//                val matchedUsers = list.filter { it.name == nameToFind }
-//                Toast.makeText(this, matchedUsers.toString(), Toast.LENGTH_SHORT).show()
-//                recyclerView.adapter = RankAdapter(matchedUsers)
-//            }
-//        }
-//        refreshBtn.setOnClickListener {
-//            firebaseManager.rankQuery { list ->
-//                searchTxt.setText("")
-//                recyclerView.adapter = RankAdapter(list)
-//            }
-//        }
-
         searchBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
@@ -135,6 +120,11 @@ class RankRecyclerViewActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
     }
 
     private fun scaleView(view: View, scale: Float) {

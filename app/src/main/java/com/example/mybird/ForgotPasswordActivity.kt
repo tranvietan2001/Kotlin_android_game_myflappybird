@@ -115,6 +115,10 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+    }
 
     private fun scaleView(view: View, scale: Float) {
         val animation = ScaleAnimation(

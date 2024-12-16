@@ -128,7 +128,7 @@ class FirebaseManager {
             }
     }
 
-    private fun logoutAccount() {
+    fun logoutAccount() {
         auth.signOut()
     }
 
