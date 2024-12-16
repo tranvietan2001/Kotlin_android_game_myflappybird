@@ -10,7 +10,7 @@ class MainThread (
 
     private var running: Boolean = false
     private var canvas: Canvas? = null
-    private val targetFPS: Int = 60
+    private val targetFPS: Int = 90
 
     override fun run() {
         val targetTime = 1000 / targetFPS

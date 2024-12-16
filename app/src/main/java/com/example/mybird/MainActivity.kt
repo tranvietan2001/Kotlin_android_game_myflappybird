@@ -165,7 +165,6 @@ class MainActivity : AppCompatActivity() {
                     val changeUi = Intent(this, ConfigActivity::class.java)
                     startActivity(changeUi)
 //                    finish()
-
                     true
                 }
 
@@ -179,6 +178,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
     }
 
     private fun scaleView(view: View, scale: Float) {
@@ -199,7 +203,6 @@ class MainActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
-
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
