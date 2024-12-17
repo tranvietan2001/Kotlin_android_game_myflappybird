@@ -35,4 +35,7 @@
     <string name="forgot_password_text">Quên mật khẩu</string>
     <string name="shop">Cửa hàng</string>
     <string name="bird_used">Bird sử dụng:</string>
+    <string name="internet_interrupted">Kết nối Internet bị gián đoạn</string>
+    <string name="internet_granted">Đã cấp quyền truy cập Internet</string>
+    <string name="internet_denied">Truy cập Internet bị từ chối, chưa cấp quyền</string>
 </resources>

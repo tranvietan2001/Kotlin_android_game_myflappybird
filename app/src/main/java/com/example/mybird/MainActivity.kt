@@ -2,9 +2,15 @@ package com.example.mybird
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 import android.view.animation.Animation
@@ -15,8 +21,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.util.ArrayList
 import java.util.Locale
 
 @Suppress("DEPRECATION")
@@ -29,10 +37,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
 
+    private val PERMISSION_REQUEST_CODE = 1606
+    private var permissions = arrayOf(android.Manifest.permission.INTERNET)
+
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge() //ẩn phần viền trên
+
+        checkPermission()
 
         sharedPrefManager = SharedPreferenceManager(this)
         sharedPrefManager.savePlayerMode("offline")
@@ -66,22 +79,26 @@ class MainActivity : AppCompatActivity() {
 
         sOnlineBtn.setOnTouchListener { v, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
                     //XIN CAP QUYEN SU DUNG INTERNET -> OK thì chuyển trang ko thì vân ở lại trang MAIN
 
-
                     ///////
+                    if (isInternetAvailable()) {
+                        sharedPrefManager.savePlayerMode("online")
+                        val changeUi = Intent(this, LoginActivity::class.java)
+                        startActivity(changeUi)
+                    }else{
+                        Toast.makeText(this, getString(R.string.internet_denied), Toast.LENGTH_SHORT).show()
+                    }
 
-                    sharedPrefManager.savePlayerMode("online")
-                    val changeUi = Intent(this, LoginActivity::class.java)
-                    startActivity(changeUi)
+
 
                     true
                 }
 
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
@@ -102,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
         sOfflineBtn.setOnTouchListener { v, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
                     sharedPrefManager.savePlayerMode("offline")
@@ -114,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
@@ -131,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 //        }
         sShopBtn.setOnTouchListener { v, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
                     val changeUi = Intent(this, ShopRecyclerViewActivity::class.java)
@@ -140,7 +157,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
@@ -159,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 
         sConfigBtn.setOnTouchListener { v, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
                     val changeUi = Intent(this, ConfigActivity::class.java)
@@ -168,7 +185,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
@@ -203,10 +220,79 @@ class MainActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
+
+
+    //    private fun checkPermission(): Boolean{
+//        return ActivityCompat.checkSelfPermission(this,android.Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+//    }
+    private fun checkPermission() {
+        val permissionsNeed: ArrayList<String> = ArrayList()
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.INTERNET
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsNeed.add(android.Manifest.permission.INTERNET)
+        }
+        if (permissionsNeed.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsNeed.toTypedArray(),
+                PERMISSION_REQUEST_CODE
+            )
+        } else {
+            Toast.makeText(this, getString(R.string.internet_granted), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty()) {
+            for (i in permissions.indices) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(this, getString(R.string.internet_granted), Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(this, getString(R.string.internet_denied), Toast.LENGTH_LONG).show()
+                    checkPermission()
+                }
+
+//                    val requestAgainLater = shouldShowRequestPermissionRationale(permissions[i])
+//                    if(requestAgainLater){
+//                        Toast.makeText(this,"Quyền truy cập đã bị từ chối", Toast.LENGTH_SHORT).show()
+//                    }
+//                    else{
+//                        Toast.makeText(this,"Đi đến phần cài đặt để cấp quyền cho ứng dụng",
+//                            Toast.LENGTH_SHORT).show()
+//                    }
+            }
+        }
+    }
+
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
     }
 }

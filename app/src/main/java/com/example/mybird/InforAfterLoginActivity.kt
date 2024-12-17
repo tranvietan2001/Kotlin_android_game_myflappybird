@@ -1,7 +1,11 @@
 package com.example.mybird
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -9,6 +13,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
@@ -40,23 +45,22 @@ class InforAfterLoginActivity : AppCompatActivity() {
         shopBtn = findViewById(R.id.shopBtn)
         backBtn = findViewById(R.id.backBtn)
 
-        if(language == "en"){
+        if (language == "en") {
             playBtn.setImageResource(R.drawable.play_button_en)
             rankBtn.setImageResource(R.drawable.rank_button_en)
             shopBtn.setImageResource(R.drawable.shop_button_en)
-        }
-        else if(language == "vi"){
+        } else if (language == "vi") {
             playBtn.setImageResource(R.drawable.play_button_vi)
             rankBtn.setImageResource(R.drawable.rank_button_vi)
             shopBtn.setImageResource(R.drawable.shop_button_vi)
         }
 
-        if(sttPlayerMode == "offline"){
+        if (sttPlayerMode == "offline") {
             nameAccountTxt.text = ""
-        }else {
+        } else {
             firebaseManager = FirebaseManager()
             firebaseManager.initFirebase()
-            firebaseManager.getNameAccount { result->
+            firebaseManager.getNameAccount { result ->
                 nameAccountTxt.text = result
             }
         }
@@ -65,15 +69,19 @@ class InforAfterLoginActivity : AppCompatActivity() {
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-                    val changeUi = Intent(this,PlayGameActivity::class.java)
+                    if (isInternetAvailable()) {
+                        val changeUi = Intent(this, PlayGameActivity::class.java)
 //                    changeUi.putExtra("NAME_ACCOUNT", nameAccount)
-                    startActivity(changeUi)
+                        startActivity(changeUi)
+                    } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
                     true
                 }
+
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -85,14 +93,18 @@ class InforAfterLoginActivity : AppCompatActivity() {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 //                    finish()
-                    val changeUi = Intent(this, RankRecyclerViewActivity::class.java)
-                    startActivity(changeUi)
+                    if (isInternetAvailable()) {
+                        val changeUi = Intent(this, RankRecyclerViewActivity::class.java)
+                        startActivity(changeUi)
+                    } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
                     true
                 }
+
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -103,15 +115,19 @@ class InforAfterLoginActivity : AppCompatActivity() {
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-                    val changeUi = Intent(this, ShopRecyclerViewActivity::class.java)
-                    changeUi.putExtra("MODE_PLAYER", "@Onl_play")
-                    startActivity(changeUi)
+                    if (isInternetAvailable()) {
+                        val changeUi = Intent(this, ShopRecyclerViewActivity::class.java)
+                        changeUi.putExtra("MODE_PLAYER", "@Onl_play")
+                        startActivity(changeUi)
+                    } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
                     true
                 }
+
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -125,10 +141,12 @@ class InforAfterLoginActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -165,6 +183,21 @@ class InforAfterLoginActivity : AppCompatActivity() {
         animation.duration = 100 // Thời gian cho animation
         animation.fillAfter = true // Giữ trạng thái cuối
         view.startAnimation(animation)
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
+        }
     }
 
 }

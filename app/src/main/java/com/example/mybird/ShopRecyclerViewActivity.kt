@@ -1,7 +1,11 @@
 package com.example.mybird
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -53,7 +57,7 @@ class ShopRecyclerViewActivity : AppCompatActivity() {
             val firebaseManager: FirebaseManager = FirebaseManager()
             firebaseManager.initFirebase()
 
-            firebaseManager.getNameAccount { result->
+            firebaseManager.getNameAccount { result ->
                 sttPlayerMode.text = result
             }
             coinImg.setImageResource(R.drawable.coin_gold)
@@ -64,7 +68,7 @@ class ShopRecyclerViewActivity : AppCompatActivity() {
                 setCoinOnline(coin)
             }
 
-            firebaseManager.getBirdUsed { result->
+            firebaseManager.getBirdUsed { result ->
                 birdUsedNameTxt.text = result
             }
 
@@ -93,35 +97,36 @@ class ShopRecyclerViewActivity : AppCompatActivity() {
         adapter = ShopAdapter(this, shopList, sharedPreferenceManager) { shopInfo ->
 
             if (modePlayer == "@Onl_play") {
-                val firebaseManager: FirebaseManager = FirebaseManager()
-                firebaseManager.initFirebase()
+                if (isInternetAvailable()) {
+                    val firebaseManager: FirebaseManager = FirebaseManager()
+                    firebaseManager.initFirebase()
 
-                firebaseManager.getListBird { birdsString ->
-                    val birdsList: List<String> = birdsString.split(",").map { it.trim() }
-                    if (birdsList.contains(shopInfo.nameBird)) {
-                        firebaseManager.updateBirdUsed(shopInfo.nameBird)
-                        firebaseManager.getBirdUsed { nameBird ->
-                            birdUsedNameTxt.text = nameBird
-                        }
-                    } else {
-                        val birdPrice = shopInfo.coinSilver
-                        if (coin >= birdPrice) {
-                            coin -= birdPrice
-//                            // update lại coin -> update lại coinTxt
-//                            sharedPreferenceManager.setCoinSilver(coin)
-                            firebaseManager.updateCoin(coin)
-                            firebaseManager.getCoinGold { result->
-                                coin= result.toInt()
-                                coinTxt.text = coin.toString()
-                            }
-
-                            firebaseManager.updateBirds(shopInfo.nameBird) {
-                                adapter.notifyDataSetChanged()      // Cập nhật RecyclerView
-                            }
+                    firebaseManager.getListBird { birdsString ->
+                        val birdsList: List<String> = birdsString.split(",").map { it.trim() }
+                        if (birdsList.contains(shopInfo.nameBird)) {
                             firebaseManager.updateBirdUsed(shopInfo.nameBird)
                             firebaseManager.getBirdUsed { nameBird ->
                                 birdUsedNameTxt.text = nameBird
                             }
+                        } else {
+                            val birdPrice = shopInfo.coinSilver
+                            if (coin >= birdPrice) {
+                                coin -= birdPrice
+//                            // update lại coin -> update lại coinTxt
+//                            sharedPreferenceManager.setCoinSilver(coin)
+                                firebaseManager.updateCoin(coin)
+                                firebaseManager.getCoinGold { result ->
+                                    coin = result.toInt()
+                                    coinTxt.text = coin.toString()
+                                }
+
+                                firebaseManager.updateBirds(shopInfo.nameBird) {
+                                    adapter.notifyDataSetChanged()      // Cập nhật RecyclerView
+                                }
+                                firebaseManager.updateBirdUsed(shopInfo.nameBird)
+                                firebaseManager.getBirdUsed { nameBird ->
+                                    birdUsedNameTxt.text = nameBird
+                                }
 //
 //                            // thêm bird mua vào ds
 //                            sharedPreferenceManager.savePurchasedBird(shopInfo.nameBird)
@@ -130,10 +135,12 @@ class ShopRecyclerViewActivity : AppCompatActivity() {
 //
 //                            sharedPreferenceManager.setBirdUsed(shopInfo.nameBird)
 //                            birdUsedNameTxt.text = sharedPreferenceManager.getBirdUsed().toString()
-                        } else Toast.makeText(this, "not enough coins -ON", Toast.LENGTH_SHORT).show()
+                            } else Toast.makeText(this, "not enough coins -ON", Toast.LENGTH_SHORT)
+                                .show()
 
+                        }
                     }
-                }
+                } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
 
             } else if (modePlayer == "@Off_play") {
 
@@ -231,7 +238,18 @@ class ShopRecyclerViewActivity : AppCompatActivity() {
         this.coinOnline = coin
     }
 
-    private fun setListBirdOnline(list: List<String>) {
-        this.listBirdOnline = list
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
+        }
     }
 }

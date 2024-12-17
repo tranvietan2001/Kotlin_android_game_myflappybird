@@ -2,8 +2,12 @@ package com.example.mybird
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -123,46 +127,51 @@ class LoginActivity : AppCompatActivity() {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
+                    if (isInternetAvailable()) {
+                        loadingIV.visibility = View.VISIBLE
+                        accountEmail = emailTxt.text.toString()
+                        password = passwordTxt.text.toString()
+                        if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
+                            failLoginTxt.visibility = View.VISIBLE
+                            loadingIV.visibility = View.GONE
+                        } else {
+                            failLoginTxt.visibility = View.GONE  // ẩn
+                            loginBtn.visibility = View.VISIBLE
+                            firebaseManager.loginAccount(accountEmail, password) { result ->
+                                if (result != "fail") {
+                                    if (result != "") {
+                                        if (result != "null") {
+                                            emailTxt.setText("")
+                                            passwordTxt.setText("")
+                                            loadingIV.visibility = View.GONE
 
-                    loadingIV.visibility = View.VISIBLE
-                    accountEmail = emailTxt.text.toString()
-                    password = passwordTxt.text.toString()
-                    if ((accountEmail == "" && password == "") || accountEmail == "" || password == "") {
-                        failLoginTxt.visibility = View.VISIBLE
-                        loadingIV.visibility = View.GONE
-                    } else {
-                        failLoginTxt.visibility = View.GONE  // ẩn
-                        loginBtn.visibility = View.VISIBLE
-                        firebaseManager.loginAccount(accountEmail, password) { result ->
-                            if (result != "fail") {
-                                if (result != "") {
-                                    if (result != "null") {
-                                        emailTxt.setText("")
-                                        passwordTxt.setText("")
-                                        loadingIV.visibility = View.GONE
-
-                                        var x = 0
+                                            var x = 0
 //                                        firebaseManager.getScore { resultScore ->
 //                                            x = resultScore.toInt()
 //                                            Toast.makeText(this, "coin 1 : $x", Toast.LENGTH_SHORT).show()
 //                                        }
 //                                        Toast.makeText(this, "coin 2 : $x", Toast.LENGTH_SHORT).show()
 
-                                        val changeUi = Intent(this, InforAfterLoginActivity::class.java)
-                                        changeUi.putExtra("NAME_ACCOUNT", result)
-                                        startActivity(changeUi)
+                                            val changeUi =
+                                                Intent(this, InforAfterLoginActivity::class.java)
+                                            changeUi.putExtra("NAME_ACCOUNT", result)
+                                            startActivity(changeUi)
+                                        }
                                     }
+                                } else {
+                                    failLoginTxt.visibility = View.VISIBLE
+                                    loadingIV.visibility = View.GONE
+                                    Toast.makeText(
+                                        this,
+                                        "Dang nhap FAIL: $result",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
                                 }
-                            } else {
-                                failLoginTxt.visibility = View.VISIBLE
-                                loadingIV.visibility = View.GONE
-                                Toast.makeText(this, "Dang nhap FAIL: $result", Toast.LENGTH_SHORT)
-                                    .show()
+
                             }
-
                         }
-                    }
-
+                    } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
                     true
                 }
 
@@ -178,13 +187,17 @@ class LoginActivity : AppCompatActivity() {
         }
 
         createAccountTxt.setOnClickListener {
-            val changeUi = Intent(this, CreateAccountActivity::class.java)
-            startActivity(changeUi)
+            if (isInternetAvailable()) {
+                val changeUi = Intent(this, CreateAccountActivity::class.java)
+                startActivity(changeUi)
+            } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
         }
 
         forgotPassTxt.setOnClickListener {
-            val changeUi = Intent(this, ForgotPasswordActivity::class.java)
-            startActivity(changeUi)
+            if (isInternetAvailable()) {
+                val changeUi = Intent(this, ForgotPasswordActivity::class.java)
+                startActivity(changeUi)
+            } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
         }
 
         backBtn.setOnTouchListener { v, event ->
@@ -197,10 +210,12 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -248,5 +263,20 @@ class LoginActivity : AppCompatActivity() {
         animation.duration = 100 // Thời gian cho animation
         animation.fillAfter = true // Giữ trạng thái cuối
         view.startAnimation(animation)
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
+        }
     }
 }

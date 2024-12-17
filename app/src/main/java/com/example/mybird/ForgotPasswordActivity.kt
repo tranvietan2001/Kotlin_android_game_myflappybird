@@ -2,8 +2,12 @@ package com.example.mybird
 
 //import android.annotation.SuppressLint
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.ColorSpace.Rgb
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -11,6 +15,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
@@ -70,22 +75,25 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
-                    nofitiTxt.visibility = View.GONE
-                    nofitiTxt.text = getString(R.string.wait_a_moment_for_verification)
+                    if(isInternetAvailable()) {
+                        nofitiTxt.visibility = View.GONE
+                        nofitiTxt.text = getString(R.string.wait_a_moment_for_verification)
 
-                    firebaseManager.forgotPass(emailForgot.toString()) { result ->
-                        if (result == "checkMail") {
-                            nofitiTxt.text = getString(R.string.check_email_reset_password)
-                        } else if (result == "resetFail") {
-                            nofitiTxt.text = getString(R.string.reset_password_fail)
-                        } else if (result == "emailNotExist") {
-                            nofitiTxt.text = getString(R.string.email_dose_not_exist)
-                        } else if (result == "There is a problem with the connection, please check again.") {
-                            nofitiTxt.text = getString(R.string.error_connect)
+                        firebaseManager.forgotPass(emailForgot.toString()) { result ->
+                            if (result == "checkMail") {
+                                nofitiTxt.text = getString(R.string.check_email_reset_password)
+                            } else if (result == "resetFail") {
+                                nofitiTxt.text = getString(R.string.reset_password_fail)
+                            } else if (result == "emailNotExist") {
+                                nofitiTxt.text = getString(R.string.email_dose_not_exist)
+                            } else if (result == "There is a problem with the connection, please check again.") {
+                                nofitiTxt.text = getString(R.string.error_connect)
+                            }
+                            nofitiTxt.setTextColor(R.color.txt_error)
+                            nofitiTxt.visibility = View.VISIBLE
                         }
-                        nofitiTxt.setTextColor(R.color.txt_error)
-                        nofitiTxt.visibility = View.VISIBLE
-                    }
+                    }else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
+
                     true
                 }
                 android.view.MotionEvent.ACTION_DOWN -> {
@@ -143,6 +151,20 @@ class ForgotPasswordActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
     }
 }

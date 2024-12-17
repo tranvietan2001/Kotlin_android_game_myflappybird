@@ -2,8 +2,11 @@ package com.example.mybird
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -94,30 +97,37 @@ class CreateAccountActivity : AppCompatActivity() {
                     val isCheckName = isValidNameAcc(name.toString())
 
                     // nếu ok thì chuyển đế tram login
-                    if (isCheckEmail && password.toString().length >= 6 && isCheckName) {
+                    if(isInternetAvailable()) {
+                        if (isCheckEmail && password.toString().length >= 6 && isCheckName) {
 
-                        firebaseManager.createAccount(email.toString(), password.toString()) { result1 ->
-                            if (result1 == "account created successfully") {
-                                nofiticalCreateTxt.text = "====================================="
-                                loadingIV.visibility = View.VISIBLE
+                            firebaseManager.createAccount(
+                                email.toString(),
+                                password.toString()
+                            ) { result1 ->
+                                if (result1 == "account created successfully") {
+                                    nofiticalCreateTxt.text =
+                                        "====================================="
+                                    loadingIV.visibility = View.VISIBLE
 
-                                firebaseManager.createAccountName(name.toString()) { result2 ->
-                                    if (result2 == "name account created successfully") {
-                                        loadingIV.visibility = View.GONE
+                                    firebaseManager.createAccountName(name.toString()) { result2 ->
+                                        if (result2 == "name account created successfully") {
+                                            loadingIV.visibility = View.GONE
 //                                        val changeUi = Intent(this, LoginActivity::class.java)
 //                                        startActivity(changeUi)
-                                        finish()
-                                    } else nofiticalCreateTxt.text = result2
-                                }
-                            } else {
+                                            finish()
+                                        } else nofiticalCreateTxt.text = result2
+                                    }
+                                } else {
 //                        nofiticalCreateTxt.text = result1.toString()
+                                }
                             }
+                        } else {
+                            nofiticalCreateTxt.setText(R.string.check_if_email_is_valid_password_length_must_be_over_6_characters)
+                            nofiticalCreateTxt.visibility = View.VISIBLE
+                            loadingIV.visibility = View.GONE
                         }
-                    } else {
-                        nofiticalCreateTxt.setText(R.string.check_if_email_is_valid_password_length_must_be_over_6_characters)
-                        nofiticalCreateTxt.visibility = View.VISIBLE
-                        loadingIV.visibility = View.GONE
                     }
+                    else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
 
                     true
                 }
@@ -198,5 +208,19 @@ class CreateAccountActivity : AppCompatActivity() {
         animation.duration = 100 // Thời gian cho animation
         animation.fillAfter = true // Giữ trạng thái cuối
         view.startAnimation(animation)
+    }
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
+        }
     }
 }

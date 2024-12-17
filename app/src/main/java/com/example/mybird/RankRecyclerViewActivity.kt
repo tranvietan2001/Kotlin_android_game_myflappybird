@@ -1,7 +1,11 @@
 package com.example.mybird
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -60,12 +64,14 @@ class RankRecyclerViewActivity : AppCompatActivity() {
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-                    firebaseManager.rankQuery { list ->
-                        val nameToFind = searchTxt.text.toString()
-                        val matchedUsers = list.filter { it.name == nameToFind }
-                        Toast.makeText(this, matchedUsers.toString(), Toast.LENGTH_SHORT).show()
-                        recyclerView.adapter = RankAdapter(matchedUsers)
-                    }
+                    if (isInternetAvailable()) {
+                        firebaseManager.rankQuery { list ->
+                            val nameToFind = searchTxt.text.toString()
+                            val matchedUsers = list.filter { it.name == nameToFind }
+                            Toast.makeText(this, matchedUsers.toString(), Toast.LENGTH_SHORT).show()
+                            recyclerView.adapter = RankAdapter(matchedUsers)
+                        }
+                    } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
                     true
                 }
 
@@ -85,10 +91,12 @@ class RankRecyclerViewActivity : AppCompatActivity() {
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
-                    firebaseManager.rankQuery { list ->
-                        searchTxt.setText("")
-                        recyclerView.adapter = RankAdapter(list)
-                    }
+                    if (isInternetAvailable()) {
+                        firebaseManager.rankQuery { list ->
+                            searchTxt.setText("")
+                            recyclerView.adapter = RankAdapter(list)
+                        }
+                    } else Toast.makeText(this, getString(R.string.internet_interrupted), Toast.LENGTH_LONG).show()
                     true
                 }
 
@@ -111,10 +119,12 @@ class RankRecyclerViewActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 android.view.MotionEvent.ACTION_DOWN -> {
                     scaleView(v, 1.2f)
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -151,6 +161,21 @@ class RankRecyclerViewActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            // Đối với các phiên bản Android trước Marshmallow
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
     }
 }

@@ -34,4 +34,7 @@
     <string name="forgot_password_text">Forgot password</string>
     <string name="shop">Shop</string>
     <string name="bird_used">Bird Used:</string>
+    <string name="internet_interrupted">Internet connection is interrupted</string>
+    <string name="internet_granted">Internet access is granted</string>
+    <string name="internet_denied">Internet access is denied</string>
 </resources>
