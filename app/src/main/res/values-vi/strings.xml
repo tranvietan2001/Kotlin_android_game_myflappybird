@@ -38,4 +38,6 @@
     <string name="internet_interrupted">Kết nối Internet bị gián đoạn</string>
     <string name="internet_granted">Đã cấp quyền truy cập Internet</string>
     <string name="internet_denied">Truy cập Internet bị từ chối, chưa cấp quyền</string>
+    <string name="you_need_to_press_OK_to_continue_playing">Bạn cần phải nhấn OK để tiếp tục</string>
+    <string name="allow_applications_to_access_the_Internet">Cho phép ứng dụng truy cập Internet không?</string>
 </resources>

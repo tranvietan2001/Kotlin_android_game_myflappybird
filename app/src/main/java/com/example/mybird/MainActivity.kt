@@ -10,7 +10,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 import android.view.animation.Animation
@@ -49,8 +48,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge() //ẩn phần viền trên
 
-        checkPermission()
-
         sharedPrefManager = SharedPreferenceManager(this)
         sharedPrefManager.savePlayerMode("offline")
         sharedPrefManager.savePurchasedBird("bird1_down")
@@ -87,8 +84,8 @@ class MainActivity : AppCompatActivity() {
                     scaleView(v, 1f)
 
                     val builder = AlertDialog.Builder(this)
-                    builder.setTitle("Allow applications to access the Internet?")
-
+//                    builder.setTitle("Allow applications to access the Internet?")
+                    builder.setTitle(getString(R.string.allow_applications_to_access_the_Internet))
                     builder.setPositiveButton("OK") { dialog, which ->
                         sharedPrefManager.savePlayerMode("online")
                         val changeUi = Intent(this, LoginActivity::class.java)
@@ -96,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     builder.setNegativeButton("Cancel") { dialog, which ->
-                        Toast.makeText(this, "You need to press OK to continue playing", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.you_need_to_press_OK_to_continue_playing), Toast.LENGTH_SHORT).show()
                     }
                     builder.show()
                     true

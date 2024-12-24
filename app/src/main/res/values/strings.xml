@@ -37,4 +37,6 @@
     <string name="internet_interrupted">Internet connection is interrupted</string>
     <string name="internet_granted">Internet access is granted</string>
     <string name="internet_denied">Internet access is denied</string>
+    <string name= "allow_applications_to_access_the_Internet">Allow applications to access the Internet?</string>
+    <string name= "you_need_to_press_OK_to_continue_playing">You need to press OK to continue playing</string>
 </resources>
