@@ -26,6 +26,11 @@ class ShopActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+    }
+
     private fun hideSystemUI() {
         // Thiết lập chế độ toàn màn hình
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN

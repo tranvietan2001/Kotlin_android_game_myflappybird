@@ -13,7 +13,9 @@ class PlayGameActivity : AppCompatActivity() {
 
     private lateinit var sharedPrefManager: SharedPreferenceManager
     private lateinit var firebaseManager: FirebaseManager
-//    private lateinit var gameManager: GameManager
+    private lateinit var gameManager: GameManager
+
+    private var isBackPress = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +27,17 @@ class PlayGameActivity : AppCompatActivity() {
 
         namePlayer = findViewById(R.id.nameAccountPlayTxt)
 
-        if(sttPlayerMode == "offline"){
+        if (sttPlayerMode == "offline") {
             namePlayer.text = ""
-        }else {
+        } else {
             firebaseManager = FirebaseManager()
             firebaseManager.initFirebase()
-            firebaseManager.getNameAccount { result->
+            firebaseManager.getNameAccount { result ->
                 namePlayer.text = result
             }
         }
 
-//        gameManager = findViewById(R.id.gameManager)
+        gameManager = findViewById(R.id.gameManager)
 
 //        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
 //        if(nameAccount != "@Off_play"){
@@ -57,5 +59,53 @@ class PlayGameActivity : AppCompatActivity() {
         if (hasFocus) {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        println("-----> onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        println("-----> onResume")
+//        gameManager.startGame()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        println("-----> onPause")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        println("-----> onStop")
+        if (!gameManager.getStatusBackBtn() && !isBackPress) {
+            if (sharedPrefManager.getPlayerMode() == "offline") {
+                val changeUi = Intent(this, MainActivity::class.java)
+                changeUi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(changeUi)
+                finish()
+            } else {
+                firebaseManager = FirebaseManager()
+                firebaseManager.initFirebase()
+                val changeUi = Intent(this, InforAfterLoginActivity::class.java)
+                changeUi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(changeUi)
+                finish()
+            }
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println("-----> onDestroy")
+    }
+
+    override fun onBackPressed() {
+        isBackPress = true
+        super.onBackPressed()
     }
 }

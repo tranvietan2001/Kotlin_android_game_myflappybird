@@ -30,8 +30,6 @@ class InforAfterLoginActivity : AppCompatActivity() {
 //        enableEdgeToEdge() //ẩn phần viền trên
         setContentView(R.layout.infor_after_login_main)
 
-
-
         sharedPrefManager = SharedPreferenceManager(this)
         val language = sharedPrefManager.getLanguageConfig()
         val sttPlayerMode = sharedPrefManager.getPlayerMode()
@@ -63,15 +61,6 @@ class InforAfterLoginActivity : AppCompatActivity() {
             }
         }
 
-//        val nameAccount = intent.getStringExtra("NAME_ACCOUNT")
-//        nameAccountTxt.text = nameAccount
-
-//        playBtn.setOnClickListener {
-//            val changeUi = Intent(this,PlayGameActivity::class.java)
-//            changeUi.putExtra("NAME_ACCOUNT", nameAccount)
-//            startActivity(changeUi)
-//        }
-
         playBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
@@ -90,11 +79,6 @@ class InforAfterLoginActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        rankBtn.setOnClickListener {
-//            val changeUi = Intent(this, RankRecyclerViewActivity::class.java)
-//            startActivity(changeUi)
-//        }
 
         rankBtn.setOnTouchListener { v, event ->
             when (event.action) {
@@ -150,8 +134,11 @@ class InforAfterLoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
     }
 
     private fun hideSystemUI() {

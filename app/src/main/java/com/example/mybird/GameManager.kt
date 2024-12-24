@@ -27,6 +27,10 @@ class GameManager(
     private lateinit var bird: Bird
     private lateinit var background: Background
 
+    private var isCheckBack = false
+
+
+
 //    private  lateinit var obstacle: Obstacle // test vật cản
 
     private lateinit var dm: DisplayMetrics
@@ -68,6 +72,7 @@ class GameManager(
     }
 
     private fun initGame() {
+        isCheckBack = false
         score = 0
         vCoin = 0
         birdPosition = Rect()
@@ -122,24 +127,29 @@ class GameManager(
         isPlaying = true
         thread.setRunning(true)
         thread.start()
+        println("-----> surfaceCreated")
     }
 
     // Xử lý khi surface thay đổi
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
+        println("-----> surfaceChanged")
     }
 
     // Xử lý khi surface bị hủy
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        isPlaying = true
-//        thread.setRunning(isPlaying)
-        while (isPlaying) {
+        var retry = true
+        while (retry) {
             try {
-//                thread.join()
-                isPlaying = false
+//                isPlaying = false
+                thread.setRunning(false)
+                thread.join()
+
+                println("-----> surfaceDestroyed")
             } catch (e: InterruptedException) {
                 e.printStackTrace()
+                println("-----> surfaceDestroyed - $e")
             }
+            retry = false
         }
     }
 
@@ -321,6 +331,7 @@ class GameManager(
     }
 
     private fun gotoBack() {
+        isCheckBack = true
         if (playerMode == "online") {
             val intent = Intent(context, InforAfterLoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -332,4 +343,9 @@ class GameManager(
         }
 
     }
+
+    fun getStatusBackBtn(): Boolean {
+        return this.isCheckBack
+    }
+
 }
