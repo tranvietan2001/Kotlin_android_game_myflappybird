@@ -18,6 +18,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.util.Locale
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.view.MotionEvent
+
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -69,15 +73,19 @@ class MainActivity : AppCompatActivity() {
                 android.view.MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
-                    //XIN CAP QUYEN SU DUNG INTERNET -> OK thì chuyển trang ko thì vân ở lại trang MAIN
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Allow applications to access the Internet?")
 
+                    builder.setPositiveButton("OK") { dialog, which ->
+                        sharedPrefManager.savePlayerMode("online")
+                        val changeUi = Intent(this, LoginActivity::class.java)
+                        startActivity(changeUi)
+                    }
 
-                    ///////
-
-                    sharedPrefManager.savePlayerMode("online")
-                    val changeUi = Intent(this, LoginActivity::class.java)
-                    startActivity(changeUi)
-
+                    builder.setNegativeButton("Cancel") { dialog, which ->
+                        Toast.makeText(this, "You need to press OK to continue playing", Toast.LENGTH_SHORT).show()
+                    }
+                    builder.show()
                     true
                 }
 
@@ -86,9 +94,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                else -> {
-                    false
-                }
+                else -> false
             }
         }
 
