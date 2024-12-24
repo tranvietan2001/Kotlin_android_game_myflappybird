@@ -63,7 +63,6 @@ class GameManager(
 
 
     init {
-
         holder.addCallback(this)
         dm = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(dm)

@@ -111,7 +111,6 @@ class RankRecyclerViewActivity : AppCompatActivity() {
             }
         }
 
-
         backBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_UP -> {
