@@ -26,6 +26,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.util.ArrayList
 import java.util.Locale
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.view.MotionEvent
+
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -82,19 +86,19 @@ class MainActivity : AppCompatActivity() {
                 MotionEvent.ACTION_UP -> {
                     scaleView(v, 1f)
 
-                    //XIN CAP QUYEN SU DUNG INTERNET -> OK thì chuyển trang ko thì vân ở lại trang MAIN
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Allow applications to access the Internet?")
 
-                    ///////
-                    if (isInternetAvailable()) {
+                    builder.setPositiveButton("OK") { dialog, which ->
                         sharedPrefManager.savePlayerMode("online")
                         val changeUi = Intent(this, LoginActivity::class.java)
                         startActivity(changeUi)
-                    }else{
-                        Toast.makeText(this, getString(R.string.internet_denied), Toast.LENGTH_SHORT).show()
                     }
 
-
-
+                    builder.setNegativeButton("Cancel") { dialog, which ->
+                        Toast.makeText(this, "You need to press OK to continue playing", Toast.LENGTH_SHORT).show()
+                    }
+                    builder.show()
                     true
                 }
 
@@ -103,9 +107,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                else -> {
-                    false
-                }
+                else -> false
             }
         }
 
@@ -225,74 +227,6 @@ class MainActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             hideSystemUI() // Đảm bảo chế độ toàn màn hình khi có tiêu điểm
-        }
-    }
-
-
-    //    private fun checkPermission(): Boolean{
-//        return ActivityCompat.checkSelfPermission(this,android.Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
-//    }
-    private fun checkPermission() {
-        val permissionsNeed: ArrayList<String> = ArrayList()
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.INTERNET
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionsNeed.add(android.Manifest.permission.INTERNET)
-        }
-        if (permissionsNeed.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsNeed.toTypedArray(),
-                PERMISSION_REQUEST_CODE
-            )
-        } else {
-            Toast.makeText(this, getString(R.string.internet_granted), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty()) {
-            for (i in permissions.indices) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-
-                    Toast.makeText(this, getString(R.string.internet_granted), Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(this, getString(R.string.internet_denied), Toast.LENGTH_LONG).show()
-                    checkPermission()
-                }
-
-//                    val requestAgainLater = shouldShowRequestPermissionRationale(permissions[i])
-//                    if(requestAgainLater){
-//                        Toast.makeText(this,"Quyền truy cập đã bị từ chối", Toast.LENGTH_SHORT).show()
-//                    }
-//                    else{
-//                        Toast.makeText(this,"Đi đến phần cài đặt để cấp quyền cho ứng dụng",
-//                            Toast.LENGTH_SHORT).show()
-//                    }
-            }
-        }
-    }
-
-
-    private fun isInternetAvailable(): Boolean {
-        val connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
-        } else {
-            // Đối với các phiên bản Android trước Marshmallow
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
     }
 }
